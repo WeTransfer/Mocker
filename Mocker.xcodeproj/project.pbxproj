@@ -25,9 +25,9 @@
 /* Begin PBXFileReference section */
 		501E26941F3DAE370048F39E /* Mocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		501E269D1F3DAE370048F39E /* MockerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MockerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		503445D61F3DB0A60039D5E4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		503445D71F3DB0A60039D5E4 /* MockerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockerTests.swift; sourceTree = "<group>"; };
 		503445D91F3DB0A60039D5E4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		503445E01F3DB21F0039D5E4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50B9281B1F3DB06500F2974A /* Mocker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Mocker.h; path = Mocker/Mocker.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -72,7 +72,7 @@
 		503445D51F3DB0A60039D5E4 /* MockerTests */ = {
 			isa = PBXGroup;
 			children = (
-				503445D61F3DB0A60039D5E4 /* Info.plist */,
+				503445DF1F3DB21F0039D5E4 /* Supporting Files */,
 				503445D71F3DB0A60039D5E4 /* MockerTests.swift */,
 			);
 			name = MockerTests;
@@ -86,6 +86,14 @@
 			);
 			name = "Supporting Files";
 			path = "Mocker/Supporting Files";
+			sourceTree = "<group>";
+		};
+		503445DF1F3DB21F0039D5E4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				503445E01F3DB21F0039D5E4 /* Info.plist */,
+			);
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -365,7 +373,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVELOPMENT_TEAM = GLJTT4T544;
-				INFOPLIST_FILE = Mocker/MockerTests/Info.plist;
+				INFOPLIST_FILE = "Mocker/MockerTests/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wetransfer.MockerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -377,7 +385,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVELOPMENT_TEAM = GLJTT4T544;
-				INFOPLIST_FILE = Mocker/MockerTests/Info.plist;
+				INFOPLIST_FILE = "Mocker/MockerTests/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wetransfer.MockerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
