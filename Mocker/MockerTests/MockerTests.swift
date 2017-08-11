@@ -51,7 +51,41 @@ final class MockerTests: XCTestCase {
             
             XCTAssert(image.size == sampleImage.size, "Image should be returned mocked")
             expectation.fulfill()
-            }.resume()
+        }.resume()
+        
+        waitForExpectations(timeout: 10.0, handler: nil)
+    }
+    
+    /// It should return the additional headers.
+    func testAdditionalHeaders() {
+        let expectation = self.expectation(description: "Data request should succeed")
+        let headers = ["testkey": "testvalue"]
+        let mock = Mock(contentType: .json, statusCode: 200, data: [.get : Data()], additionalHeaders: headers)
+        mock.register()
+        
+        URLSession.shared.dataTask(with: mock.url) { (data, response, error) in
+            XCTAssert(error == nil)
+            XCTAssert(((response as! HTTPURLResponse).allHeaderFields["testkey"] as! String) == "testvalue", "Additional headers should be added.")
+            expectation.fulfill()
+        }.resume()
+        
+        waitForExpectations(timeout: 10.0, handler: nil)
+    }
+    
+    /// It should override existing mocks.
+    func testMockOverriding() {
+        let expectation = self.expectation(description: "Data request should succeed")
+        let mock = Mock(contentType: .json, statusCode: 200, data: [.get : Data()], additionalHeaders: ["testkey": "testvalue"])
+        mock.register()
+        
+        let newMock = Mock(contentType: .json, statusCode: 200, data: [.get : Data()], additionalHeaders: ["newkey": "newvalue"])
+        newMock.register()
+        
+        URLSession.shared.dataTask(with: mock.url) { (data, response, error) in
+            XCTAssert(error == nil)
+            XCTAssert(((response as! HTTPURLResponse).allHeaderFields["newkey"] as! String) == "newvalue", "Additional headers should be added.")
+            expectation.fulfill()
+        }.resume()
         
         waitForExpectations(timeout: 10.0, handler: nil)
     }

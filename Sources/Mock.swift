@@ -140,9 +140,9 @@ public struct Mock: Equatable {
             // If the mock contains a file extension, this should always be used to match for.
             guard let pathExtension = request.url?.pathExtension else { return false }
             return fileExtensions.contains(pathExtension)
-        } else {
-            return mock.url == request.url && mock.data.keys.contains(requestHTTPMethod)
         }
+        
+        return mock.url == request.url && mock.data.keys.contains(requestHTTPMethod)
     }
     
     public static func == (lhs: Mock, rhs: Mock) -> Bool {
