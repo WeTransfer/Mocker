@@ -10,6 +10,9 @@
 		501E269E1F3DAE370048F39E /* Mocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 501E26941F3DAE370048F39E /* Mocker.framework */; };
 		503445DD1F3DB0F90039D5E4 /* MockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503445D71F3DB0A60039D5E4 /* MockerTests.swift */; };
 		503445DE1F3DB1F00039D5E4 /* Mocker.h in Headers */ = {isa = PBXBuildFile; fileRef = 50B9281B1F3DB06500F2974A /* Mocker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		503446171F3DB4660039D5E4 /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503446141F3DB4660039D5E4 /* Mock.swift */; };
+		503446181F3DB4660039D5E4 /* Mocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503446151F3DB4660039D5E4 /* Mocker.swift */; };
+		503446191F3DB4660039D5E4 /* MockingURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503446161F3DB4660039D5E4 /* MockingURLProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +31,9 @@
 		503445D71F3DB0A60039D5E4 /* MockerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockerTests.swift; sourceTree = "<group>"; };
 		503445D91F3DB0A60039D5E4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		503445E01F3DB21F0039D5E4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		503446141F3DB4660039D5E4 /* Mock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mock.swift; sourceTree = "<group>"; };
+		503446151F3DB4660039D5E4 /* Mocker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mocker.swift; sourceTree = "<group>"; };
+		503446161F3DB4660039D5E4 /* MockingURLProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockingURLProtocol.swift; sourceTree = "<group>"; };
 		50B9281B1F3DB06500F2974A /* Mocker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Mocker.h; path = Mocker/Mocker.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -56,6 +62,7 @@
 				50B9281B1F3DB06500F2974A /* Mocker.h */,
 				503445D51F3DB0A60039D5E4 /* MockerTests */,
 				501E26951F3DAE370048F39E /* Products */,
+				503446131F3DB4660039D5E4 /* Sources */,
 				503445D81F3DB0A60039D5E4 /* Supporting Files */,
 			);
 			sourceTree = "<group>";
@@ -94,6 +101,16 @@
 				503445E01F3DB21F0039D5E4 /* Info.plist */,
 			);
 			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		503446131F3DB4660039D5E4 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				503446141F3DB4660039D5E4 /* Mock.swift */,
+				503446151F3DB4660039D5E4 /* Mocker.swift */,
+				503446161F3DB4660039D5E4 /* MockingURLProtocol.swift */,
+			);
+			path = Sources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -208,6 +225,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				503446191F3DB4660039D5E4 /* MockingURLProtocol.swift in Sources */,
+				503446181F3DB4660039D5E4 /* Mocker.swift in Sources */,
+				503446171F3DB4660039D5E4 /* Mock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,6 +392,7 @@
 		501E26AC1F3DAE370048F39E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = GLJTT4T544;
 				INFOPLIST_FILE = "Mocker/MockerTests/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -384,6 +405,7 @@
 		501E26AD1F3DAE370048F39E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = GLJTT4T544;
 				INFOPLIST_FILE = "Mocker/MockerTests/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
