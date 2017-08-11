@@ -10,6 +10,15 @@ import XCTest
 @testable import Mocker
 
 final class MockerTests: XCTestCase {
+    struct Framework {
+        let name: String?
+        let owner: String?
+        
+        init(jsonDictionary: [String: Any]) {
+            name = jsonDictionary["name"] as? String
+            owner = jsonDictionary["owner"] as? String
+        }
+    }
     
     /// It should returned the register mocked image data as response.
     func testImageURLDataRequest() {
@@ -21,7 +30,7 @@ final class MockerTests: XCTestCase {
         ])
         
         mock.register()
-        URLSession.shared.dataTask(with: originalURL) { (data, response, error) in
+        URLSession.shared.dataTask(with: originalURL) { (data, _, error) in
             XCTAssert(error == nil)
             let image: UIImage = UIImage(data: data!)!
             let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
@@ -42,7 +51,7 @@ final class MockerTests: XCTestCase {
             .get: MockedData.botAvatarImageFileUrl.data
         ]).register()
         
-        URLSession.shared.dataTask(with: originalURL!) { (data, response, error) in
+        URLSession.shared.dataTask(with: originalURL!) { (data, _, error) in
             XCTAssert(error == nil)
             let image: UIImage = UIImage(data: data!)!
             let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
@@ -56,25 +65,15 @@ final class MockerTests: XCTestCase {
     
     /// It should return the mocked JSON.
     func testJSONRequest() {
-        struct Framework {
-            let name: String?
-            let owner: String?
-            
-            init(jsonDictionary: [String: Any]) {
-                name = jsonDictionary["name"] as? String
-                owner = jsonDictionary["owner"] as? String
-            }
-        }
-        
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://www.wetransfer.com/example.json")!
         
         Mock(url: originalURL, contentType: .json, statusCode: 200, data: [
-            .get : MockedData.exampleJSON.data
+            .get: MockedData.exampleJSON.data
             ]
         ).register()
         
-        URLSession.shared.dataTask(with: originalURL) { (data, response, error) in
+        URLSession.shared.dataTask(with: originalURL) { (data, _, _) in
 
             guard let data = data, let jsonDictionary = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String: Any] else {
                 XCTFail("Wrong data response")
@@ -96,10 +95,10 @@ final class MockerTests: XCTestCase {
     func testAdditionalHeaders() {
         let expectation = self.expectation(description: "Data request should succeed")
         let headers = ["testkey": "testvalue"]
-        let mock = Mock(contentType: .json, statusCode: 200, data: [.get : Data()], additionalHeaders: headers)
+        let mock = Mock(contentType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: headers)
         mock.register()
         
-        URLSession.shared.dataTask(with: mock.url) { (data, response, error) in
+        URLSession.shared.dataTask(with: mock.url) { (_, response, error) in
             XCTAssert(error == nil)
             XCTAssert(((response as! HTTPURLResponse).allHeaderFields["testkey"] as! String) == "testvalue", "Additional headers should be added.")
             expectation.fulfill()
@@ -111,13 +110,13 @@ final class MockerTests: XCTestCase {
     /// It should override existing mocks.
     func testMockOverriding() {
         let expectation = self.expectation(description: "Data request should succeed")
-        let mock = Mock(contentType: .json, statusCode: 200, data: [.get : Data()], additionalHeaders: ["testkey": "testvalue"])
+        let mock = Mock(contentType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: ["testkey": "testvalue"])
         mock.register()
         
-        let newMock = Mock(contentType: .json, statusCode: 200, data: [.get : Data()], additionalHeaders: ["newkey": "newvalue"])
+        let newMock = Mock(contentType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: ["newkey": "newvalue"])
         newMock.register()
         
-        URLSession.shared.dataTask(with: mock.url) { (data, response, error) in
+        URLSession.shared.dataTask(with: mock.url) { (_, response, error) in
             XCTAssert(error == nil)
             XCTAssert(((response as! HTTPURLResponse).allHeaderFields["newkey"] as! String) == "newvalue", "Additional headers should be added.")
             expectation.fulfill()
@@ -139,7 +138,7 @@ final class MockerTests: XCTestCase {
         configuration.protocolClasses = [MockingURLProtocol.self]
         let urlSession = URLSession(configuration: configuration)
         
-        urlSession.dataTask(with: originalURL!) { (data, response, error) in
+        urlSession.dataTask(with: originalURL!) { (data, _, error) in
             XCTAssert(error == nil)
             let image: UIImage = UIImage(data: data!)!
             let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!

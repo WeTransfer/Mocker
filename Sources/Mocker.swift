@@ -39,6 +39,7 @@ public struct Mocker {
             /// Delete the existing mock.
             shared.mocks.remove(at: existingIndex)
         }
+        
         shared.mocks.append(mock)
     }
     

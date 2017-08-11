@@ -93,7 +93,6 @@ public struct Mock: Equatable {
         self.init(url: nil, contentType: contentType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
     }
     
-    
     /// Creates a `Mock` for the given URL.
     ///
     /// - Parameters:
