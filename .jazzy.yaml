@@ -1,0 +1,14 @@
+clean: true
+author: WeTransfer
+author_url: https://wetransfer.com
+documentation: docs/*.md
+github_url: https://github.com/WeTransfer/Mocker
+github_file_prefix: https://github.com/WeTransfer/Mocker/tree/master
+umbrella_header: Mocker/Mocker.h
+framework_root: Mocker
+module: Mocker
+skip_undocumented: true
+hide_documentation_coverage: true
+theme: fullwidth
+sdk: iphonesimulator
+readme: README.md

@@ -18,7 +18,7 @@ public struct Mocker {
     }
     
     /// The shared instance of the Mocker, can be used to register and return mocks.
-    static var shared = Mocker()
+    private static var shared = Mocker()
     
     /// The HTTP Version to use in the mocked response.
     public static var httpVersion: HTTPVersion = HTTPVersion.http1_1
@@ -47,7 +47,7 @@ public struct Mocker {
     ///
     /// - Parameter request: The request to search for a mock.
     /// - Returns: A mock if found, `nil` if there's no mocked data registered for the given request.
-    public static func mock(for request: URLRequest) -> Mock? {
+    static func mock(for request: URLRequest) -> Mock? {
         return shared.mocks.first(where: { $0 == request })
     }
 }

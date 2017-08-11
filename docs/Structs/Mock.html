@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Mock Struct Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Struct/Mock" class="dashAnchor"></a>
+
+    <a title="Mock Struct Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          Mocker Docs
+        </a>
+        
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/WeTransfer/Mocker">
+            <img class="header-icon" src="../img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">Mocker Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      Mock Struct Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/MockingURLProtocol.html">MockingURLProtocol</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Mock.html">Mock</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Mock.html#/s:OV6Mocker4Mock10HTTPMethod">– HTTPMethod</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Mock.html#/s:OV6Mocker4Mock11ContentType">– ContentType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Mocker.html">Mocker</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <h1>Mock</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Mock</span><span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+
+                </div>
+              </div>
+            <p>A Mock which can be used for mocking data requests with the <code><a href="../Structs/Mocker.html">Mocker</a></code> by calling <code><a href="../Structs/Mocker.html#/s:ZFV6Mocker6Mocker8registerFVS_4MockT_">Mocker.register(...)</a></code>.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:OV6Mocker4Mock10HTTPMethod"></a>
+                    <a name="//apple_ref/swift/Enum/HTTPMethod" class="dashAnchor"></a>
+                    <a class="token" href="#/s:OV6Mocker4Mock10HTTPMethod">HTTPMethod</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>HTTP method definitions.</p>
+
+<p>See <a href="https://tools.ietf.org/html/rfc7231#section-4.3">https://tools.ietf.org/html/rfc7231#section-4.3</a></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">HTTPMethod</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/WeTransfer/Mocker/tree/master/Sources/Mock.swift#L19-L29">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:OV6Mocker4Mock11ContentType"></a>
+                    <a name="//apple_ref/swift/Enum/ContentType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:OV6Mocker4Mock11ContentType">ContentType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The types of content of a request. Will be used as Content-Type header inside a <code>Mock</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ContentType</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/WeTransfer/Mocker/tree/master/Sources/Mock.swift#L32-L53">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV6Mocker4Mock11contentTypeOS0_11ContentType"></a>
+                    <a name="//apple_ref/swift/Property/contentType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV6Mocker4Mock11contentTypeOS0_11ContentType">contentType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The type of the data which is returned.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">contentType</span><span class="p">:</span> <span class="kt"><a href="../Structs/Mock.html#/s:OV6Mocker4Mock11ContentType">ContentType</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/WeTransfer/Mocker/tree/master/Sources/Mock.swift#L56">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV6Mocker4Mock7headersGVs10DictionarySSSS_"></a>
+                    <a name="//apple_ref/swift/Property/headers" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV6Mocker4Mock7headersGVs10DictionarySSSS_">headers</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The headers to send back with the response.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">headers</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/WeTransfer/Mocker/tree/master/Sources/Mock.swift#L59">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV6Mocker4Mock10statusCodeSi"></a>
+                    <a name="//apple_ref/swift/Property/statusCode" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV6Mocker4Mock10statusCodeSi">statusCode</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The HTTP status code to return with the response.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">statusCode</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/WeTransfer/Mocker/tree/master/Sources/Mock.swift#L62">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV6Mocker4Mock3urlV10Foundation3URL"></a>
+                    <a name="//apple_ref/swift/Property/url" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV6Mocker4Mock3urlV10Foundation3URL">url</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The URL value generated based on the Mock data.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/WeTransfer/Mocker/tree/master/Sources/Mock.swift#L65">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV6Mocker4Mock14fileExtensionsGSqGSaSS__"></a>
+                    <a name="//apple_ref/swift/Property/fileExtensions" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV6Mocker4Mock14fileExtensionsGSqGSaSS__">fileExtensions</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The file extensions to match for.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">fileExtensions</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/WeTransfer/Mocker/tree/master/Sources/Mock.swift#L68">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FV6Mocker4MockcFT11contentTypeOS0_11ContentType10statusCodeSi4dataGVs10DictionaryOS0_10HTTPMethodV10Foundation4Data_17additionalHeadersGS2_SSSS__S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(contentType:statusCode:data:additionalHeaders:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FV6Mocker4MockcFT11contentTypeOS0_11ContentType10statusCodeSi4dataGVs10DictionaryOS0_10HTTPMethodV10Foundation4Data_17additionalHeadersGS2_SSSS__S0_">init(contentType:statusCode:data:additionalHeaders:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a <code>Mock</code> for the given data type. The mock will be automatically matched based on a URL created from the given parameters.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">contentType</span><span class="p">:</span> <span class="kt"><a href="../Structs/Mock.html#/s:OV6Mocker4Mock11ContentType">ContentType</a></span><span class="p">,</span> <span class="nv">statusCode</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/Mock.html#/s:OV6Mocker4Mock10HTTPMethod">HTTPMethod</a></span><span class="p">:</span> <span class="kt">Data</span><span class="p">],</span> <span class="nv">additionalHeaders</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]</span> <span class="o">=</span> <span class="p">[:])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>contentType</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The type of the data which is returned.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>statusCode</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The HTTP status code to return with the response.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data which will be returned as the response based on the HTTP Method.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>additionalHeaders</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Additional headers to be added to the response.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/WeTransfer/Mocker/tree/master/Sources/Mock.swift#L92-L94">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FV6Mocker4MockcFT3urlV10Foundation3URL11contentTypeOS0_11ContentType10statusCodeSi4dataGVs10DictionaryOS0_10HTTPMethodVS1_4Data_17additionalHeadersGS4_SSSS__S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(url:contentType:statusCode:data:additionalHeaders:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FV6Mocker4MockcFT3urlV10Foundation3URL11contentTypeOS0_11ContentType10statusCodeSi4dataGVs10DictionaryOS0_10HTTPMethodVS1_4Data_17additionalHeadersGS4_SSSS__S0_">init(url:contentType:statusCode:data:additionalHeaders:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a <code>Mock</code> for the given URL.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">contentType</span><span class="p">:</span> <span class="kt"><a href="../Structs/Mock.html#/s:OV6Mocker4Mock11ContentType">ContentType</a></span><span class="p">,</span> <span class="nv">statusCode</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/Mock.html#/s:OV6Mocker4Mock10HTTPMethod">HTTPMethod</a></span><span class="p">:</span> <span class="kt">Data</span><span class="p">],</span> <span class="nv">additionalHeaders</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]</span> <span class="o">=</span> <span class="p">[:])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>url</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL to match for and to return the mocked data for.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>contentType</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The type of the data which is returned.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>statusCode</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The HTTP status code to return with the response.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data which will be returned as the response based on the HTTP Method.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>additionalHeaders</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Additional headers to be added to the response.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/WeTransfer/Mocker/tree/master/Sources/Mock.swift#L104-L106">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FV6Mocker4MockcFT14fileExtensionsGSaSS_11contentTypeOS0_11ContentType10statusCodeSi4dataGVs10DictionaryOS0_10HTTPMethodV10Foundation4Data_17additionalHeadersGS2_SSSS__S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(fileExtensions:contentType:statusCode:data:additionalHeaders:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FV6Mocker4MockcFT14fileExtensionsGSaSS_11contentTypeOS0_11ContentType10statusCodeSi4dataGVs10DictionaryOS0_10HTTPMethodV10Foundation4Data_17additionalHeadersGS2_SSSS__S0_">init(fileExtensions:contentType:statusCode:data:additionalHeaders:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a <code>Mock</code> for the given file extensions. The mock will only be used for urls matching the extension.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">fileExtensions</span><span class="p">:</span> <span class="kt">String</span><span class="o">...</span><span class="p">,</span> <span class="nv">contentType</span><span class="p">:</span> <span class="kt"><a href="../Structs/Mock.html#/s:OV6Mocker4Mock11ContentType">ContentType</a></span><span class="p">,</span> <span class="nv">statusCode</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/Mock.html#/s:OV6Mocker4Mock10HTTPMethod">HTTPMethod</a></span><span class="p">:</span> <span class="kt">Data</span><span class="p">],</span> <span class="nv">additionalHeaders</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]</span> <span class="o">=</span> <span class="p">[:])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fileExtensions</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The file extension to match for.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>contentType</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The type of the data which is returned.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>statusCode</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The HTTP status code to return with the response.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data which will be returned as the response based on the HTTP Method.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>additionalHeaders</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Additional headers to be added to the response.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/WeTransfer/Mocker/tree/master/Sources/Mock.swift#L116-L118">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFPs9Equatableoi2eeFTxx_Sb"></a>
+                    <a name="//apple_ref/swift/Method/==(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFPs9Equatableoi2eeFTxx_Sb">==(_:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">==</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="kt">Mock</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt">Mock</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>lhs</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A value to compare.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>rhs</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Another value to compare.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/WeTransfer/Mocker/tree/master/Sources/Mock.swift#L147-L151">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2017 <a class="link" href="https://wetransfer.com" target="_blank" rel="external">WeTransfer</a>. All rights reserved. (Last updated: 2017-08-11)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

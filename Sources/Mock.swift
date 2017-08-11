@@ -52,20 +52,20 @@ public struct Mock: Equatable {
         }
     }
     
-    /// The type of the data which is returned.
-    public let contentType: ContentType
-    
     /// The headers to send back with the response.
-    public let headers: [String: String]
+    let headers: [String: String]
     
     /// The HTTP status code to return with the response.
-    public let statusCode: Int
+    let statusCode: Int
     
     /// The URL value generated based on the Mock data.
-    public let url: URL
+    let url: URL
+    
+    /// The type of the data which is returned.
+    private let contentType: ContentType
     
     /// The file extensions to match for.
-    public let fileExtensions: [String]?
+    private let fileExtensions: [String]?
     
     /// The data which will be returned as the response based on the HTTP Method.
     private let data: [HTTPMethod: Data]
