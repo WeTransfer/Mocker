@@ -15,6 +15,8 @@
 		5034461E1F3DB5630039D5E4 /* Mocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5034460F1F3DB4330039D5E4 /* Mocker.framework */; };
 		5034461F1F3DB5700039D5E4 /* Mocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5034460F1F3DB4330039D5E4 /* Mocker.framework */; };
 		503446201F3DB5700039D5E4 /* Mocker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5034460F1F3DB4330039D5E4 /* Mocker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		503446251F3DB6060039D5E4 /* JSON Files in Resources */ = {isa = PBXBuildFile; fileRef = 503446241F3DB6060039D5E4 /* JSON Files */; };
+		5034462D1F3DB6280039D5E4 /* Mocker_ExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5034462C1F3DB6280039D5E4 /* Mocker_ExampleTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +48,13 @@
 			remoteGlobalIDString = 501E26931F3DAE370048F39E;
 			remoteInfo = Mocker;
 		};
+		5034462F1F3DB6280039D5E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 503445EB1F3DB3E90039D5E4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 503445F21F3DB3EA0039D5E4;
+			remoteInfo = "Mocker-Example";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -71,6 +80,10 @@
 		503446001F3DB3EA0039D5E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		503446021F3DB3EA0039D5E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		503446091F3DB4330039D5E4 /* Mocker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Mocker.xcodeproj; path = ../Mocker.xcodeproj; sourceTree = "<group>"; };
+		503446241F3DB6060039D5E4 /* JSON Files */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "JSON Files"; path = "Mocker-Example/JSON Files"; sourceTree = "<group>"; };
+		5034462A1F3DB6280039D5E4 /* Mocker-ExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Mocker-ExampleTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5034462C1F3DB6280039D5E4 /* Mocker_ExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocker_ExampleTests.swift; sourceTree = "<group>"; };
+		5034462E1F3DB6280039D5E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,13 +96,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		503446271F3DB6280039D5E4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		503445EA1F3DB3E90039D5E4 = {
 			isa = PBXGroup;
 			children = (
+				503446241F3DB6060039D5E4 /* JSON Files */,
 				503445F51F3DB3EA0039D5E4 /* Mocker-Example */,
+				5034462B1F3DB6280039D5E4 /* Mocker-ExampleTests */,
 				503445F41F3DB3EA0039D5E4 /* Products */,
 				503446091F3DB4330039D5E4 /* Mocker.xcodeproj */,
 			);
@@ -99,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				503445F31F3DB3EA0039D5E4 /* Mocker-Example.app */,
+				5034462A1F3DB6280039D5E4 /* Mocker-ExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -125,6 +148,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		5034462B1F3DB6280039D5E4 /* Mocker-ExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				5034462C1F3DB6280039D5E4 /* Mocker_ExampleTests.swift */,
+				5034462E1F3DB6280039D5E4 /* Info.plist */,
+			);
+			path = "Mocker-ExampleTests";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -148,6 +180,24 @@
 			productReference = 503445F31F3DB3EA0039D5E4 /* Mocker-Example.app */;
 			productType = "com.apple.product-type.application";
 		};
+		503446291F3DB6280039D5E4 /* Mocker-ExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 503446311F3DB6280039D5E4 /* Build configuration list for PBXNativeTarget "Mocker-ExampleTests" */;
+			buildPhases = (
+				503446261F3DB6280039D5E4 /* Sources */,
+				503446271F3DB6280039D5E4 /* Frameworks */,
+				503446281F3DB6280039D5E4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				503446301F3DB6280039D5E4 /* PBXTargetDependency */,
+			);
+			name = "Mocker-ExampleTests";
+			productName = "Mocker-ExampleTests";
+			productReference = 5034462A1F3DB6280039D5E4 /* Mocker-ExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -162,6 +212,12 @@
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = GLJTT4T544;
 						ProvisioningStyle = Automatic;
+					};
+					503446291F3DB6280039D5E4 = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = GLJTT4T544;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 503445F21F3DB3EA0039D5E4;
 					};
 				};
 			};
@@ -185,6 +241,7 @@
 			projectRoot = "";
 			targets = (
 				503445F21F3DB3EA0039D5E4 /* Mocker-Example */,
+				503446291F3DB6280039D5E4 /* Mocker-ExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -214,6 +271,14 @@
 				503446011F3DB3EA0039D5E4 /* LaunchScreen.storyboard in Resources */,
 				503445FE1F3DB3EA0039D5E4 /* Assets.xcassets in Resources */,
 				503445FC1F3DB3EA0039D5E4 /* Main.storyboard in Resources */,
+				503446251F3DB6060039D5E4 /* JSON Files in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		503446281F3DB6280039D5E4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +294,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		503446261F3DB6280039D5E4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5034462D1F3DB6280039D5E4 /* Mocker_ExampleTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -241,6 +314,11 @@
 			isa = PBXTargetDependency;
 			name = Mocker;
 			targetProxy = 503446211F3DB5700039D5E4 /* PBXContainerItemProxy */;
+		};
+		503446301F3DB6280039D5E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 503445F21F3DB3EA0039D5E4 /* Mocker-Example */;
+			targetProxy = 5034462F1F3DB6280039D5E4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -387,6 +465,34 @@
 			};
 			name = Release;
 		};
+		503446321F3DB6280039D5E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = GLJTT4T544;
+				INFOPLIST_FILE = "Mocker-ExampleTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.wetransfer.Mocker-ExampleTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mocker-Example.app/Mocker-Example";
+			};
+			name = Debug;
+		};
+		503446331F3DB6280039D5E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = GLJTT4T544;
+				INFOPLIST_FILE = "Mocker-ExampleTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.wetransfer.Mocker-ExampleTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mocker-Example.app/Mocker-Example";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -407,6 +513,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		503446311F3DB6280039D5E4 /* Build configuration list for PBXNativeTarget "Mocker-ExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				503446321F3DB6280039D5E4 /* Debug */,
+				503446331F3DB6280039D5E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
