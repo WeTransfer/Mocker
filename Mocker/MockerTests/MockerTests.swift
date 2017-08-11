@@ -17,7 +17,6 @@ final class MockerTests: XCTestCase {
         let originalURL = URL(string: "https://avatars3.githubusercontent.com/u/26250426?v=4&s=400")!
         
         let mock = Mock(url: originalURL, contentType: .imagePNG, statusCode: 200, data: [
-            .head: MockedData.botAvatarImageResponseHead,
             .get: MockedData.botAvatarImageFileUrl.data
         ])
         
@@ -40,7 +39,6 @@ final class MockerTests: XCTestCase {
         let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png")
         
         Mock(fileExtensions: "png", contentType: .imagePNG, statusCode: 200, data: [
-            .head: MockedData.botAvatarImageResponseHead,
             .get: MockedData.botAvatarImageFileUrl.data
         ]).register()
         
@@ -134,7 +132,6 @@ final class MockerTests: XCTestCase {
         let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png")
         
         Mock(fileExtensions: "png", contentType: .imagePNG, statusCode: 200, data: [
-            .head: MockedData.botAvatarImageResponseHead,
             .get: MockedData.botAvatarImageFileUrl.data
         ]).register()
         

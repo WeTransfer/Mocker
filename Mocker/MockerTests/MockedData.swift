@@ -9,12 +9,8 @@
 import Foundation
 import UIKit
 
-/// Contains all available Mocket
+/// Contains all available Mocked data.
 public final class MockedData {
-    
-    private static let bundle = Bundle(for: MockedData.self)
-    
-    public static let botAvatarImageResponseHead: Data = Bundle(for: MockedData.self).url(forResource: "Resources/Responses/bot-avatar-image-head", withExtension: "data")!.data
     public static let botAvatarImageFileUrl: URL = Bundle(for: MockedData.self).url(forResource: "wetransfer_bot_avater", withExtension: "png")!
     public static let exampleJSON: URL = Bundle(for: MockedData.self).url(forResource: "Resources/JSON Files/example", withExtension: "json")!
 }
