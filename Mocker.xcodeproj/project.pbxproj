@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		501E269E1F3DAE370048F39E /* Mocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 501E26941F3DAE370048F39E /* Mocker.framework */; };
-		501E26A31F3DAE370048F39E /* MockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E26A21F3DAE370048F39E /* MockerTests.swift */; };
-		501E26AF1F3DAF9F0048F39E /* Mocker.h in Headers */ = {isa = PBXBuildFile; fileRef = 501E26AE1F3DAF9F0048F39E /* Mocker.h */; };
+		503445DD1F3DB0F90039D5E4 /* MockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503445D71F3DB0A60039D5E4 /* MockerTests.swift */; };
+		503445DE1F3DB1F00039D5E4 /* Mocker.h in Headers */ = {isa = PBXBuildFile; fileRef = 50B9281B1F3DB06500F2974A /* Mocker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,10 +25,10 @@
 /* Begin PBXFileReference section */
 		501E26941F3DAE370048F39E /* Mocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		501E269D1F3DAE370048F39E /* MockerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MockerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		501E26A21F3DAE370048F39E /* MockerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockerTests.swift; sourceTree = "<group>"; };
-		501E26A41F3DAE370048F39E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		501E26AE1F3DAF9F0048F39E /* Mocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mocker.h; sourceTree = "<group>"; };
-		501E26B11F3DAFA60048F39E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		503445D61F3DB0A60039D5E4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		503445D71F3DB0A60039D5E4 /* MockerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockerTests.swift; sourceTree = "<group>"; };
+		503445D91F3DB0A60039D5E4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		50B9281B1F3DB06500F2974A /* Mocker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Mocker.h; path = Mocker/Mocker.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,10 +53,10 @@
 		501E268A1F3DAE370048F39E = {
 			isa = PBXGroup;
 			children = (
-				501E26A11F3DAE370048F39E /* MockerTests */,
+				50B9281B1F3DB06500F2974A /* Mocker.h */,
+				503445D51F3DB0A60039D5E4 /* MockerTests */,
 				501E26951F3DAE370048F39E /* Products */,
-				501E26B01F3DAFA60048F39E /* Supporting Files */,
-				501E26AE1F3DAF9F0048F39E /* Mocker.h */,
+				503445D81F3DB0A60039D5E4 /* Supporting Files */,
 			);
 			sourceTree = "<group>";
 		};
@@ -69,21 +69,23 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		501E26A11F3DAE370048F39E /* MockerTests */ = {
+		503445D51F3DB0A60039D5E4 /* MockerTests */ = {
 			isa = PBXGroup;
 			children = (
-				501E26A21F3DAE370048F39E /* MockerTests.swift */,
-				501E26A41F3DAE370048F39E /* Info.plist */,
+				503445D61F3DB0A60039D5E4 /* Info.plist */,
+				503445D71F3DB0A60039D5E4 /* MockerTests.swift */,
 			);
-			path = MockerTests;
+			name = MockerTests;
+			path = Mocker/MockerTests;
 			sourceTree = "<group>";
 		};
-		501E26B01F3DAFA60048F39E /* Supporting Files */ = {
+		503445D81F3DB0A60039D5E4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				501E26B11F3DAFA60048F39E /* Info.plist */,
+				503445D91F3DB0A60039D5E4 /* Info.plist */,
 			);
-			path = "Supporting Files";
+			name = "Supporting Files";
+			path = "Mocker/Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -93,7 +95,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				501E26AF1F3DAF9F0048F39E /* Mocker.h in Headers */,
+				503445DE1F3DB1F00039D5E4 /* Mocker.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,7 +207,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				501E26A31F3DAE370048F39E /* MockerTests.swift in Sources */,
+				503445DD1F3DB0F90039D5E4 /* MockerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,7 +332,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Supporting Files/Info.plist";
+				INFOPLIST_FILE = "Mocker/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wetransfer.Mocker;
@@ -349,7 +351,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Supporting Files/Info.plist";
+				INFOPLIST_FILE = "Mocker/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wetransfer.Mocker;
@@ -363,7 +365,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVELOPMENT_TEAM = GLJTT4T544;
-				INFOPLIST_FILE = MockerTests/Info.plist;
+				INFOPLIST_FILE = Mocker/MockerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wetransfer.MockerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -375,7 +377,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVELOPMENT_TEAM = GLJTT4T544;
-				INFOPLIST_FILE = MockerTests/Info.plist;
+				INFOPLIST_FILE = Mocker/MockerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wetransfer.MockerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -402,6 +404,7 @@
 				501E26AA1F3DAE370048F39E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		501E26AB1F3DAE370048F39E /* Build configuration list for PBXNativeTarget "MockerTests" */ = {
 			isa = XCConfigurationList;
@@ -410,6 +413,7 @@
 				501E26AD1F3DAE370048F39E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
