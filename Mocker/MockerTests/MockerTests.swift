@@ -90,4 +90,30 @@ final class MockerTests: XCTestCase {
         waitForExpectations(timeout: 10.0, handler: nil)
     }
     
+    /// It should work with a custom URLSession.
+    func testCustomURLSession() {
+        let expectation = self.expectation(description: "Data request should succeed")
+        let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png")
+        
+        Mock(fileExtensions: "png", contentType: .imagePNG, statusCode: 200, data: [
+            Mock.HTTPMethod.head: TestResources.mockedData.botAvatarImageResponseHead,
+            Mock.HTTPMethod.get: TestResources.mockedData.botAvatarImageResponseGet
+            ]).register()
+        
+        let configuration = URLSessionConfiguration.default
+        configuration.protocolClasses = [MockingURLProtocol.self]
+        let urlSession = URLSession(configuration: configuration)
+        
+        urlSession.dataTask(with: originalURL!) { (data, response, error) in
+            XCTAssert(error == nil)
+            let image: UIImage = UIImage(data: data!)!
+            let sampleImage: UIImage = UIImage(contentsOfFile: TestResources.sampleFiles.botAvatarImageFileUrl.path)!
+            
+            XCTAssert(image.size == sampleImage.size, "Image should be returned mocked")
+            expectation.fulfill()
+            }.resume()
+        
+        waitForExpectations(timeout: 10.0, handler: nil)
+    }
+    
 }

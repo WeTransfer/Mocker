@@ -10,11 +10,18 @@ import Foundation
 
 /// Can be used for registering Mocked data, returned by the `MockingURLProtocol`.
 public struct Mocker {
+    
+    public enum HTTPVersion: String {
+        case http1_0 = "HTTP/1.0"
+        case http1_1 = "HTTP/1.1"
+        case http2_0 = "HTTP/2.0"
+    }
+    
     /// The shared instance of the Mocker, can be used to register and return mocks.
     static var shared = Mocker()
     
     /// The HTTP Version to use in the mocked response.
-    static let httpVersion = "HTTP/1.1"
+    public static var httpVersion: HTTPVersion = HTTPVersion.http1_1
     
     /// The registrated mocks.
     private(set) var mocks: [Mock] = []

@@ -15,7 +15,7 @@ public final class MockingURLProtocol: URLProtocol {
     public override func startLoading() {
         guard
             let mock = Mocker.mock(for: request),
-            let response = HTTPURLResponse(url: mock.url, statusCode: mock.statusCode, httpVersion: Mocker.httpVersion, headerFields: mock.headers),
+            let response = HTTPURLResponse(url: mock.url, statusCode: mock.statusCode, httpVersion: Mocker.httpVersion.rawValue, headerFields: mock.headers),
             let data = mock.data(for: request)
         else {
             fatalError("No mocked data found for url \(String(describing: request.url?.absoluteString)) method \(String(describing: request.httpMethod)). Did you forget to use `register()`?")
