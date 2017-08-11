@@ -8,61 +8,15 @@
 
 import Foundation
 import UIKit
-/// Coyote Test Resources
-final class TestResources {
-    private static let bundle = Bundle(for: TestResources.self)
-    static var sampleFiles = SampleFiles(bundle: bundle)
-    static var mockedData = MockedData(bundle: bundle, sampleFiles: TestResources.sampleFiles)
-}
-
-/// Contains all available samples files to be used inside tests.
-public struct SampleFiles {
-    public typealias FileURL = URL
-    
-    private let bundle: Bundle
-    
-    /// Initialises a new instance containing access to all sample files.
-    ///
-    /// - Parameter bundle: The bundle to read the files from.
-    public init(bundle: Bundle) {
-        self.bundle = bundle
-    }
-    
-    public lazy var botAvatarImageFileUrl: FileURL = self.bundle.url(forResource: "wetransfer_bot_avater", withExtension: "png")!
-}
-
 
 /// Contains all available Mocket
-public struct MockedData {
+public final class MockedData {
     
-    private let bundle: Bundle
-    private var sampleFiles: SampleFiles
+    private static let bundle = Bundle(for: MockedData.self)
     
-    public var json: JSONSampleData
-    
-    /// Initialised a new instance to access all available Mocked Data.
-    ///
-    /// - Parameters:
-    ///   - bundle: The bundle to read the files from.
-    ///   - sampleFiles: The struct containing access to all Sample Files. Will sometimes be used to return sample files as mocked data.
-    public init(bundle: Bundle, sampleFiles: SampleFiles) {
-        self.bundle = bundle
-        self.sampleFiles = sampleFiles
-        self.json = JSONSampleData(bundle: bundle)
-    }
-    
-    public lazy var botAvatarImageResponseHead: Data = self.bundle.url(forResource: "Resources/Responses/bot-avatar-image-head", withExtension: "data")!.data
-    public lazy var botAvatarImageResponseGet: Data = self.sampleFiles.botAvatarImageFileUrl.data
-    
-    public struct JSONSampleData {
-        private let bundle: Bundle
-        
-        fileprivate init(bundle: Bundle) {
-            self.bundle = bundle
-        }
-        
-        public lazy var authorize: URL = self.bundle.url(forResource: "MockedData/Requests/authorize", withExtension: "json")!
-    }
+    public static let botAvatarImageResponseHead: Data = Bundle(for: MockedData.self).url(forResource: "Resources/Responses/bot-avatar-image-head", withExtension: "data")!.data
+    public static let botAvatarImageFileUrl: URL = Bundle(for: MockedData.self).url(forResource: "wetransfer_bot_avater", withExtension: "png")!
+    public static let exampleJSON: URL = Bundle(for: MockedData.self).url(forResource: "Resources/JSON Files/example", withExtension: "json")!
 }
 
 internal extension URL {

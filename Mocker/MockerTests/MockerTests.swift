@@ -17,15 +17,15 @@ final class MockerTests: XCTestCase {
         let originalURL = URL(string: "https://avatars3.githubusercontent.com/u/26250426?v=4&s=400")!
         
         let mock = Mock(url: originalURL, contentType: .imagePNG, statusCode: 200, data: [
-            Mock.HTTPMethod.head: TestResources.mockedData.botAvatarImageResponseHead,
-            Mock.HTTPMethod.get: TestResources.mockedData.botAvatarImageResponseGet
-            ])
+            .head: MockedData.botAvatarImageResponseHead,
+            .get: MockedData.botAvatarImageFileUrl.data
+        ])
         
         mock.register()
         URLSession.shared.dataTask(with: originalURL) { (data, response, error) in
             XCTAssert(error == nil)
             let image: UIImage = UIImage(data: data!)!
-            let sampleImage: UIImage = UIImage(contentsOfFile: TestResources.sampleFiles.botAvatarImageFileUrl.path)!
+            let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
             
             XCTAssert(image.size == sampleImage.size, "Image should be returned mocked")
             expectation.fulfill()
@@ -40,16 +40,54 @@ final class MockerTests: XCTestCase {
         let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png")
         
         Mock(fileExtensions: "png", contentType: .imagePNG, statusCode: 200, data: [
-            Mock.HTTPMethod.head: TestResources.mockedData.botAvatarImageResponseHead,
-            Mock.HTTPMethod.get: TestResources.mockedData.botAvatarImageResponseGet
+            .head: MockedData.botAvatarImageResponseHead,
+            .get: MockedData.botAvatarImageFileUrl.data
         ]).register()
         
         URLSession.shared.dataTask(with: originalURL!) { (data, response, error) in
             XCTAssert(error == nil)
             let image: UIImage = UIImage(data: data!)!
-            let sampleImage: UIImage = UIImage(contentsOfFile: TestResources.sampleFiles.botAvatarImageFileUrl.path)!
+            let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
             
             XCTAssert(image.size == sampleImage.size, "Image should be returned mocked")
+            expectation.fulfill()
+        }.resume()
+        
+        waitForExpectations(timeout: 10.0, handler: nil)
+    }
+    
+    /// It should return the mocked JSON.
+    func testJSONRequest() {
+        struct Framework {
+            let name: String?
+            let owner: String?
+            
+            init(jsonDictionary: [String: Any]) {
+                name = jsonDictionary["name"] as? String
+                owner = jsonDictionary["owner"] as? String
+            }
+        }
+        
+        let expectation = self.expectation(description: "Data request should succeed")
+        let originalURL = URL(string: "https://www.wetransfer.com/example.json")!
+        
+        Mock(url: originalURL, contentType: .json, statusCode: 200, data: [
+            .get : MockedData.exampleJSON.data
+            ]
+        ).register()
+        
+        URLSession.shared.dataTask(with: originalURL) { (data, response, error) in
+
+            guard let data = data, let jsonDictionary = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String: Any] else {
+                XCTFail("Wrong data response")
+                expectation.fulfill()
+                return
+            }
+            
+            let framework = Framework(jsonDictionary: jsonDictionary)
+            XCTAssert(framework.name == "Mocker")
+            XCTAssert(framework.owner == "WeTransfer")
+            
             expectation.fulfill()
         }.resume()
         
@@ -96,9 +134,9 @@ final class MockerTests: XCTestCase {
         let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png")
         
         Mock(fileExtensions: "png", contentType: .imagePNG, statusCode: 200, data: [
-            Mock.HTTPMethod.head: TestResources.mockedData.botAvatarImageResponseHead,
-            Mock.HTTPMethod.get: TestResources.mockedData.botAvatarImageResponseGet
-            ]).register()
+            .head: MockedData.botAvatarImageResponseHead,
+            .get: MockedData.botAvatarImageFileUrl.data
+        ]).register()
         
         let configuration = URLSessionConfiguration.default
         configuration.protocolClasses = [MockingURLProtocol.self]
@@ -107,7 +145,7 @@ final class MockerTests: XCTestCase {
         urlSession.dataTask(with: originalURL!) { (data, response, error) in
             XCTAssert(error == nil)
             let image: UIImage = UIImage(data: data!)!
-            let sampleImage: UIImage = UIImage(contentsOfFile: TestResources.sampleFiles.botAvatarImageFileUrl.path)!
+            let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
             
             XCTAssert(image.size == sampleImage.size, "Image should be returned mocked")
             expectation.fulfill()
@@ -115,5 +153,4 @@ final class MockerTests: XCTestCase {
         
         waitForExpectations(timeout: 10.0, handler: nil)
     }
-    
 }
