@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-<img src="https://travis-ci.com/WeTransfer/Mocker.svg?token=Ur5V2zzKmBJLmMYHKJTF&branch=master"/>
+<img src="https://travis-ci.org/WeTransfer/Mocker.svg?branch=master"/>
 <img src="https://img.shields.io/cocoapods/v/Mocker.svg?style=flat"/>
 <img src="https://img.shields.io/cocoapods/l/Mocker.svg?style=flat"/>
 <img src="https://img.shields.io/cocoapods/p/Mocker.svg?style=flat"/>
