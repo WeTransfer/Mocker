@@ -76,51 +76,51 @@ public struct Mock: Equatable {
     /// Add a delay to a certain mock, which makes the response returned later.
     public var delay: DispatchTimeInterval?
     
-    private init(url: URL? = nil, contentType: ContentType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
-        self.contentType = contentType
+    private init(url: URL? = nil, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
+        self.dataType = dataType
         self.statusCode = statusCode
         self.data = data
-        self.url = url ?? URL(string: "https://mocked.wetransfer.com/\(contentType.rawValue)/\(statusCode)/")!
+        self.url = url ?? URL(string: "https://mocked.wetransfer.com/\(dataType.rawValue)/\(statusCode)/")!
         self.fileExtensions = fileExtensions?.map({ $0.replacingOccurrences(of: ".", with: "") })
         
         var headers = additionalHeaders
-        headers["Content-Type"] = contentType.headerValue
+        headers["Content-Type"] = dataType.headerValue
         self.headers = headers
     }
     
     /// Creates a `Mock` for the given data type. The mock will be automatically matched based on a URL created from the given parameters.
     ///
     /// - Parameters:
-    ///   - contentType: The type of the data which is returned.
+    ///   - dataType: The type of the data which is returned.
     ///   - statusCode: The HTTP status code to return with the response.
     ///   - data: The data which will be returned as the response based on the HTTP Method.
     ///   - additionalHeaders: Additional headers to be added to the response.
-    public init(contentType: ContentType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
-        self.init(url: nil, contentType: contentType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
+    public init(dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
+        self.init(url: nil, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
     }
     
     /// Creates a `Mock` for the given URL.
     ///
     /// - Parameters:
     ///   - url: The URL to match for and to return the mocked data for.
-    ///   - contentType: The type of the data which is returned.
+    ///   - dataType: The type of the data which is returned.
     ///   - statusCode: The HTTP status code to return with the response.
     ///   - data: The data which will be returned as the response based on the HTTP Method.
     ///   - additionalHeaders: Additional headers to be added to the response.
-    public init(url: URL, contentType: ContentType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
-        self.init(url: url, contentType: contentType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
+    public init(url: URL, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
+        self.init(url: url, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
     }
     
     /// Creates a `Mock` for the given file extensions. The mock will only be used for urls matching the extension.
     ///
     /// - Parameters:
     ///   - fileExtensions: The file extension to match for.
-    ///   - contentType: The type of the data which is returned.
+    ///   - dataType: The type of the data which is returned.
     ///   - statusCode: The HTTP status code to return with the response.
     ///   - data: The data which will be returned as the response based on the HTTP Method.
     ///   - additionalHeaders: Additional headers to be added to the response.
-    public init(fileExtensions: String..., contentType: ContentType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
-        self.init(url: nil, contentType: contentType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: fileExtensions)
+    public init(fileExtensions: String..., dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
+        self.init(url: nil, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: fileExtensions)
     }
     
     /// Registers the mock with the shared `Mocker`.

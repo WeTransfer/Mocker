@@ -3,6 +3,7 @@ disabled_rules: # Rule identifiers to exclude from running
   - identifier_name
   - force_cast
   - force_try
+  - force_unwrapping
 opt_in_rules:
   - empty_count
   - explicit_init

@@ -25,7 +25,7 @@ final class MockerTests: XCTestCase {
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://avatars3.githubusercontent.com/u/26250426?v=4&s=400")!
         
-        let mock = Mock(url: originalURL, contentType: .imagePNG, statusCode: 200, data: [
+        let mock = Mock(url: originalURL, dataType: .imagePNG, statusCode: 200, data: [
             .get: MockedData.botAvatarImageFileUrl.data
         ])
         
@@ -47,7 +47,7 @@ final class MockerTests: XCTestCase {
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png")
         
-        Mock(fileExtensions: "png", contentType: .imagePNG, statusCode: 200, data: [
+        Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 200, data: [
             .get: MockedData.botAvatarImageFileUrl.data
         ]).register()
         
@@ -68,7 +68,7 @@ final class MockerTests: XCTestCase {
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://www.wetransfer.com/example.json")!
         
-        Mock(url: originalURL, contentType: .json, statusCode: 200, data: [
+        Mock(url: originalURL, dataType: .json, statusCode: 200, data: [
             .get: MockedData.exampleJSON.data
             ]
         ).register()
@@ -95,7 +95,7 @@ final class MockerTests: XCTestCase {
     func testAdditionalHeaders() {
         let expectation = self.expectation(description: "Data request should succeed")
         let headers = ["testkey": "testvalue"]
-        let mock = Mock(contentType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: headers)
+        let mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: headers)
         mock.register()
         
         URLSession.shared.dataTask(with: mock.url) { (_, response, error) in
@@ -110,10 +110,10 @@ final class MockerTests: XCTestCase {
     /// It should override existing mocks.
     func testMockOverriding() {
         let expectation = self.expectation(description: "Data request should succeed")
-        let mock = Mock(contentType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: ["testkey": "testvalue"])
+        let mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: ["testkey": "testvalue"])
         mock.register()
         
-        let newMock = Mock(contentType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: ["newkey": "newvalue"])
+        let newMock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: ["newkey": "newvalue"])
         newMock.register()
         
         URLSession.shared.dataTask(with: mock.url) { (_, response, error) in
@@ -130,7 +130,7 @@ final class MockerTests: XCTestCase {
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png")
         
-        Mock(fileExtensions: "png", contentType: .imagePNG, statusCode: 200, data: [
+        Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 200, data: [
             .get: MockedData.botAvatarImageFileUrl.data
         ]).register()
         
