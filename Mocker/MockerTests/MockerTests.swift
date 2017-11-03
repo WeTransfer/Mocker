@@ -170,4 +170,29 @@ final class MockerTests: XCTestCase {
         
         waitForExpectations(timeout: 10.0, handler: nil)
     }
+    
+    /// It should correctly handle redirect responses.
+    func testRedirectResponse() {
+        let expectation = self.expectation(description: "Data request should be cancelled")
+        let urlWhichRedirects: URL = URL(string: "https://we.tl/redirect")!
+        Mock(url: urlWhichRedirects, dataType: .html, statusCode: 200, data: [.get: MockedData.redirectGET.data]).register()
+        Mock(url: URL(string: "https://wetransfer.com/redirect")!, dataType: .json, statusCode: 200, data: [.get: MockedData.exampleJSON.data]).register()
+        
+        URLSession.shared.dataTask(with: urlWhichRedirects) { (data, _, _) in
+            
+            guard let data = data, let jsonDictionary = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String: Any] else {
+                XCTFail("Wrong data response")
+                expectation.fulfill()
+                return
+            }
+            
+            let framework = Framework(jsonDictionary: jsonDictionary)
+            XCTAssert(framework.name == "Mocker")
+            XCTAssert(framework.owner == "WeTransfer")
+            
+            expectation.fulfill()
+        }.resume()
+        
+        waitForExpectations(timeout: 10.0, handler: nil)
+    }
 }

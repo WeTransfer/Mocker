@@ -25,6 +25,8 @@ Mocker is a library written in Swift which makes it possible to mock data reques
 	    - [JSON Requests](#json-requests)
 	    - [File extensions](#file-extensions)
 	    - [Custom HEAD and GET response](#custom-head-and-get-response)
+	    - [Delayed responses](#delayed-responses)
+	    - [Redirect responses](#redirect-responses)
 - [Communication](#communication)
 - [Installation](#installation)
 - [Release Notes](#release-notes)
@@ -39,9 +41,9 @@ _Run all your data request unit tests offline_ 🎉
 - [x] Supports popular frameworks like `Alamofire`
 
 ## Requirements
-- Swift 3.0, 3.1, 3.2
+- Swift 3+
 - iOS 8.0+
-- Xcode 8.1, 8.2, 8.3
+- Xcode 9.0+
 
 ## Usage
 
@@ -139,7 +141,22 @@ var mock = Mock(url: exampleURL, contentType: .json, statusCode: 200, data: [
 ])
 mock.delay = DispatchTimeInterval.seconds(5)
 mock.register()
+```
 
+##### Redirect responses
+Sometimes you want to mock short URLs or other redirect URLs. This is possible by saving the response and mock the redirect location, which can be found inside the response:
+
+```
+Date: Tue, 10 Oct 2017 07:28:33 GMT
+Location: https://wetransfer.com/redirect
+```
+
+By creating a mock for the short URL and the redirect URL, you can mock redirect and test this behaviour:
+
+```swift
+let urlWhichRedirects: URL = URL(string: "https://we.tl/redirect")!
+Mock(url: urlWhichRedirects, dataType: .html, statusCode: 200, data: [.get: MockedData.redirectGET.data]).register()
+Mock(url: URL(string: "https://wetransfer.com/redirect")!, dataType: .json, statusCode: 200, data: [.get: MockedData.exampleJSON.data]).register()
 ```
 
 ## Communication

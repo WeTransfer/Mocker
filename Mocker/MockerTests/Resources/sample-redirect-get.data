@@ -1,0 +1,14 @@
+HTTP/1.1 302 Moved Temporarily
+Content-Type: text/html;charset=utf-8
+Content-Length: 0
+Cache-Control: public
+Date: Tue, 10 Oct 2017 07:28:33 GMT
+Location: https://wetransfer.com/redirect
+Server: nginx/1.12.0
+X-Content-Type-Options: nosniff
+X-Request-Id: 8c43587ec891b2f1f72c61ecec2e96db
+X-XSS-Protection: 1; mode=block
+X-Cache: Miss from cloudfront
+Via: 1.1 72f202fb973968c0cfdb028ab6f36fac.cloudfront.net (CloudFront)
+X-Amz-Cf-Id: tU8eVZ9jWBJzd3aEB-4gyym_VxcPKskWFByEvXapy5WrdDkV-35-KA==
+Connection: Keep-alive
