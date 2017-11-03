@@ -127,6 +127,21 @@ URLSession.shared.dataTask(with: exampleURL) { (data, response, error) in
 }.resume()
 ```
 
+##### Delayed responses
+Sometimes you want to test if cancellation of requests is working. In that case, the mocked request should not finished directly and you need an delay. This can be added easily:
+
+```swift
+let exampleURL = URL(string: "https://www.wetransfer.com/api/endpoint")!
+
+var mock = Mock(url: exampleURL, contentType: .json, statusCode: 200, data: [
+    .head: MockedData.headResponse.data,
+    .get: MockedData.exampleJSON.data
+])
+mock.delay = DispatchTimeInterval.seconds(5)
+mock.register()
+
+```
+
 ## Communication
 
 - If you **found a bug**, open an issue.

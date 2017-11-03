@@ -149,4 +149,25 @@ final class MockerTests: XCTestCase {
         
         waitForExpectations(timeout: 10.0, handler: nil)
     }
+    
+    /// It should be possible to test cancellation of requests with a delayed mock.
+    func testDelayedMock() {
+        let expectation = self.expectation(description: "Data request should be cancelled")
+        var mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()])
+        mock.delay = DispatchTimeInterval.seconds(5)
+        mock.register()
+        
+        let task = URLSession.shared.dataTask(with: mock.url) { (_, _, error) in
+            XCTAssert(error?._code == NSURLErrorCancelled)
+            expectation.fulfill()
+        }
+        
+        task.resume()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+            task.cancel()
+        })
+        
+        waitForExpectations(timeout: 10.0, handler: nil)
+    }
 }
