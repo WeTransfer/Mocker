@@ -195,4 +195,14 @@ final class MockerTests: XCTestCase {
         
         waitForExpectations(timeout: 10.0, handler: nil)
     }
+    
+    /// It should be possible to ignore URLs and not let them be handled.
+    func testIgnoreURLs() {
+        
+        let ignoredURL = URL(string: "www.wetransfer.com")!
+        
+        XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURL)) == true)
+        Mocker.ignore(ignoredURL)
+        XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURL)) == false)
+    }
 }

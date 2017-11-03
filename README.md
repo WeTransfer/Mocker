@@ -27,6 +27,7 @@ Mocker is a library written in Swift which makes it possible to mock data reques
 	    - [Custom HEAD and GET response](#custom-head-and-get-response)
 	    - [Delayed responses](#delayed-responses)
 	    - [Redirect responses](#redirect-responses)
+	    - [Ignoring URLs](#ignoring-urls)
 - [Communication](#communication)
 - [Installation](#installation)
 - [Release Notes](#release-notes)
@@ -157,6 +158,14 @@ By creating a mock for the short URL and the redirect URL, you can mock redirect
 let urlWhichRedirects: URL = URL(string: "https://we.tl/redirect")!
 Mock(url: urlWhichRedirects, dataType: .html, statusCode: 200, data: [.get: MockedData.redirectGET.data]).register()
 Mock(url: URL(string: "https://wetransfer.com/redirect")!, dataType: .json, statusCode: 200, data: [.get: MockedData.exampleJSON.data]).register()
+```
+
+##### Ignoring URLs
+As the Mocker catches all URLs when registered, you might end up with a `fatalError` thrown in cases you don't need a mocked request. In that case you can ignore the URL:
+
+```swift
+let ignoredURL = URL(string: "www.wetransfer.com")!
+Mocker.ignore(ignoredURL)
 ```
 
 ## Communication
