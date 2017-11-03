@@ -3,10 +3,11 @@
 </p>
 
 <p align="center">
-<img src="https://travis-ci.org/WeTransfer/Mocker.svg?branch=master"/>
+<img src="https://api.travis-ci.org/WeTransfer/Mocker.svg?branch=master"/>
 <img src="https://img.shields.io/cocoapods/v/Mocker.svg?style=flat"/>
 <img src="https://img.shields.io/cocoapods/l/Mocker.svg?style=flat"/>
 <img src="https://img.shields.io/cocoapods/p/Mocker.svg?style=flat"/>
+<img src="https://img.shields.io/badge/language-swift4.0-f48041.svg?style=flat"/>
 <img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat"/>
 <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat"/>
 </p>
@@ -25,6 +26,9 @@ Mocker is a library written in Swift which makes it possible to mock data reques
 	    - [JSON Requests](#json-requests)
 	    - [File extensions](#file-extensions)
 	    - [Custom HEAD and GET response](#custom-head-and-get-response)
+	    - [Delayed responses](#delayed-responses)
+	    - [Redirect responses](#redirect-responses)
+	    - [Ignoring URLs](#ignoring-urls)
 - [Communication](#communication)
 - [Installation](#installation)
 - [Release Notes](#release-notes)
@@ -39,9 +43,9 @@ _Run all your data request unit tests offline_ 🎉
 - [x] Supports popular frameworks like `Alamofire`
 
 ## Requirements
-- Swift 3.0, 3.1, 3.2
+- Swift 3+
 - iOS 8.0+
-- Xcode 8.1, 8.2, 8.3
+- Xcode 9.0+
 
 ## Usage
 
@@ -125,6 +129,44 @@ Mock(url: exampleURL, contentType: .json, statusCode: 200, data: [
 URLSession.shared.dataTask(with: exampleURL) { (data, response, error) in
 	// data is your mocked data
 }.resume()
+```
+
+##### Delayed responses
+Sometimes you want to test if cancellation of requests is working. In that case, the mocked request should not finished directly and you need an delay. This can be added easily:
+
+```swift
+let exampleURL = URL(string: "https://www.wetransfer.com/api/endpoint")!
+
+var mock = Mock(url: exampleURL, contentType: .json, statusCode: 200, data: [
+    .head: MockedData.headResponse.data,
+    .get: MockedData.exampleJSON.data
+])
+mock.delay = DispatchTimeInterval.seconds(5)
+mock.register()
+```
+
+##### Redirect responses
+Sometimes you want to mock short URLs or other redirect URLs. This is possible by saving the response and mock the redirect location, which can be found inside the response:
+
+```
+Date: Tue, 10 Oct 2017 07:28:33 GMT
+Location: https://wetransfer.com/redirect
+```
+
+By creating a mock for the short URL and the redirect URL, you can mock redirect and test this behaviour:
+
+```swift
+let urlWhichRedirects: URL = URL(string: "https://we.tl/redirect")!
+Mock(url: urlWhichRedirects, dataType: .html, statusCode: 200, data: [.get: MockedData.redirectGET.data]).register()
+Mock(url: URL(string: "https://wetransfer.com/redirect")!, dataType: .json, statusCode: 200, data: [.get: MockedData.exampleJSON.data]).register()
+```
+
+##### Ignoring URLs
+As the Mocker catches all URLs when registered, you might end up with a `fatalError` thrown in cases you don't need a mocked request. In that case you can ignore the URL:
+
+```swift
+let ignoredURL = URL(string: "www.wetransfer.com")!
+Mocker.ignore(ignoredURL)
 ```
 
 ## Communication

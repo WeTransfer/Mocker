@@ -26,6 +26,9 @@ public struct Mocker {
     /// The registrated mocks.
     private(set) var mocks: [Mock] = []
     
+    /// URLs to ignore for mocking.
+    private(set) var ignoredURLs: [URL] = []
+    
     private init() {
         // Whenever someone is requesting the Mocker, we want the URL protocol to be activated.
         URLProtocol.registerClass(MockingURLProtocol.self)
@@ -39,8 +42,22 @@ public struct Mocker {
             /// Delete the existing mock.
             shared.mocks.remove(at: existingIndex)
         }
-        
         shared.mocks.append(mock)
+    }
+    
+    /// Register an URL to ignore for mocking. This will let the URL work as if the Mocker doesn't exist.
+    ///
+    /// - Parameter url: The URL to mock.
+    public static func ignore(_ url: URL) {
+        shared.ignoredURLs.append(url)
+    }
+    
+    /// Checks if the passed URL should be handled by the Mocker. If the URL is registered to be ignored, it will not handle the URL.
+    ///
+    /// - Parameter url: The URL to check for.
+    /// - Returns: `true` if it should be mocked, `false` if the URL is registered as ignored.
+    public static func shouldHandle(_ url: URL) -> Bool {
+        return !shared.ignoredURLs.contains(url)
     }
     
     /// Retrieve a Mock for the given request. Matches on `request.url` and `request.httpMethod`.
