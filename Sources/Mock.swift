@@ -29,12 +29,13 @@ public struct Mock: Equatable {
     }
     
     /// The types of content of a request. Will be used as Content-Type header inside a `Mock`.
-    public enum ContentType: String {
+    public enum DataType: String {
         case json
         case html
         case imagePNG
         case pdf
         case mp4
+        case zip
         
         var headerValue: String {
             switch self {
@@ -48,27 +49,32 @@ public struct Mock: Equatable {
                 return "application/pdf"
             case .mp4:
                 return "video/mp4"
+            case .zip:
+                return "application/zip"
             }
         }
     }
     
+    /// The type of the data which is returned.
+    public let dataType: DataType
+    
     /// The headers to send back with the response.
-    let headers: [String: String]
+    public let headers: [String: String]
     
     /// The HTTP status code to return with the response.
-    let statusCode: Int
+    public let statusCode: Int
     
     /// The URL value generated based on the Mock data.
-    let url: URL
-    
-    /// The type of the data which is returned.
-    private let contentType: ContentType
+    public let url: URL
     
     /// The file extensions to match for.
-    private let fileExtensions: [String]?
+    public let fileExtensions: [String]?
     
     /// The data which will be returned as the response based on the HTTP Method.
     private let data: [HTTPMethod: Data]
+    
+    /// Add a delay to a certain mock, which makes the response returned later.
+    public var delay: DispatchTimeInterval?
     
     private init(url: URL? = nil, contentType: ContentType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
         self.contentType = contentType
@@ -118,7 +124,7 @@ public struct Mock: Equatable {
     }
     
     /// Registers the mock with the shared `Mocker`.
-    func register() {
+    public func register() {
         Mocker.register(self)
     }
     
@@ -139,9 +145,9 @@ public struct Mock: Equatable {
             // If the mock contains a file extension, this should always be used to match for.
             guard let pathExtension = request.url?.pathExtension else { return false }
             return fileExtensions.contains(pathExtension)
+        } else {
+            return mock.url == request.url && mock.data.keys.contains(requestHTTPMethod)
         }
-        
-        return mock.url == request.url && mock.data.keys.contains(requestHTTPMethod)
     }
     
     public static func == (lhs: Mock, rhs: Mock) -> Bool {

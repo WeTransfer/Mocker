@@ -21,14 +21,21 @@ public final class MockingURLProtocol: URLProtocol {
             fatalError("No mocked data found for url \(String(describing: request.url?.absoluteString)) method \(String(describing: request.httpMethod)). Did you forget to use `register()`?")
         }
         
-        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
-        client?.urlProtocol(self, didLoad: data)
-        client?.urlProtocolDidFinishLoading(self)
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).asyncAfter(deadline: .now() + (mock.delay ?? DispatchTimeInterval.seconds(0))) {
+            if let redirectLocation = data.redirectLocation {
+                self.client?.urlProtocol(self, wasRedirectedTo: URLRequest(url: redirectLocation), redirectResponse: response)
+            } else {
+                self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+                self.client?.urlProtocol(self, didLoad: data)
+                self.client?.urlProtocolDidFinishLoading(self)
+            }
+        }
     }
     
     /// Overrides needed to define a valid inheritance of URLProtocol.
     public override class func canInit(with request: URLRequest) -> Bool {
-        return true
+        guard let url = request.url else { return false }
+        return Mocker.shouldHandle(url)
     }
     
     /// Implementation does nothing, but is needed for a valid inheritance of URLProtocol.
@@ -39,5 +46,19 @@ public final class MockingURLProtocol: URLProtocol {
     /// Simply sends back the passed request. Implementation is needed for a valid inheritance of URLProtocol.
     public override class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
+    }
+}
+
+private extension Data {
+    /// Returns the redirect location from the raw HTTP response if exists.
+    var redirectLocation: URL? {
+        let locationComponent = String(data: self, encoding: String.Encoding.utf8)?.components(separatedBy: "\n").first(where: { (value) -> Bool in
+            return value.contains("Location:")
+        })
+        
+        guard let redirectLocationString = locationComponent?.components(separatedBy: "Location:").last, let redirectLocation = URL(string: redirectLocationString.trimmingCharacters(in: NSCharacterSet.whitespaces)) else {
+            return nil
+        }
+        return redirectLocation
     }
 }
