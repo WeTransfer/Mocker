@@ -11,12 +11,22 @@
 import Foundation
 
 /// A Mock which can be used for mocking data requests with the `Mocker` by calling `Mocker.register(...)`.
-public struct Mock: Equatable {
+public struct Mock: Equatable, Codable {
+    
+    enum CodingKeys: String, CodingKey {
+        case dataType
+        case headers
+        case statusCode
+        case fileExtensions
+        case url
+        case delay
+        case data
+    }
     
     /// HTTP method definitions.
     ///
     /// See https://tools.ietf.org/html/rfc7231#section-4.3
-    public enum HTTPMethod: String {
+    public enum HTTPMethod: String, Codable {
         case options = "OPTIONS"
         case get     = "GET"
         case head    = "HEAD"
@@ -29,7 +39,7 @@ public struct Mock: Equatable {
     }
     
     /// The types of content of a request. Will be used as Content-Type header inside a `Mock`.
-    public enum DataType: String {
+    public enum DataType: String, Codable {
         case json
         case html
         case imagePNG
@@ -73,10 +83,10 @@ public struct Mock: Equatable {
     /// The data which will be returned as the response based on the HTTP Method.
     private let data: [HTTPMethod: Data]
     
-    /// Add a delay to a certain mock, which makes the response returned later.
-    public var delay: DispatchTimeInterval?
+    /// Add a delay in milliseconds to a certain mock, which makes the response returned later.
+    public var delay: Int?
     
-    private init(path: String? = nil, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
+    private init(path: String? = nil, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], fileExtensions: [String]?) {
         self.dataType = dataType
         self.statusCode = statusCode
         self.data = data
@@ -91,12 +101,13 @@ public struct Mock: Equatable {
     /// Creates a `Mock` for the given data type. The mock will be automatically matched based on a URL created from the given parameters.
     ///
     /// - Parameters:
+    ///   - path: The optional path to check for.
     ///   - dataType: The type of the data which is returned.
     ///   - statusCode: The HTTP status code to return with the response.
     ///   - data: The data which will be returned as the response based on the HTTP Method.
     ///   - additionalHeaders: Additional headers to be added to the response.
-    public init(dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
-        self.init(path: nil, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
+    public init(path: String? = nil, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
+        self.init(path: path, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
     }
     
     /// Creates a `Mock` for the given URL.

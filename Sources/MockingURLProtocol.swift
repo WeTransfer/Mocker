@@ -21,7 +21,7 @@ public final class MockingURLProtocol: URLProtocol {
             fatalError("No mocked data found for url \(String(describing: request.url?.absoluteString)) method \(String(describing: request.httpMethod)). Did you forget to use `register()`?")
         }
         
-        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).asyncAfter(deadline: .now() + (mock.delay ?? DispatchTimeInterval.seconds(0))) {
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).asyncAfter(deadline: .now() + DispatchTimeInterval.milliseconds(mock.delay ?? 0)) {
             if let redirectLocation = data.redirectLocation {
                 self.client?.urlProtocol(self, wasRedirectedTo: URLRequest(url: redirectLocation), redirectResponse: response)
             } else {

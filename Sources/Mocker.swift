@@ -11,7 +11,7 @@ import Foundation
 /// Can be used for registering Mocked data, returned by the `MockingURLProtocol`.
 public struct Mocker {
     
-    public enum HTTPVersion: String {
+    internal enum HTTPVersion: String {
         case http1_0 = "HTTP/1.0"
         case http1_1 = "HTTP/1.1"
         case http2_0 = "HTTP/2.0"
@@ -21,13 +21,13 @@ public struct Mocker {
     private static var shared = Mocker()
     
     /// The HTTP Version to use in the mocked response.
-    public static var httpVersion: HTTPVersion = HTTPVersion.http1_1
+    internal static var httpVersion: HTTPVersion = HTTPVersion.http1_1
     
     /// The registrated mocks.
-    private(set) var mocks: [Mock] = []
+    private var mocks: [Mock] = []
     
     /// URLs to ignore for mocking.
-    private(set) var ignoredURLs: [URL] = []
+    private var ignoredURLs: [URL] = []
     
     private init() {
         // Whenever someone is requesting the Mocker, we want the URL protocol to be activated.
@@ -43,6 +43,18 @@ public struct Mocker {
             shared.mocks.remove(at: existingIndex)
         }
         shared.mocks.append(mock)
+    }
+    
+    public static func addMocksTo(launchEnvironments: inout [String: String]) {
+        let encoder = JSONEncoder()
+        
+        let jsonMocks = shared.mocks.flatMap { (mock) -> Data? in
+            return try? encoder.encode(mock)
+        }.flatMap { (data) -> String? in
+            return String(data: data, encoding: .utf8)
+        }.joined(separator: ",")
+        
+        launchEnvironments["mocks"] = jsonMocks
     }
     
     /// Register an URL to ignore for mocking. This will let the URL work as if the Mocker doesn't exist.
