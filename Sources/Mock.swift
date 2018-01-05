@@ -76,11 +76,11 @@ public struct Mock: Equatable {
     /// Add a delay to a certain mock, which makes the response returned later.
     public var delay: DispatchTimeInterval?
     
-    private init(url: URL? = nil, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
+    private init(path: String? = nil, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
         self.dataType = dataType
         self.statusCode = statusCode
         self.data = data
-        self.url = url ?? URL(string: "https://mocked.wetransfer.com/\(dataType.rawValue)/\(statusCode)/")!
+        self.url = URL(string: "https://mocked.wetransfer.com\(path ?? "/\(dataType.rawValue)/\(statusCode)")")!
         self.fileExtensions = fileExtensions?.map({ $0.replacingOccurrences(of: ".", with: "") })
         
         var headers = additionalHeaders
@@ -96,7 +96,7 @@ public struct Mock: Equatable {
     ///   - data: The data which will be returned as the response based on the HTTP Method.
     ///   - additionalHeaders: Additional headers to be added to the response.
     public init(dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
-        self.init(url: nil, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
+        self.init(path: nil, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
     }
     
     /// Creates a `Mock` for the given URL.
@@ -108,7 +108,7 @@ public struct Mock: Equatable {
     ///   - data: The data which will be returned as the response based on the HTTP Method.
     ///   - additionalHeaders: Additional headers to be added to the response.
     public init(url: URL, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
-        self.init(url: url, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
+        self.init(path: url.pathQuery, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
     }
     
     /// Creates a `Mock` for the given file extensions. The mock will only be used for urls matching the extension.
@@ -120,7 +120,7 @@ public struct Mock: Equatable {
     ///   - data: The data which will be returned as the response based on the HTTP Method.
     ///   - additionalHeaders: Additional headers to be added to the response.
     public init(fileExtensions: String..., dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
-        self.init(url: nil, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: fileExtensions)
+        self.init(path: nil, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: fileExtensions)
     }
     
     /// Registers the mock with the shared `Mocker`.
@@ -146,13 +146,19 @@ public struct Mock: Equatable {
             guard let pathExtension = request.url?.pathExtension else { return false }
             return fileExtensions.contains(pathExtension)
         } else {
-            return mock.url == request.url && mock.data.keys.contains(requestHTTPMethod)
+            return mock.url.pathQuery == request.url?.pathQuery && mock.data.keys.contains(requestHTTPMethod)
         }
     }
     
     public static func == (lhs: Mock, rhs: Mock) -> Bool {
         let lhsHTTPMethods: [String] = lhs.data.keys.flatMap { $0.rawValue }
         let rhsHTTPMethods: [String] = lhs.data.keys.flatMap { $0.rawValue }
-        return lhs.url.absoluteString == rhs.url.absoluteString && lhsHTTPMethods == rhsHTTPMethods
+        return lhs.url.pathQuery == rhs.url.pathQuery && lhsHTTPMethods == rhsHTTPMethods
+    }
+}
+
+extension URL {
+    var pathQuery: String {
+        return path + "?" + (query ?? "")
     }
 }
