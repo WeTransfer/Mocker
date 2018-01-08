@@ -57,6 +57,17 @@ public struct Mocker {
         launchEnvironments["mocks"] = jsonMocks
     }
     
+    public static func registerMocksFrom(launchEnvironments: [String: String]) {
+        guard let mocksJSON = launchEnvironments["mocks"]?.components(separatedBy: ","), !mocksJSON.isEmpty else { return }
+        
+        let decoder = JSONDecoder()
+        
+        mocksJSON.flatMap { (mockJSON) -> Mock? in
+            guard let data = mockJSON.data(using: .utf8) else { return nil }
+            return try? decoder.decode(Mock.self, from: data)
+        }.forEach(register)
+    }
+    
     /// Register an URL to ignore for mocking. This will let the URL work as if the Mocker doesn't exist.
     ///
     /// - Parameter url: The URL to mock.
