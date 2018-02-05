@@ -2,7 +2,7 @@
 source "https://rubygems.org"
 
 gem 'danger'
-gem 'danger-swiftlint', '0.9.0'
+gem 'danger-swiftlint', '0.12.1'
 gem 'danger-xcov'
 gem 'danger-xcodebuild'
 gem 'danger-xcode_summary'
