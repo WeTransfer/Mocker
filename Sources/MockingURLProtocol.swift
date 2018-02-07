@@ -10,7 +10,11 @@ import Foundation
 
 /// The protocol which can be used to send Mocked data back. Use the `Mocker` to register `Mock` data
 public final class MockingURLProtocol: URLProtocol {
-    
+
+    enum MockingURLProtocolError: Swift.Error {
+        case missingMockedData(url: String)
+    }
+
     /// Returns Mocked data based on the mocks register in the `Mocker`. Will end up in an error when no Mock data is found for the request.
     public override func startLoading() {
         guard
@@ -18,7 +22,9 @@ public final class MockingURLProtocol: URLProtocol {
             let response = HTTPURLResponse(url: mock.url, statusCode: mock.statusCode, httpVersion: Mocker.httpVersion.rawValue, headerFields: mock.headers),
             let data = mock.data(for: request)
         else {
-            fatalError("No mocked data found for url \(String(describing: request.url?.absoluteString)) method \(String(describing: request.httpMethod)). Did you forget to use `register()`?")
+            print("\n\n 🚨 No mocked data found for url \(String(describing: request.url?.absoluteString)) method \(String(describing: request.httpMethod)). Did you forget to use `register()`? 🚨 \n\n")
+            client?.urlProtocol(self, didFailWithError: MockingURLProtocolError.missingMockedData(url: String(describing: request.url?.absoluteString)))
+            return
         }
         
         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).asyncAfter(deadline: .now() + (mock.delay ?? DispatchTimeInterval.seconds(0))) {

@@ -8,7 +8,7 @@ end
 
 def lineIsPropertyMethodClassOrStruct(line)
 	if line.include?("var") or line.include?("let") or line.include?("func") or line.include?("class") or line.include?("struct")
-		if line.include?("guard") or line.include?("==")
+		if line.include?("guard")
 			return false
 		end
 		return true
@@ -23,6 +23,15 @@ def lineIncludesDocumentComment(line)
 	return false
 end
 
+def lineRequiresDocumentation(line)
+	if line.include?("override") or line.include?("==")
+		# Overrides will use documentation of the original method. Operators don't need documentation.
+		return false
+	end
+
+	return true
+end
+
 # Make it more obvious that a PR is a work in progress and shouldn't be merged yet.
 has_wip_label = github.pr_labels.any? { |label| label.include? "WIP" }
 has_wip_title = github.pr_title.include? "[WIP]"
@@ -35,24 +44,29 @@ end
 warn("Big PR") if git.lines_of_code > 500
 
 # Check for warnings
-xcodebuild.json_file = "build/reports/errors.json"
-xcodebuild.post_messages = false
-number_of_warnings = xcodebuild.parse_warnings
+json_file = "build/reports/errors.json"
+if File.file?(json_file)
+	xcodebuild.json_file = json_file
+	xcodebuild.post_messages = false
+	number_of_warnings = xcodebuild.parse_warnings
 
-if number_of_warnings > 0
- warn("The project still contains #{number_of_warnings} warnings 😱")
+	if number_of_warnings > 0
+	 warn("The project still contains #{number_of_warnings} warnings 😱")
+	end
+
+	xcode_summary.ignored_files = 'Submodules/**'
+	xcode_summary.inline_mode = true
+	xcode_summary.report 'build/reports/errors.json'
 end
-
-xcode_summary.inline_mode = true
-xcode_summary.report 'build/reports/errors.json'
-
 
 # Check to see if any of our project files contains a line with "SOURCE_ROOT" which indicates that the file isn't in sync with Finder.
 ["Mocker.xcodeproj/project.pbxproj"].each do |project_file|
  	next unless File.file?(project_file)
 	File.readlines(project_file).each_with_index do |line, index|
 		# The folder Resources is a folder references for sharing resources for testing. Don't warn for that folder.
-		if line.include?("sourceTree = SOURCE_ROOT;") and line.include?("PBXFileReference") and line.include?("name = Resources") == false
+		files_to_ignore = ["Resources", "Toucan.swift"]
+		line_should_be_ignored = files_to_ignore.map { |name| "name = " + name }.any? { |file_to_ignore| line.include?(file_to_ignore) }
+		if line.include?("sourceTree = SOURCE_ROOT;") and line.include?("PBXFileReference") and !line_should_be_ignored
 			warn("Files should be in sync with project structure", file: project_file, line: index+1) 
 		end
 	end
@@ -81,7 +95,10 @@ files_to_check = (git.modified_files + git.added_files).uniq
 	next unless File.file?(file)
 	# Only check for classes inside swift files
 	next unless File.extname(file).include?(".swift")
-  	
+
+	# Determine if we're in a test file
+  	isTestFile = File.basename(file, ".*" ).downcase.include?("test")
+
   	# Will be used to check if we're inside a comment block.
 	isCommentBlock = false
 
@@ -125,14 +142,14 @@ files_to_check = (git.modified_files + git.added_files).uniq
 			end
 
 			## Check for public properties which aren't commented
-			if disabled_rules.include?("public_docs") == false and lineContainsPublicPropertyMethodClassOrStruct(line) && lineIncludesDocumentComment(filelines[index-1]) == false
+			if disabled_rules.include?("public_docs") == false and lineContainsPublicPropertyMethodClassOrStruct(line) && lineIncludesDocumentComment(filelines[index-1]) == false && lineRequiresDocumentation(line)
 				warn("Public properties, methods, classes or structs should be documented. Make use of `///` or `/* */` so it will show up inside the docs. (public_docs)", file: file, line: index+1) 
 			end
 		end 
 	end
 
 	## Check wether our file is larger than 200 lines and doesn't include any Marks
-	if filelines.count > 200 and foundMark == false 
-		warn("Consider to place some `MARK:` lines for files over 200 lines big.")
+	if filelines.count > 200 and foundMark == false and isTestFile == false
+		warn("Consider to place some `MARK:` lines for #{file}, which is over 200 lines big.")
 	end
 end

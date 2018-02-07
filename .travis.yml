@@ -1,9 +1,7 @@
 language: objective-c
-osx_image: xcode8.3
+osx_image: xcode9.2
 script:
-    - xcodebuild clean -project Mocker.xcodeproj -scheme Mocker | xcpretty
-    - xcodebuild test -project Mocker.xcodeproj -scheme Mocker -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' -enableCodeCoverage YES | xcpretty -f `xcpretty-json-formatter`
-    - bundle exec danger
+    - bundle exec fastlane test
 before_install:
   - brew outdated swiftlint || brew upgrade swiftlint
   - bundle install

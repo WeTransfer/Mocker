@@ -1,0 +1,21 @@
+# Fastlane requirements
+fastlane_version "1.109.0"
+generated_fastfile_id "0121e253-f9e2-40ac-b489-f17f36e24ec6"
+
+default_platform :ios
+
+desc "Run tests and Danger"
+lane :test do
+  clear_derived_data
+
+  scan(
+    scheme: "Mocker",
+    project: "Mocker.xcodeproj",
+    skip_slack: true,
+    device: "iPhone 7",
+    clean: true,
+    code_coverage: true,
+    formatter: "xcpretty-json-formatter")
+
+  danger
+end
