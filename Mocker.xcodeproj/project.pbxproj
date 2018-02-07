@@ -15,7 +15,6 @@
 		503446191F3DB4660039D5E4 /* MockingURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503446161F3DB4660039D5E4 /* MockingURLProtocol.swift */; };
 		503446411F3DB7AA0039D5E4 /* MockedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503446401F3DB7AA0039D5E4 /* MockedData.swift */; };
 		503446421F3DBA3A0039D5E4 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 503446361F3DB77C0039D5E4 /* Resources */; };
-		50A08E96202B006700507436 /* testFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A08E95202B006700507436 /* testFile.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,7 +38,6 @@
 		503446161F3DB4660039D5E4 /* MockingURLProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockingURLProtocol.swift; sourceTree = "<group>"; };
 		503446361F3DB77C0039D5E4 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 		503446401F3DB7AA0039D5E4 /* MockedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockedData.swift; sourceTree = "<group>"; };
-		50A08E95202B006700507436 /* testFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testFile.swift; sourceTree = "<group>"; };
 		50B9281B1F3DB06500F2974A /* Mocker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Mocker.h; path = Mocker/Mocker.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -117,7 +115,6 @@
 				503446141F3DB4660039D5E4 /* Mock.swift */,
 				503446151F3DB4660039D5E4 /* Mocker.swift */,
 				503446161F3DB4660039D5E4 /* MockingURLProtocol.swift */,
-				50A08E95202B006700507436 /* testFile.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -255,7 +252,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				503446191F3DB4660039D5E4 /* MockingURLProtocol.swift in Sources */,
-				50A08E96202B006700507436 /* testFile.swift in Sources */,
 				503446181F3DB4660039D5E4 /* Mocker.swift in Sources */,
 				503446171F3DB4660039D5E4 /* Mock.swift in Sources */,
 			);

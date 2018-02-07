@@ -1,20 +1,20 @@
-disabled_rules: # Rule identifiers to exclude from running
-  - line_length # Documentation can exceed line lengths
-  - identifier_name
-opt_in_rules:
-  - empty_count
-  - force_unwrapping
-  - explicit_init
-  - first_where
-  - object_literal
-  - operator_usage_whitespace
-  - overridden_super_call
-  - private_outlet
-  - prohibited_super_call
-  - redundant_nil_coalescing
-  - switch_case_on_newline
-force_cast: warning # Implicitly
-force_try:
-  severity: warning
-trailing_whitespace:
-  ignores_empty_lines: true # This is such a hassle to do right and adds nothing
+# disabled_rules: # Rule identifiers to exclude from running
+#   - line_length # Documentation can exceed line lengths
+#   - identifier_name
+# opt_in_rules:
+#   - empty_count
+#   - force_unwrapping
+#   - explicit_init
+#   - first_where
+#   - object_literal
+#   - operator_usage_whitespace
+#   - overridden_super_call
+#   - private_outlet
+#   - prohibited_super_call
+#   - redundant_nil_coalescing
+#   - switch_case_on_newline
+# force_cast: warning # Implicitly
+# force_try:
+#   severity: warning
+# trailing_whitespace:
+#   ignores_empty_lines: true # This is such a hassle to do right and adds nothing
