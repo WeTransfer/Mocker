@@ -6,6 +6,8 @@ default_platform :ios
 
 desc "Run tests and Danger"
 lane :test do
+  clear_derived_data
+  
   scan(
     scheme: "Mocker",
     project: "Mocker.xcodeproj",
