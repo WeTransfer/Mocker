@@ -1,14 +1,17 @@
 ## Changelog
 
 ### Next
+
+### 1.2.0 (2018-02-09)
 - Ignoring query path for mocks
 - Missing mocks no longer break tests (removed fatalError)
-- Support for delayed responses
-- Support for redirect responses
-- Support for ignoring URLs for mocking
-- Support for ZIP content responses
-- Updated for Swift 4
 - Improved SwiftLint implementation
+
+### 1.1.0 (2017-11-03)
+- Adds support for delayed responses
+- Adds support for ignoring URLs
+- Adds support for redirects
+- Migrated to Swift 4.0
 
 ### 1.0 (2017-08-11)
 
