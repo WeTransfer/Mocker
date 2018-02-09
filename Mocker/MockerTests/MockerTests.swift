@@ -62,6 +62,30 @@ final class MockerTests: XCTestCase {
         
         waitForExpectations(timeout: 10.0, handler: nil)
     }
+
+    /// It should correctly ignore queries if set.
+    func testIgnoreQueryMocking() {
+        let expectation = self.expectation(description: "Data request should succeed")
+        let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png?width=200&height=200")!
+
+        Mock(url: originalURL, ignoreQuery: true, dataType: .imagePNG, statusCode: 200, data: [
+            .get: MockedData.botAvatarImageFileUrl.data
+        ]).register()
+
+        /// Make it different compared to the mocked URL.
+        let customURL = URL(string: originalURL.absoluteString + "&" + UUID().uuidString)!
+
+        URLSession.shared.dataTask(with: customURL) { (data, _, error) in
+            XCTAssert(error == nil)
+            let image: UIImage = UIImage(data: data!)!
+            let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
+
+            XCTAssert(image.size == sampleImage.size, "Image should be returned mocked")
+            expectation.fulfill()
+        }.resume()
+
+        waitForExpectations(timeout: 10.0, handler: nil)
+    }
     
     /// It should return the mocked JSON.
     func testJSONRequest() {
