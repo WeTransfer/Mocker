@@ -108,8 +108,8 @@ URLSession.shared.dataTask(with: originalURL) { (data, response, error) in
 Some URLs like authentication URLs contain timestamps or UUIDs in the query. To mock these you can ignore the Query for a certain URL:
 
 ``` swift
-/// Would transform to "https://www.wetransfer.com/api/authentication?oauth_timestamp=151817037" for example.
-let originalURL = URL(string: "https://www.wetransfer.com/api/authentication")!
+/// Would transform to "https://www.example.com/api/authentication?oauth_timestamp=151817037" for example.
+let originalURL = URL(string: "https://www.example.com/api/authentication")!
     
 let mock = Mock(url: originalURL, ignoreQuery: true, contentType: .json, statusCode: 200, data: [
     .get : MockedData.exampleJSON.data // Data containing the JSON response
