@@ -66,6 +66,9 @@ public struct Mock: Equatable {
     
     /// The URL value generated based on the Mock data.
     public let url: URL
+
+    /// If `true`, checking the URL will ignore the query and match only for the scheme, host and path.
+    public let ignoreQuery: Bool
     
     /// The file extensions to match for.
     public let fileExtensions: [String]?
@@ -76,16 +79,18 @@ public struct Mock: Equatable {
     /// Add a delay to a certain mock, which makes the response returned later.
     public var delay: DispatchTimeInterval?
     
-    private init(url: URL? = nil, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
+    private init(url: URL? = nil, ignoreQuery: Bool = false, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
+        self.url = url ?? URL(string: "https://mocked.wetransfer.com/\(dataType.rawValue)/\(statusCode)/")!
+        self.ignoreQuery = ignoreQuery
         self.dataType = dataType
         self.statusCode = statusCode
         self.data = data
-        self.url = url ?? URL(string: "https://mocked.wetransfer.com/\(dataType.rawValue)/\(statusCode)/")!
-        self.fileExtensions = fileExtensions?.map({ $0.replacingOccurrences(of: ".", with: "") })
-        
+
         var headers = additionalHeaders
         headers["Content-Type"] = dataType.headerValue
         self.headers = headers
+
+        self.fileExtensions = fileExtensions?.map({ $0.replacingOccurrences(of: ".", with: "") })
     }
     
     /// Creates a `Mock` for the given data type. The mock will be automatically matched based on a URL created from the given parameters.
@@ -103,12 +108,13 @@ public struct Mock: Equatable {
     ///
     /// - Parameters:
     ///   - url: The URL to match for and to return the mocked data for.
+    ///   - ignoreQuery: If `true`, checking the URL will ignore the query and match only for the scheme, host and path. Defaults to `false`.
     ///   - dataType: The type of the data which is returned.
     ///   - statusCode: The HTTP status code to return with the response.
     ///   - data: The data which will be returned as the response based on the HTTP Method.
     ///   - additionalHeaders: Additional headers to be added to the response.
-    public init(url: URL, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
-        self.init(url: url, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
+    public init(url: URL, ignoreQuery: Bool = false, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
+        self.init(url: url, ignoreQuery: ignoreQuery, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
     }
     
     /// Creates a `Mock` for the given file extensions. The mock will only be used for urls matching the extension.
@@ -145,14 +151,24 @@ public struct Mock: Equatable {
             // If the mock contains a file extension, this should always be used to match for.
             guard let pathExtension = request.url?.pathExtension else { return false }
             return fileExtensions.contains(pathExtension)
-        } else {
-            return mock.url == request.url && mock.data.keys.contains(requestHTTPMethod)
+        } else if mock.ignoreQuery {
+            return mock.url.baseString == request.url?.baseString && mock.data.keys.contains(requestHTTPMethod)
         }
+
+        return mock.url == request.url && mock.data.keys.contains(requestHTTPMethod)
     }
     
     public static func == (lhs: Mock, rhs: Mock) -> Bool {
         let lhsHTTPMethods: [String] = lhs.data.keys.flatMap { $0.rawValue }
         let rhsHTTPMethods: [String] = lhs.data.keys.flatMap { $0.rawValue }
         return lhs.url.absoluteString == rhs.url.absoluteString && lhsHTTPMethods == rhsHTTPMethods
+    }
+}
+
+private extension URL {
+    /// Returns the base URL string build with the scheme, host and path. "https://www.wetransfer.com/v1/test?param=test" would be "https://www.wetransfer.com/v1/test".
+    var baseString: String? {
+        guard let scheme = scheme, let host = host else { return nil }
+        return scheme + "://" + host + path
     }
 }
