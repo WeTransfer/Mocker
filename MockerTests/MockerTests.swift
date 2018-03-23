@@ -191,7 +191,6 @@ final class MockerTests: XCTestCase {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
             task.cancel()
         })
-        
         waitForExpectations(timeout: 10.0, handler: nil)
     }
     
