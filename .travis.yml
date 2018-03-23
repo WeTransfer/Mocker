@@ -1,7 +1,14 @@
 language: objective-c
 osx_image: xcode9.2
+gemfile: Gemfile
+bundler_args: "--without documentation --path bundle" # Don't download documentation for gems.
+cache:
+  bundler: true
+  directories:
+    - /tmp/SwiftLint # Cache SwiftLint (absolute url on purpose)
+env:
+  global:
+    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true # Prevents long install time http://awesomism.co.uk/nokogiri-slow-install/
+
 script:
-    - bundle exec fastlane test
-before_install:
-  - brew outdated swiftlint || brew upgrade swiftlint
-  - bundle install
+  - "./Submodules/WeTransfer-iOS-CI/Scripts/travis.sh Mocker" # Run WeTransfer iOS CI Travis script
