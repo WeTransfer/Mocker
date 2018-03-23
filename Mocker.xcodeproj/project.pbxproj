@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		501E269E1F3DAE370048F39E /* Mocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 501E26941F3DAE370048F39E /* Mocker.framework */; };
-		503445DD1F3DB0F90039D5E4 /* MockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503445D71F3DB0A60039D5E4 /* MockerTests.swift */; };
-		503445DE1F3DB1F00039D5E4 /* Mocker.h in Headers */ = {isa = PBXBuildFile; fileRef = 50B9281B1F3DB06500F2974A /* Mocker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		503446171F3DB4660039D5E4 /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503446141F3DB4660039D5E4 /* Mock.swift */; };
 		503446181F3DB4660039D5E4 /* Mocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503446151F3DB4660039D5E4 /* Mocker.swift */; };
 		503446191F3DB4660039D5E4 /* MockingURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503446161F3DB4660039D5E4 /* MockingURLProtocol.swift */; };
-		503446411F3DB7AA0039D5E4 /* MockedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503446401F3DB7AA0039D5E4 /* MockedData.swift */; };
-		503446421F3DBA3A0039D5E4 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 503446361F3DB77C0039D5E4 /* Resources */; };
+		50D4606E20653F1F00A85D93 /* Mocker.h in Headers */ = {isa = PBXBuildFile; fileRef = 50D4606B20653F1F00A85D93 /* Mocker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		50D4607020653F2500A85D93 /* MockedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D4605B20653EAF00A85D93 /* MockedData.swift */; };
+		50D4607120653F2700A85D93 /* MockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D4605C20653EAF00A85D93 /* MockerTests.swift */; };
+		50D4607320653F4500A85D93 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 50D4607220653F4500A85D93 /* Resources */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,15 +30,15 @@
 /* Begin PBXFileReference section */
 		501E26941F3DAE370048F39E /* Mocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		501E269D1F3DAE370048F39E /* MockerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MockerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		503445D71F3DB0A60039D5E4 /* MockerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockerTests.swift; sourceTree = "<group>"; };
-		503445D91F3DB0A60039D5E4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		503445E01F3DB21F0039D5E4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		503446141F3DB4660039D5E4 /* Mock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mock.swift; sourceTree = "<group>"; };
 		503446151F3DB4660039D5E4 /* Mocker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mocker.swift; sourceTree = "<group>"; };
 		503446161F3DB4660039D5E4 /* MockingURLProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockingURLProtocol.swift; sourceTree = "<group>"; };
-		503446361F3DB77C0039D5E4 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
-		503446401F3DB7AA0039D5E4 /* MockedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockedData.swift; sourceTree = "<group>"; };
-		50B9281B1F3DB06500F2974A /* Mocker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Mocker.h; path = Mocker/Mocker.h; sourceTree = "<group>"; };
+		50D4605B20653EAF00A85D93 /* MockedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockedData.swift; sourceTree = "<group>"; };
+		50D4605C20653EAF00A85D93 /* MockerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockerTests.swift; sourceTree = "<group>"; };
+		50D4606320653EAF00A85D93 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		50D4606B20653F1F00A85D93 /* Mocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mocker.h; sourceTree = "<group>"; };
+		50D4606D20653F1F00A85D93 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		50D4607220653F4500A85D93 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,11 +63,10 @@
 		501E268A1F3DAE370048F39E = {
 			isa = PBXGroup;
 			children = (
-				50B9281B1F3DB06500F2974A /* Mocker.h */,
-				503445D51F3DB0A60039D5E4 /* MockerTests */,
 				501E26951F3DAE370048F39E /* Products */,
+				50D4606A20653F1F00A85D93 /* Mocker */,
+				50D4605A20653EAF00A85D93 /* MockerTests */,
 				503446131F3DB4660039D5E4 /* Sources */,
-				503445D81F3DB0A60039D5E4 /* Supporting Files */,
 			);
 			sourceTree = "<group>";
 		};
@@ -80,35 +79,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		503445D51F3DB0A60039D5E4 /* MockerTests */ = {
-			isa = PBXGroup;
-			children = (
-				503446361F3DB77C0039D5E4 /* Resources */,
-				503445DF1F3DB21F0039D5E4 /* Supporting Files */,
-				503445D71F3DB0A60039D5E4 /* MockerTests.swift */,
-				503446401F3DB7AA0039D5E4 /* MockedData.swift */,
-			);
-			name = MockerTests;
-			path = Mocker/MockerTests;
-			sourceTree = "<group>";
-		};
-		503445D81F3DB0A60039D5E4 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				503445D91F3DB0A60039D5E4 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			path = "Mocker/Supporting Files";
-			sourceTree = "<group>";
-		};
-		503445DF1F3DB21F0039D5E4 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				503445E01F3DB21F0039D5E4 /* Info.plist */,
-			);
-			path = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		503446131F3DB4660039D5E4 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -119,6 +89,42 @@
 			path = Sources;
 			sourceTree = "<group>";
 		};
+		50D4605A20653EAF00A85D93 /* MockerTests */ = {
+			isa = PBXGroup;
+			children = (
+				50D4605B20653EAF00A85D93 /* MockedData.swift */,
+				50D4605C20653EAF00A85D93 /* MockerTests.swift */,
+				50D4607220653F4500A85D93 /* Resources */,
+				50D4606220653EAF00A85D93 /* Supporting Files */,
+			);
+			path = MockerTests;
+			sourceTree = "<group>";
+		};
+		50D4606220653EAF00A85D93 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				50D4606320653EAF00A85D93 /* Info.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		50D4606A20653F1F00A85D93 /* Mocker */ = {
+			isa = PBXGroup;
+			children = (
+				50D4606B20653F1F00A85D93 /* Mocker.h */,
+				50D4606C20653F1F00A85D93 /* Supporting Files */,
+			);
+			path = Mocker;
+			sourceTree = "<group>";
+		};
+		50D4606C20653F1F00A85D93 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				50D4606D20653F1F00A85D93 /* Info.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -126,7 +132,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				503445DE1F3DB1F00039D5E4 /* Mocker.h in Headers */,
+				50D4606E20653F1F00A85D93 /* Mocker.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,7 +230,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				503446421F3DBA3A0039D5E4 /* Resources in Resources */,
+				50D4607320653F4500A85D93 /* Resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,7 +249,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint lint --config \".swiftlint.yml\"\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n\n";
+			shellScript = "if [ -z \"$CI\" ]; then\n    if which swiftlint >/dev/null; then\n        swiftlint --config \"${SRCROOT}/Submodules/WeTransfer-iOS-CI/SwiftLint/.swiftlint-source.yml\"\n        swiftlint --config \"${SRCROOT}/Submodules/WeTransfer-iOS-CI/SwiftLint/.swiftlint-tests.yml\"\n    else\n        echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n    fi\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -262,8 +268,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				503446411F3DB7AA0039D5E4 /* MockedData.swift in Sources */,
-				503445DD1F3DB0F90039D5E4 /* MockerTests.swift in Sources */,
+				50D4607120653F2700A85D93 /* MockerTests.swift in Sources */,
+				50D4607020653F2500A85D93 /* MockedData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,7 +442,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = GLJTT4T544;
-				INFOPLIST_FILE = "Mocker/MockerTests/Supporting Files/Info.plist";
+				INFOPLIST_FILE = "MockerTests/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wetransfer.MockerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -448,7 +454,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = GLJTT4T544;
-				INFOPLIST_FILE = "Mocker/MockerTests/Supporting Files/Info.plist";
+				INFOPLIST_FILE = "MockerTests/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wetransfer.MockerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
