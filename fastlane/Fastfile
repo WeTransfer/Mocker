@@ -10,15 +10,19 @@ lane :test do |options|
 
   # Set timeout to prevent xcodebuild -list -project to take to much retries.
   ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "120"
-
-  scan(
-    scheme: options[:project_name],
-    project: "#{options[:project_name]}.xcodeproj",
-    device: "iPhone 7",
-    clean: true,
-    code_coverage: true,
-    formatter: "xcpretty-json-formatter"
-  )
+  
+  begin
+    scan(
+      scheme: options[:project_name],
+      project: "#{options[:project_name]}.xcodeproj",
+      device: "iPhone 7",
+      clean: true,
+      code_coverage: true,
+      formatter: "xcpretty-json-formatter"
+    )
+  rescue => ex
+    UI.error("Tests failed: #{ex}")
+  end
 
   validate_changes(project_name: options[:project_name])
 end
