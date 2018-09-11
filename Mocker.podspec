@@ -7,7 +7,7 @@ Pod::Spec.new do |spec|
   spec.homepage         = 'https://github.com/WeTransfer/Mocker'
   spec.license          = { :type => 'MIT', :file => 'LICENSE' }
   spec.authors           = {
-    'Antoine van der Lee' => 'antoine@wetransfer.com',
+    'Antoine van der Lee' => 'ajvanderlee@gmail.com',
     'Samuel Beek' => 'ik@samuelbeek.com'
   }
   spec.source           = { :git => 'https://github.com/WeTransfer/Mocker.git', :tag => spec.version.to_s }
