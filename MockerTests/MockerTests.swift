@@ -228,4 +228,18 @@ final class MockerTests: XCTestCase {
         Mocker.ignore(ignoredURL)
         XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURL)) == false)
     }
+    
+    func testComposedURLMatch() {
+        let composedURL = URL(fileURLWithPath: "resource", relativeTo: URL(string: "https://host.com/api/"))
+        let simpleURL = URL(string: "https://host.com/api/resource")
+        let mock = Mock(url: composedURL, dataType: .json, statusCode: 200, data: [.get: MockedData.exampleJSON.data])
+        if let url = simpleURL {
+            let urlRequest = URLRequest(url: url)
+            XCTAssertEqual(composedURL.absoluteString, url.absoluteString)
+            XCTAssert(mock == urlRequest)
+        } else {
+            XCTFail("Unable to create simpleURL")
+        }
+        
+    }
 }

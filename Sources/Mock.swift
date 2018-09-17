@@ -155,7 +155,7 @@ public struct Mock: Equatable {
             return mock.url.baseString == request.url?.baseString && mock.data.keys.contains(requestHTTPMethod)
         }
 
-        return mock.url == request.url && mock.data.keys.contains(requestHTTPMethod)
+        return mock.url.absoluteString == request.url?.absoluteString && mock.data.keys.contains(requestHTTPMethod)
     }
     
     public static func == (lhs: Mock, rhs: Mock) -> Bool {
