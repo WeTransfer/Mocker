@@ -1,13 +1,13 @@
 Pod::Spec.new do |spec|
   spec.name             = 'Mocker'
-  spec.version          = '1.2.0'
+  spec.version          = '1.2.1'
   spec.summary          = 'Mock data requests using a custom URLProtocol and run them offline.'
   spec.description      = 'Mocker is a library written in Swift which makes it possible to mock data requests using a custom URLProtocol and run them offline.'
 
   spec.homepage         = 'https://github.com/WeTransfer/Mocker'
   spec.license          = { :type => 'MIT', :file => 'LICENSE' }
   spec.authors           = {
-    'Antoine van der Lee' => 'antoine@wetransfer.com',
+    'Antoine van der Lee' => 'ajvanderlee@gmail.com',
     'Samuel Beek' => 'ik@samuelbeek.com'
   }
   spec.source           = { :git => 'https://github.com/WeTransfer/Mocker.git', :tag => spec.version.to_s }
@@ -15,4 +15,5 @@ Pod::Spec.new do |spec|
 
   spec.ios.deployment_target = '9.0'
   spec.source_files = 'Sources/**/*'
+  spec.swift_version = '4.1'
 end
