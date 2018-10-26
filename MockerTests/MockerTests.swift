@@ -63,6 +63,30 @@ final class MockerTests: XCTestCase {
         waitForExpectations(timeout: 10.0, handler: nil)
     }
 
+    /// It should ignore file extension mocks if a specific URL is mocked.
+    func testSpecificURLOverGenericMocks() {
+        let expectation = self.expectation(description: "Data request should succeed")
+        let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png")!
+
+        Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 400, data: [
+            .get: Data()
+        ]).register()
+        Mock(url: originalURL, ignoreQuery: true, dataType: .imagePNG, statusCode: 200, data: [
+            .get: MockedData.botAvatarImageFileUrl.data
+        ]).register()
+
+        URLSession.shared.dataTask(with: originalURL) { (data, _, error) in
+            XCTAssert(error == nil)
+            let image: UIImage = UIImage(data: data!)!
+            let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
+
+            XCTAssert(image.size == sampleImage.size, "Image should be returned mocked")
+            expectation.fulfill()
+        }.resume()
+
+        waitForExpectations(timeout: 10.0, handler: nil)
+    }
+
     /// It should correctly ignore queries if set.
     func testIgnoreQueryMocking() {
         let expectation = self.expectation(description: "Data request should succeed")
