@@ -65,6 +65,11 @@ public struct Mocker {
     /// - Parameter request: The request to search for a mock.
     /// - Returns: A mock if found, `nil` if there's no mocked data registered for the given request.
     static func mock(for request: URLRequest) -> Mock? {
+        /// First check for specific URLs
+        if let specificMock = shared.mocks.first(where: { $0 == request && $0.fileExtensions == nil }) {
+            return specificMock
+        }
+        /// Second, check for generic file extension Mocks
         return shared.mocks.first(where: { $0 == request })
     }
 }
