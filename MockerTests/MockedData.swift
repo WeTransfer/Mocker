@@ -11,7 +11,7 @@ import UIKit
 
 /// Contains all available Mocked data.
 public final class MockedData {
-    public static let botAvatarImageFileUrl: URL = Bundle(for: MockedData.self).url(forResource: "wetransfer_bot_avater", withExtension: "png")!
+    public static let botAvatarImageFileUrl: URL = Bundle(for: MockedData.self).url(forResource: "wetransfer_bot_avatar", withExtension: "png")!
     public static let exampleJSON: URL = Bundle(for: MockedData.self).url(forResource: "Resources/JSON Files/example", withExtension: "json")!
     public static let redirectGET: URL = Bundle(for: MockedData.self).url(forResource: "Resources/sample-redirect-get", withExtension: "data")!
 }
