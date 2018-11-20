@@ -15,7 +15,6 @@
 Mocker is a library written in Swift which makes it possible to mock data requests using a custom `URLProtocol`.
 
 - [Features](#features)
-- [Example](#example)
 - [Requirements](#requirements)
 - [Usage](#usage)
     - [Activating the Mocker](#activating-the-mocker)
