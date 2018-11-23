@@ -38,10 +38,8 @@ public struct Mocker {
     ///
     /// - Parameter mock: The Mock to be registered for future requests.
     public static func register(_ mock: Mock) {
-        if let existingIndex = shared.mocks.index(of: mock) {
-            /// Delete the existing mock.
-            shared.mocks.remove(at: existingIndex)
-        }
+        /// Delete the Mock if it was already registered.
+        shared.mocks.removeAll(where: { $0 == mock })
         shared.mocks.append(mock)
     }
     
