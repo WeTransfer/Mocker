@@ -11,7 +11,7 @@ import Foundation
 /// The protocol which can be used to send Mocked data back. Use the `Mocker` to register `Mock` data
 public final class MockingURLProtocol: URLProtocol {
 
-    enum MockingURLProtocolError: Swift.Error {
+    enum Error: Swift.Error {
         case missingMockedData(url: String)
     }
 
@@ -22,9 +22,9 @@ public final class MockingURLProtocol: URLProtocol {
             let response = HTTPURLResponse(url: mock.url, statusCode: mock.statusCode, httpVersion: Mocker.httpVersion.rawValue, headerFields: mock.headers),
             let data = mock.data(for: request)
         else {
-            // swiftlint:disable nslog_prohibted
+            // swiftlint:disable nslog_prohibited
             print("\n\n 🚨 No mocked data found for url \(String(describing: request.url?.absoluteString)) method \(String(describing: request.httpMethod)). Did you forget to use `register()`? 🚨 \n\n")
-            client?.urlProtocol(self, didFailWithError: MockingURLProtocolError.missingMockedData(url: String(describing: request.url?.absoluteString)))
+            client?.urlProtocol(self, didFailWithError: Error.missingMockedData(url: String(describing: request.url?.absoluteString)))
             return
         }
         

@@ -7,7 +7,7 @@
 <img src="https://img.shields.io/cocoapods/v/Mocker.svg?style=flat"/>
 <img src="https://img.shields.io/cocoapods/l/Mocker.svg?style=flat"/>
 <img src="https://img.shields.io/cocoapods/p/Mocker.svg?style=flat"/>
-<img src="https://img.shields.io/badge/language-swift4.0-f48041.svg?style=flat"/>
+<img src="https://img.shields.io/badge/language-swift4.2-f48041.svg?style=flat"/>
 <img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat"/>
 <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat"/>
 </p>
