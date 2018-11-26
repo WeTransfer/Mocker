@@ -1,6 +1,7 @@
 ## Changelog
 
-### Next
+### 1.3.0
+- Updated to Swift 4.2
 
 ### 1.2.1 (2018-09-11)
 - Improved CI
