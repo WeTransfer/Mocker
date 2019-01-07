@@ -36,6 +36,8 @@ public final class MockingURLProtocol: URLProtocol {
                 self.client?.urlProtocol(self, didLoad: data)
                 self.client?.urlProtocolDidFinishLoading(self)
             }
+
+            mock.completion?()
         }
     }
     
