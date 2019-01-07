@@ -253,7 +253,7 @@ final class MockerTests: XCTestCase {
         XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURL)) == false)
     }
     
-    // It should be possible to compose a url relative to a base and still have it match the full url
+    /// It should be possible to compose a url relative to a base and still have it match the full url
     func testComposedURLMatch() {
         let composedURL = URL(fileURLWithPath: "resource", relativeTo: URL(string: "https://host.com/api/"))
         let simpleURL = URL(string: "https://host.com/api/resource")
@@ -261,5 +261,19 @@ final class MockerTests: XCTestCase {
         let urlRequest = URLRequest(url: simpleURL!)
         XCTAssertEqual(composedURL.absoluteString, simpleURL!.absoluteString)
         XCTAssert(mock == urlRequest)
+    }
+
+    /// It should call the completion callback when a `Mock` is used.
+    func testCompletionCallback() {
+        let expectation = self.expectation(description: "Data request should succeed")
+        var mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()])
+        mock.completion = {
+            expectation.fulfill()
+        }
+        mock.register()
+
+        URLSession.shared.dataTask(with: mock.url).resume()
+
+        waitForExpectations(timeout: 2.0, handler: nil)
     }
 }
