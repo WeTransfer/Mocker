@@ -18,7 +18,7 @@ public struct Mocker {
     }
     
     /// The shared instance of the Mocker, can be used to register and return mocks.
-    private static var shared = Mocker()
+    internal static var shared = Mocker()
     
     /// The HTTP Version to use in the mocked response.
     public static var httpVersion: HTTPVersion = HTTPVersion.http1_1
@@ -56,6 +56,11 @@ public struct Mocker {
     /// - Returns: `true` if it should be mocked, `false` if the URL is registered as ignored.
     public static func shouldHandle(_ url: URL) -> Bool {
         return !shared.ignoredURLs.contains(url)
+    }
+
+    /// Removes all registered mocks. Use this method in your tearDown function to make sure a Mock is not used in any other test.
+    public static func removeAll() {
+        shared.mocks.removeAll()
     }
     
     /// Retrieve a Mock for the given request. Matches on `request.url` and `request.httpMethod`.

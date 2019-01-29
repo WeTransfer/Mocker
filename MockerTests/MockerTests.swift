@@ -276,4 +276,12 @@ final class MockerTests: XCTestCase {
 
         waitForExpectations(timeout: 2.0, handler: nil)
     }
+
+    /// It should remove all registered mocks correctly.
+    func testRemoveAll() {
+        let mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()])
+        mock.register()
+        Mocker.removeAll()
+        XCTAssertTrue(Mocker.shared.mocks.isEmpty)
+    }
 }
