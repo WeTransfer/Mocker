@@ -189,7 +189,7 @@
 					501E26931F3DAE370048F39E = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = GLJTT4T544;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					501E269C1F3DAE370048F39E = {
@@ -205,6 +205,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 501E268A1F3DAE370048F39E;
@@ -419,7 +420,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.wetransfer.Mocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -439,7 +440,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.wetransfer.Mocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
