@@ -41,11 +41,6 @@ _Run all your data request unit tests offline_ 🎉
 - [x] Works with `URLSession` using a custom protocol class
 - [x] Supports popular frameworks like `Alamofire`
 
-## Requirements
-- Swift 3+
-- iOS 8.0+
-- Xcode 9.0+
-
 ## Usage
 
 Unit tests are written for the `Mocker` which can help you to see how it works.
