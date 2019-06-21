@@ -13,7 +13,7 @@ let package = Package(
     targets: [
         .target(
             name: "Mocker",
-            paht: "Source")
+            paht: "Sources")
     ],
     swiftLanguageVersions: [.v5]
 )
