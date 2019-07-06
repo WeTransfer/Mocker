@@ -20,6 +20,7 @@ DerivedData
 *.xccheckout
 # AppCode
 .idea/
+.swiftpm
 
 Carthage
 
