@@ -11,7 +11,7 @@ let package = Package(
     products: [
         .library(
             name: "Mocker",
-            targets: ["Mocker"]),
+            targets: ["Mocker"])
     ],
     targets: [
         .target(
