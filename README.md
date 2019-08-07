@@ -82,7 +82,7 @@ public final class MockedData {
 ``` swift
 let originalURL = URL(string: "https://www.wetransfer.com/example.json")!
     
-let mock = Mock(url: originalURL, contentType: .json, statusCode: 200, data: [
+let mock = Mock(url: originalURL, dataType: .json, statusCode: 200, data: [
     .get : MockedData.exampleJSON.data // Data containing the JSON response
 ])
 mock.register()
@@ -105,7 +105,7 @@ Some URLs like authentication URLs contain timestamps or UUIDs in the query. To 
 /// Would transform to "https://www.example.com/api/authentication?oauth_timestamp=151817037" for example.
 let originalURL = URL(string: "https://www.example.com/api/authentication")!
     
-let mock = Mock(url: originalURL, ignoreQuery: true, contentType: .json, statusCode: 200, data: [
+let mock = Mock(url: originalURL, ignoreQuery: true, dataType: .json, statusCode: 200, data: [
     .get : MockedData.exampleJSON.data // Data containing the JSON response
 ])
 mock.register()
@@ -125,7 +125,7 @@ URLSession.shared.dataTask(with: originalURL) { (data, response, error) in
 ```swift
 let imageURL = URL(string: "https://www.wetransfer.com/sample-image.png")!
 
-Mock(fileExtensions: "png", contentType: .imagePNG, statusCode: 200, data: [
+Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 200, data: [
     .get: MockedData.botAvatarImageFileUrl.data
 ]).register()
 
@@ -138,7 +138,7 @@ URLSession.shared.dataTask(with: imageURL) { (data, response, error) in
 ```swift
 let exampleURL = URL(string: "https://www.wetransfer.com/api/endpoint")!
 
-Mock(url: exampleURL, contentType: .json, statusCode: 200, data: [
+Mock(url: exampleURL, dataType: .json, statusCode: 200, data: [
     .head: MockedData.headResponse.data,
     .get: MockedData.exampleJSON.data
 ]).register()
@@ -154,7 +154,7 @@ Sometimes you want to test if cancellation of requests is working. In that case,
 ```swift
 let exampleURL = URL(string: "https://www.wetransfer.com/api/endpoint")!
 
-var mock = Mock(url: exampleURL, contentType: .json, statusCode: 200, data: [
+var mock = Mock(url: exampleURL, dataType: .json, statusCode: 200, data: [
     .head: MockedData.headResponse.data,
     .get: MockedData.exampleJSON.data
 ])

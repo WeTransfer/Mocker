@@ -16,7 +16,7 @@ public final class MockingURLProtocol: URLProtocol {
     }
 
     /// Returns Mocked data based on the mocks register in the `Mocker`. Will end up in an error when no Mock data is found for the request.
-    public override func startLoading() {
+    override public func startLoading() {
         guard
             let mock = Mocker.mock(for: request),
             let response = HTTPURLResponse(url: mock.url, statusCode: mock.statusCode, httpVersion: Mocker.httpVersion.rawValue, headerFields: mock.headers),
@@ -41,20 +41,20 @@ public final class MockingURLProtocol: URLProtocol {
         }
     }
     
-    /// Overrides needed to define a valid inheritance of URLProtocol.
-    public override class func canInit(with request: URLRequest) -> Bool {
-        guard let url = request.url else { return false }
-        return Mocker.shouldHandle(url)
-    }
-    
     /// Implementation does nothing, but is needed for a valid inheritance of URLProtocol.
-    public override func stopLoading() {
+    override public func stopLoading() {
         // No implementation needed
     }
     
     /// Simply sends back the passed request. Implementation is needed for a valid inheritance of URLProtocol.
-    public override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+    override public class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
+    }
+
+    /// Overrides needed to define a valid inheritance of URLProtocol.
+    override public class func canInit(with request: URLRequest) -> Bool {
+        guard let url = request.url else { return false }
+        return Mocker.shouldHandle(url)
     }
 }
 
