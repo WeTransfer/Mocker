@@ -3,6 +3,7 @@
 ### Next
 - A new completion callback can be set on `Mock` to use for expectation fulfilling once a `Mock` is used.
 - Updated to Swift 5.0
+- Correctly handle cancellation of delayed responses
 
 ### 1.3.0
 - Updated to Swift 4.2
