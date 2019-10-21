@@ -15,6 +15,8 @@ public final class MockingURLProtocol: URLProtocol {
         case missingMockedData(url: String)
     }
 
+    private var responseWorkItem: DispatchWorkItem?
+
     /// Returns Mocked data based on the mocks register in the `Mocker`. Will end up in an error when no Mock data is found for the request.
     override public func startLoading() {
         guard
@@ -33,9 +35,12 @@ public final class MockingURLProtocol: URLProtocol {
             return
         }
 
-        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).asyncAfter(deadline: .now() + delay) {
+        self.responseWorkItem = DispatchWorkItem(block: { [weak self] in
+            guard let self = self else { return }
             self.finishRequest(for: mock, data: data, response: response)
-        }
+        })
+
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).asyncAfter(deadline: .now() + delay), execute: responseWorkItem!)
     }
 
     private func finishRequest(for mock: Mock, data: Data, response: HTTPURLResponse) {
@@ -52,7 +57,7 @@ public final class MockingURLProtocol: URLProtocol {
     
     /// Implementation does nothing, but is needed for a valid inheritance of URLProtocol.
     override public func stopLoading() {
-        // No implementation needed
+        responseWorkItem?.cancel()
     }
     
     /// Simply sends back the passed request. Implementation is needed for a valid inheritance of URLProtocol.
