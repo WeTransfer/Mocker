@@ -40,7 +40,7 @@ public final class MockingURLProtocol: URLProtocol {
             self.finishRequest(for: mock, data: data, response: response)
         })
 
-        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).asyncAfter(deadline: .now() + delay), execute: responseWorkItem!)
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).asyncAfter(deadline: .now() + delay, execute: responseWorkItem!)
     }
 
     private func finishRequest(for mock: Mock, data: Data, response: HTTPURLResponse) {
