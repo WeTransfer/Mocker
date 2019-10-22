@@ -5,6 +5,7 @@
 - Updated to Swift 5.0
 - Only dispatch to the background queue if needed
 - Correctly handle cancellation of delayed responses
+- Adding and reading mocks is now thread safe by using a Dispatch Semaphore
 
 ### 1.3.0
 - Updated to Swift 4.2

@@ -33,6 +33,7 @@
 		503446141F3DB4660039D5E4 /* Mock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mock.swift; sourceTree = "<group>"; };
 		503446151F3DB4660039D5E4 /* Mocker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mocker.swift; sourceTree = "<group>"; };
 		503446161F3DB4660039D5E4 /* MockingURLProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockingURLProtocol.swift; sourceTree = "<group>"; };
+		506277CC235F2777000A4316 /* Changelog.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Changelog.md; sourceTree = "<group>"; };
 		50D4605B20653EAF00A85D93 /* MockedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockedData.swift; sourceTree = "<group>"; };
 		50D4605C20653EAF00A85D93 /* MockerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockerTests.swift; sourceTree = "<group>"; };
 		50D4606320653EAF00A85D93 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -63,6 +64,7 @@
 		501E268A1F3DAE370048F39E = {
 			isa = PBXGroup;
 			children = (
+				506277CC235F2777000A4316 /* Changelog.md */,
 				501E26951F3DAE370048F39E /* Products */,
 				50D4606A20653F1F00A85D93 /* Mocker */,
 				50D4605A20653EAF00A85D93 /* MockerTests */,
