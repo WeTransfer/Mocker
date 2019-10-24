@@ -3,25 +3,14 @@
 
 import PackageDescription
 
-let package = Package(
-    name: "Mocker",
-    platforms: [
-        .macOS(.v10_14), .iOS(.v12), .tvOS(.v12), .watchOS(.v6)
-    ],
-    products: [
-        .library(
-            name: "Mocker",
-            targets: ["Mocker"])
-    ],
-    targets: [
-        .target(
-            name: "Mocker",
-            dependencies: [],
-            path: "Sources"),
-        .testTarget(
-            name: "MockerTests",
-            dependencies: ["Mocker"],
-            path: "MockerTests")
-    ],
-    swiftLanguageVersions: [.v5]
-)
+let package = Package(name: "Mocker",
+                      platforms: [
+                        .macOS(.v10_15),
+                        .iOS(.v10),
+                        .tvOS(.v12),
+                        .watchOS(.v6)],
+                      products: [.library(name: "Mocker",
+                                          targets: ["Mocker"])],
+                      targets: [.target(name: "Mocker",
+                                        path: "Sources")],
+                      swiftLanguageVersions: [.v5])
