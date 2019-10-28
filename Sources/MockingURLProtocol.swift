@@ -30,20 +30,29 @@ public final class MockingURLProtocol: URLProtocol {
             return
         }
 
+        guard let delay = mock.delay else {
+            finishRequest(for: mock, data: data, response: response)
+            return
+        }
+
         self.responseWorkItem = DispatchWorkItem(block: { [weak self] in
             guard let self = self else { return }
-            if let redirectLocation = data.redirectLocation {
-                self.client?.urlProtocol(self, wasRedirectedTo: URLRequest(url: redirectLocation), redirectResponse: response)
-            } else {
-                self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
-                self.client?.urlProtocol(self, didLoad: data)
-                self.client?.urlProtocolDidFinishLoading(self)
-            }
-
-            mock.completion?()
+            self.finishRequest(for: mock, data: data, response: response)
         })
 
-        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).asyncAfter(deadline: .now() + (mock.delay ?? DispatchTimeInterval.seconds(0)), execute: responseWorkItem!)
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).asyncAfter(deadline: .now() + delay, execute: responseWorkItem!)
+    }
+
+    private func finishRequest(for mock: Mock, data: Data, response: HTTPURLResponse) {
+        if let redirectLocation = data.redirectLocation {
+            self.client?.urlProtocol(self, wasRedirectedTo: URLRequest(url: redirectLocation), redirectResponse: response)
+        } else {
+            self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+            self.client?.urlProtocol(self, didLoad: data)
+            self.client?.urlProtocolDidFinishLoading(self)
+        }
+
+        mock.completion?()
     }
     
     /// Implementation does nothing, but is needed for a valid inheritance of URLProtocol.
