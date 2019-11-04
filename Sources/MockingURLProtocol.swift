@@ -30,6 +30,8 @@ public final class MockingURLProtocol: URLProtocol {
             return
         }
 
+        mock.onRequest?()
+
         guard let delay = mock.delay else {
             finishRequest(for: mock, data: data, response: response)
             return
