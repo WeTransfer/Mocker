@@ -29,8 +29,6 @@ public struct Mocker {
     /// URLs to ignore for mocking.
     private(set) var ignoredURLs: [URL] = []
 
-    private let mutex = DispatchSemaphore(value: 1)
-
     private init() {
         // Whenever someone is requesting the Mocker, we want the URL protocol to be activated.
         URLProtocol.registerClass(MockingURLProtocol.self)
@@ -40,20 +38,16 @@ public struct Mocker {
     ///
     /// - Parameter mock: The Mock to be registered for future requests.
     public static func register(_ mock: Mock) {
-        shared.mutex.lock {
-            /// Delete the Mock if it was already registered.
-            shared.mocks.removeAll(where: { $0 == mock })
-            shared.mocks.append(mock)
-        }
+        /// Delete the Mock if it was already registered.
+        shared.mocks.removeAll(where: { $0 == mock })
+        shared.mocks.append(mock)
     }
     
     /// Register an URL to ignore for mocking. This will let the URL work as if the Mocker doesn't exist.
     ///
     /// - Parameter url: The URL to mock.
     public static func ignore(_ url: URL) {
-        return shared.mutex.lock {
-            shared.ignoredURLs.append(url)
-        }
+        shared.ignoredURLs.append(url)
     }
     
     /// Checks if the passed URL should be handled by the Mocker. If the URL is registered to be ignored, it will not handle the URL.
@@ -61,16 +55,12 @@ public struct Mocker {
     /// - Parameter url: The URL to check for.
     /// - Returns: `true` if it should be mocked, `false` if the URL is registered as ignored.
     public static func shouldHandle(_ url: URL) -> Bool {
-        return shared.mutex.lock {
-            return !shared.ignoredURLs.contains(url)
-        }
+        return !shared.ignoredURLs.contains(url)
     }
 
     /// Removes all registered mocks. Use this method in your tearDown function to make sure a Mock is not used in any other test.
     public static func removeAll() {
-        shared.mutex.lock {
-            shared.mocks.removeAll()
-        }
+        shared.mocks.removeAll()
     }
     
     /// Retrieve a Mock for the given request. Matches on `request.url` and `request.httpMethod`.
@@ -78,21 +68,11 @@ public struct Mocker {
     /// - Parameter request: The request to search for a mock.
     /// - Returns: A mock if found, `nil` if there's no mocked data registered for the given request.
     static func mock(for request: URLRequest) -> Mock? {
-        return shared.mutex.lock {
-            /// First check for specific URLs
-            if let specificMock = shared.mocks.first(where: { $0 == request && $0.fileExtensions == nil }) {
-                return specificMock
-            }
-            /// Second, check for generic file extension Mocks
-            return shared.mocks.first(where: { $0 == request })
+        /// First check for specific URLs
+        if let specificMock = shared.mocks.first(where: { $0 == request && $0.fileExtensions == nil }) {
+            return specificMock
         }
-    }
-}
-
-private extension DispatchSemaphore {
-    func lock<T>(execute task: () throws -> T) rethrows -> T {
-        wait()
-        defer { signal() }
-        return try task()
+        /// Second, check for generic file extension Mocks
+        return shared.mocks.first(where: { $0 == request })
     }
 }
