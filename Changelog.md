@@ -8,6 +8,7 @@
 - Correctly handle cancellation of delayed responses
 - Adding and reading mocks is now thread safe by using a Dispatch Semaphore
 - Add support for using Swift Package Manager
+- Improved checking for Mocks using `URLRequest`.
 
 ### 1.3.0
 - Updated to Swift 4.2

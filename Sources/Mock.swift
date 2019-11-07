@@ -65,7 +65,18 @@ public struct Mock: Equatable {
     public let statusCode: Int
     
     /// The URL value generated based on the Mock data. Force unwrapped on purpose. If you access this URL while it's not set, this is a programming error.
-    public let url: URL!
+    public var url: URL {
+        if urlToMock == nil && !data.keys.contains(.get) {
+            assertionFailure("For non GET mocks you should use the `request` property so the HTTP method is set.")
+        }
+        return urlToMock ?? generatedURL
+    }
+
+    /// The URL to mock as set implicitely from the init.
+    private let urlToMock: URL?
+
+    /// The URL generated from all the data set on this mock.
+    private let generatedURL: URL
 
     /// The `URLRequest` to use if you did not set a specific URL.
     public let request: URLRequest
@@ -89,12 +100,12 @@ public struct Mock: Equatable {
     public var onRequest: (() -> Void)?
     
     private init(url: URL? = nil, ignoreQuery: Bool = false, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
-        self.url = url
-
-        var request = URLRequest(url: url ?? URL(string: "https://mocked.wetransfer.com/\(dataType.rawValue)/\(statusCode)/\(data.keys.first!.rawValue)")!)
+        self.urlToMock = url
+        let generatedURL = URL(string: "https://mocked.wetransfer.com/\(dataType.rawValue)/\(statusCode)/\(data.keys.first!.rawValue)")!
+        self.generatedURL = generatedURL
+        var request = URLRequest(url: url ?? generatedURL)
         request.httpMethod = data.keys.first!.rawValue
         self.request = request
-
         self.ignoreQuery = ignoreQuery
         self.dataType = dataType
         self.statusCode = statusCode
