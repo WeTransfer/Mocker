@@ -29,6 +29,9 @@ public struct Mocker {
     /// URLs to ignore for mocking.
     private(set) var ignoredURLs: [URL] = []
 
+    /// For Thread Safety access.
+    private let queue = DispatchQueue(label: "mocker.serial.queue")
+
     private init() {
         // Whenever someone is requesting the Mocker, we want the URL protocol to be activated.
         URLProtocol.registerClass(MockingURLProtocol.self)
@@ -38,16 +41,20 @@ public struct Mocker {
     ///
     /// - Parameter mock: The Mock to be registered for future requests.
     public static func register(_ mock: Mock) {
-        /// Delete the Mock if it was already registered.
-        shared.mocks.removeAll(where: { $0 == mock })
-        shared.mocks.append(mock)
+        shared.queue.async {
+            /// Delete the Mock if it was already registered.
+            shared.mocks.removeAll(where: { $0 == mock })
+            shared.mocks.append(mock)
+        }
     }
     
     /// Register an URL to ignore for mocking. This will let the URL work as if the Mocker doesn't exist.
     ///
     /// - Parameter url: The URL to mock.
     public static func ignore(_ url: URL) {
-        shared.ignoredURLs.append(url)
+        shared.queue.async {
+            shared.ignoredURLs.append(url)
+        }
     }
     
     /// Checks if the passed URL should be handled by the Mocker. If the URL is registered to be ignored, it will not handle the URL.
@@ -55,12 +62,16 @@ public struct Mocker {
     /// - Parameter url: The URL to check for.
     /// - Returns: `true` if it should be mocked, `false` if the URL is registered as ignored.
     public static func shouldHandle(_ url: URL) -> Bool {
-        return !shared.ignoredURLs.contains(url)
+        shared.queue.sync {
+            return !shared.ignoredURLs.contains(url)
+        }
     }
 
     /// Removes all registered mocks. Use this method in your tearDown function to make sure a Mock is not used in any other test.
     public static func removeAll() {
-        shared.mocks.removeAll()
+        shared.queue.async {
+            shared.mocks.removeAll()
+        }
     }
     
     /// Retrieve a Mock for the given request. Matches on `request.url` and `request.httpMethod`.
@@ -68,11 +79,13 @@ public struct Mocker {
     /// - Parameter request: The request to search for a mock.
     /// - Returns: A mock if found, `nil` if there's no mocked data registered for the given request.
     static func mock(for request: URLRequest) -> Mock? {
-        /// First check for specific URLs
-        if let specificMock = shared.mocks.first(where: { $0 == request && $0.fileExtensions == nil }) {
-            return specificMock
+        shared.queue.sync {
+            /// First check for specific URLs
+            if let specificMock = shared.mocks.first(where: { $0 == request && $0.fileExtensions == nil }) {
+                return specificMock
+            }
+            /// Second, check for generic file extension Mocks
+            return shared.mocks.first(where: { $0 == request })
         }
-        /// Second, check for generic file extension Mocks
-        return shared.mocks.first(where: { $0 == request })
     }
 }
