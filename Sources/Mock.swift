@@ -64,8 +64,11 @@ public struct Mock: Equatable {
     /// The HTTP status code to return with the response.
     public let statusCode: Int
     
-    /// The URL value generated based on the Mock data.
-    public let url: URL
+    /// The URL value generated based on the Mock data. Force unwrapped on purpose. If you access this URL while it's not set, this is a programming error.
+    public let url: URL!
+
+    /// The `URLRequest` to use if you did not set a specific URL.
+    public let request: URLRequest
 
     /// If `true`, checking the URL will ignore the query and match only for the scheme, host and path.
     public let ignoreQuery: Bool
@@ -86,7 +89,12 @@ public struct Mock: Equatable {
     public var onRequest: (() -> Void)?
     
     private init(url: URL? = nil, ignoreQuery: Bool = false, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
-        self.url = url ?? URL(string: "https://mocked.wetransfer.com/\(dataType.rawValue)/\(statusCode)/")!
+        self.url = url
+
+        var request = URLRequest(url: url ?? URL(string: "https://mocked.wetransfer.com/\(dataType.rawValue)/\(statusCode)/\(data.keys.first!.rawValue)")!)
+        request.httpMethod = data.keys.first!.rawValue
+        self.request = request
+
         self.ignoreQuery = ignoreQuery
         self.dataType = dataType
         self.statusCode = statusCode
@@ -158,16 +166,16 @@ public struct Mock: Equatable {
             guard let pathExtension = request.url?.pathExtension else { return false }
             return fileExtensions.contains(pathExtension)
         } else if mock.ignoreQuery {
-            return mock.url.baseString == request.url?.baseString && mock.data.keys.contains(requestHTTPMethod)
+            return mock.request.url!.baseString == request.url?.baseString && mock.data.keys.contains(requestHTTPMethod)
         }
 
-        return mock.url.absoluteString == request.url?.absoluteString && mock.data.keys.contains(requestHTTPMethod)
+        return mock.request.url!.absoluteString == request.url?.absoluteString && mock.data.keys.contains(requestHTTPMethod)
     }
     
     public static func == (lhs: Mock, rhs: Mock) -> Bool {
         let lhsHTTPMethods: [String] = lhs.data.keys.compactMap { $0.rawValue }
         let rhsHTTPMethods: [String] = lhs.data.keys.compactMap { $0.rawValue }
-        return lhs.url.absoluteString == rhs.url.absoluteString && lhsHTTPMethods == rhsHTTPMethods
+        return lhs.request.url!.absoluteString == rhs.request.url!.absoluteString && lhsHTTPMethods == rhsHTTPMethods
     }
 }
 

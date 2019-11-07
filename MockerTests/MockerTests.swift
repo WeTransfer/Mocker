@@ -146,7 +146,7 @@ final class MockerTests: XCTestCase {
         let mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: headers)
         mock.register()
         
-        URLSession.shared.dataTask(with: mock.url) { (_, response, error) in
+        URLSession.shared.dataTask(with: mock.request) { (_, response, error) in
             XCTAssert(error == nil)
             XCTAssert(((response as! HTTPURLResponse).allHeaderFields["testkey"] as! String) == "testvalue", "Additional headers should be added.")
             expectation.fulfill()
@@ -164,7 +164,7 @@ final class MockerTests: XCTestCase {
         let newMock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: ["newkey": "newvalue"])
         newMock.register()
         
-        URLSession.shared.dataTask(with: mock.url) { (_, response, error) in
+        URLSession.shared.dataTask(with: mock.request) { (_, response, error) in
             XCTAssert(error == nil)
             XCTAssert(((response as! HTTPURLResponse).allHeaderFields["newkey"] as! String) == "newvalue", "Additional headers should be added.")
             expectation.fulfill()
@@ -199,13 +199,13 @@ final class MockerTests: XCTestCase {
     }
     
     /// It should be possible to test cancellation of requests with a delayed mock.
-    func testDelayedMock() {
+    func testDelayedMockCancelation() {
         let expectation = self.expectation(description: "Data request should be cancelled")
         var mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()])
         mock.delay = DispatchTimeInterval.seconds(5)
         mock.register()
         
-        let task = URLSession.shared.dataTask(with: mock.url) { (_, _, error) in
+        let task = URLSession.shared.dataTask(with: mock.request) { (_, _, error) in
             XCTAssert(error?._code == NSURLErrorCancelled)
             expectation.fulfill()
         }
@@ -263,18 +263,46 @@ final class MockerTests: XCTestCase {
         XCTAssert(mock == urlRequest)
     }
 
-    /// It should call the completion callback when a `Mock` is used.
-    func testCompletionCallback() {
-        let expectation = self.expectation(description: "Data request should succeed")
+    /// It should call the onRequest and completion callbacks when a `Mock` is used and completed in the right order.
+    func testMockCallbacks() {
+        let onRequestExpectation = expectation(description: "Data request should start")
+        let completionExpectation = expectation(description: "Data request should succeed")
         var mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()])
+        mock.onRequest = {
+            onRequestExpectation.fulfill()
+        }
         mock.completion = {
-            expectation.fulfill()
+            completionExpectation.fulfill()
         }
         mock.register()
 
-        URLSession.shared.dataTask(with: mock.url).resume()
+        URLSession.shared.dataTask(with: mock.request).resume()
 
-        waitForExpectations(timeout: 2.0, handler: nil)
+        wait(for: [onRequestExpectation, completionExpectation], timeout: 2.0, enforceOrder: true)
+    }
+
+    /// It should call the mock after a delay.
+    func testDelayedMock() {
+        let nonDelayExpectation = expectation(description: "Data request should succeed")
+        let delayedExpectation = expectation(description: "Data request should succeed")
+        var delayedMock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()])
+        delayedMock.delay = DispatchTimeInterval.seconds(1)
+        delayedMock.completion = {
+            delayedExpectation.fulfill()
+        }
+        delayedMock.register()
+        var nonDelayMock = Mock(dataType: .json, statusCode: 200, data: [.post: Data()])
+        nonDelayMock.completion = {
+            nonDelayExpectation.fulfill()
+        }
+        nonDelayMock.register()
+
+        XCTAssertNotEqual(delayedMock.request.url!, nonDelayMock.request.url!)
+
+        URLSession.shared.dataTask(with: delayedMock.request).resume()
+        URLSession.shared.dataTask(with: nonDelayMock.request).resume()
+
+        wait(for: [nonDelayExpectation, delayedExpectation], timeout: 2.0, enforceOrder: true)
     }
 
     /// It should remove all registered mocks correctly.
