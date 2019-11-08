@@ -69,7 +69,7 @@ public struct Mocker {
 
     /// Removes all registered mocks. Use this method in your tearDown function to make sure a Mock is not used in any other test.
     public static func removeAll() {
-        shared.queue.async(flags: .barrier) {
+        shared.queue.sync(flags: .barrier) {
             shared.mocks.removeAll()
         }
     }
