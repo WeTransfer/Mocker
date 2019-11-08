@@ -20,7 +20,8 @@ lane :test do |options|
       fail_build: false,
       code_coverage: true,
       formatter: "xcpretty-json-formatter",
-      result_bundle: true
+      result_bundle: true,
+      output_directory: "build/reports/"
     )
   rescue => ex
     UI.error("Tests failed: #{ex}")
