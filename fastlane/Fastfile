@@ -26,7 +26,7 @@ lane :test do |options|
     UI.error("Tests failed: #{ex}")
   end
 
-  trainer(output_directory: "build/reports/", fail_build: false)
+  trainer(path: "build/reports/", output_directory: "build/reports/", fail_build: false)
 
   validate_changes(project_name: options[:project_name])
 end
