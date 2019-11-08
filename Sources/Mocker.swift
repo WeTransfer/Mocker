@@ -30,7 +30,7 @@ public struct Mocker {
     private(set) var ignoredURLs: [URL] = []
 
     /// For Thread Safety access.
-    private let queue = DispatchQueue(label: "mocker.serial.queue")
+    private let queue = DispatchQueue(label: "mocker.mocks.access.queue", attributes: .concurrent)
 
     private init() {
         // Whenever someone is requesting the Mocker, we want the URL protocol to be activated.
@@ -41,7 +41,7 @@ public struct Mocker {
     ///
     /// - Parameter mock: The Mock to be registered for future requests.
     public static func register(_ mock: Mock) {
-        shared.queue.async {
+        shared.queue.async(flags: .barrier) {
             /// Delete the Mock if it was already registered.
             shared.mocks.removeAll(where: { $0 == mock })
             shared.mocks.append(mock)
@@ -52,7 +52,7 @@ public struct Mocker {
     ///
     /// - Parameter url: The URL to mock.
     public static func ignore(_ url: URL) {
-        shared.queue.async {
+        shared.queue.async(flags: .barrier) {
             shared.ignoredURLs.append(url)
         }
     }
@@ -69,7 +69,7 @@ public struct Mocker {
 
     /// Removes all registered mocks. Use this method in your tearDown function to make sure a Mock is not used in any other test.
     public static func removeAll() {
-        shared.queue.async {
+        shared.queue.async(flags: .barrier) {
             shared.mocks.removeAll()
         }
     }
