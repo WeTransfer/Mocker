@@ -1,6 +1,8 @@
 ## Changelog
 
 ### Next
+
+### 2.0.0
 - A new completion callback can be set on `Mock` to use for expectation fulfilling once a `Mock` is completed.
 - A new onRequest callback can be set on `Mock` to use for expectation fulfilling once a `Mock` is requested.
 - Updated to Swift 5.0
@@ -8,6 +10,7 @@
 - Correctly handle cancellation of delayed responses
 - Adding and reading mocks is now thread safe by using a Dispatch Semaphore
 - Add support for using Swift Package Manager
+- Improved checking for Mocks using `URLRequest`.
 
 ### 1.3.0
 - Updated to Swift 4.2

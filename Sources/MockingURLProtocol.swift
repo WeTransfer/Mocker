@@ -21,7 +21,7 @@ public final class MockingURLProtocol: URLProtocol {
     override public func startLoading() {
         guard
             let mock = Mocker.mock(for: request),
-            let response = HTTPURLResponse(url: mock.url, statusCode: mock.statusCode, httpVersion: Mocker.httpVersion.rawValue, headerFields: mock.headers),
+            let response = HTTPURLResponse(url: mock.request.url!, statusCode: mock.statusCode, httpVersion: Mocker.httpVersion.rawValue, headerFields: mock.headers),
             let data = mock.data(for: request)
         else {
             // swiftlint:disable nslog_prohibited
