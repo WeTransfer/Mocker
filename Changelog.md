@@ -1,6 +1,7 @@
 ## Changelog
 
 ### Next
+- `MockingURLProtocol` Error is now localized
 
 ### 2.0.0
 - A new completion callback can be set on `Mock` to use for expectation fulfilling once a `Mock` is completed.
