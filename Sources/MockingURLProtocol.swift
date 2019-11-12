@@ -11,10 +11,14 @@ import Foundation
 /// The protocol which can be used to send Mocked data back. Use the `Mocker` to register `Mock` data
 public final class MockingURLProtocol: URLProtocol {
 
-    enum Error: Swift.Error, LocalizedError {
+    enum Error: Swift.Error, LocalizedError, CustomDebugStringConvertible {
         case missingMockedData(url: String)
 
         var errorDescription: String? {
+            return debugDescription
+        }
+
+        var debugDescription: String {
             switch self {
             case .missingMockedData(let url):
                 return "Missing mock for URL: \(url)"

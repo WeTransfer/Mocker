@@ -312,4 +312,16 @@ final class MockerTests: XCTestCase {
         Mocker.removeAll()
         XCTAssertTrue(Mocker.shared.mocks.isEmpty)
     }
+
+    /// It should correctly add two mocks for the same URL if the HTTP method is different.
+    func testDifferentHTTPMethodSameURL() {
+        let url = URL(string: "https://www.fakeurl.com/\(UUID().uuidString)")!
+        Mock(url: url, dataType: .json, statusCode: 200, data: [.get: Data()]).register()
+        Mock(url: url, dataType: .json, statusCode: 200, data: [.put: Data()]).register()
+        var request = URLRequest(url: url)
+        request.httpMethod = Mock.HTTPMethod.get.rawValue
+        XCTAssertNotNil(Mocker.mock(for: request))
+        request.httpMethod = Mock.HTTPMethod.put.rawValue
+        XCTAssertNotNil(Mocker.mock(for: request))
+    }
 }

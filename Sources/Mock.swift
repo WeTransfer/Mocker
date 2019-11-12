@@ -185,7 +185,7 @@ public struct Mock: Equatable {
     
     public static func == (lhs: Mock, rhs: Mock) -> Bool {
         let lhsHTTPMethods: [String] = lhs.data.keys.compactMap { $0.rawValue }
-        let rhsHTTPMethods: [String] = lhs.data.keys.compactMap { $0.rawValue }
+        let rhsHTTPMethods: [String] = rhs.data.keys.compactMap { $0.rawValue }
         return lhs.request.url!.absoluteString == rhs.request.url!.absoluteString && lhsHTTPMethods == rhsHTTPMethods
     }
 }

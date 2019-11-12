@@ -1,7 +1,8 @@
 ## Changelog
 
 ### Next
-- `MockingURLProtocol` Error is now localized
+- `MockingURLProtocol` Error now conforms to `CustomDebugStringConvertible` for better debugging logs.
+- Fixed a bug in which two Mocks would not be registered for the same URL if the HTTP method was different.
 
 ### 2.0.0
 - A new completion callback can be set on `Mock` to use for expectation fulfilling once a `Mock` is completed.
