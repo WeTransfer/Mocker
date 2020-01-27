@@ -1,3 +1,7 @@
+# 2.0.1
+
+- Switch over to Danger-Swift & Bitrise ([#34](https://github.com/WeTransfer/Mocker/pull/34)) via @AvdLee
+- Fix important mismatch for getting the right mock ([#31](https://github.com/WeTransfer/Mocker/pull/31)) via @AvdLee
 ## Changelog
 
 ### 2.0.0
