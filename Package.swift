@@ -10,15 +10,15 @@ let package = Package(name: "Mocker",
                         .tvOS(.v12),
                         .watchOS(.v6)],
                       products: [
-                        .library(name: "DangerDeps", type: .dynamic, targets: ["DangerDependencies"]), // dev
+                        // dev .library(name: "DangerDeps", type: .dynamic, targets: ["DangerDependencies"]),
                         .library(name: "Mocker", targets: ["Mocker"])
                         ],
                       dependencies: [
-                        .package(url: "https://github.com/danger/swift", from: "3.0.0"), // dev
-                        .package(path: "Submodules/WeTransfer-iOS-CI/Danger-Swift") // dev
+                        // dev .package(url: "https://github.com/danger/swift", from: "3.0.0"),
+                        // dev .package(path: "Submodules/WeTransfer-iOS-CI/Danger-Swift")
                         ],
                       targets: [
                         .target(name: "Mocker", path: "Sources"),
-                        .target(name: "DangerDependencies", dependencies: ["Danger", "WeTransferPRLinter"], path: "Submodules/WeTransfer-iOS-CI/Danger-Swift", sources: ["DangerFakeSource.swift"]) // dev
+                        // dev .target(name: "DangerDependencies", dependencies: ["Danger", "WeTransferPRLinter"], path: "Submodules/WeTransfer-iOS-CI/Danger-Swift", sources: ["DangerFakeSource.swift"])
                         ],
                       swiftLanguageVersions: [.v5])
