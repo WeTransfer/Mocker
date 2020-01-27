@@ -1,5 +1,6 @@
 // swift-tools-version:5.1
 // The swift-tools-version declares the minimum version of Swift required to build this package.
+// We're hiding dev, test, and danger dependencies with // dev to make sure they're not fetched by users of this package.
 
 import PackageDescription
 
