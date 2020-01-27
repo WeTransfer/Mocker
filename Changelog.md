@@ -1,8 +1,9 @@
-# 2.0.1
+## Changelog
+
+### 2.0.1
 
 - Switch over to Danger-Swift & Bitrise ([#34](https://github.com/WeTransfer/Mocker/pull/34)) via @AvdLee
 - Fix important mismatch for getting the right mock ([#31](https://github.com/WeTransfer/Mocker/pull/31)) via @AvdLee
-## Changelog
 
 ### 2.0.0
 - A new completion callback can be set on `Mock` to use for expectation fulfilling once a `Mock` is completed.
