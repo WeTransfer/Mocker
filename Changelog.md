@@ -1,5 +1,3 @@
-## Changelog
-
 ### 2.0.1
 
 - Switch over to Danger-Swift & Bitrise ([#34](https://github.com/WeTransfer/Mocker/pull/34)) via @AvdLee
