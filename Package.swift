@@ -19,7 +19,7 @@ let package = Package(name: "Mocker",
                         // dev .package(path: "Submodules/WeTransfer-iOS-CI/Danger-Swift")
                         ],
                       targets: [
-                        .target(name: "Mocker", path: "Sources"),
-                        // dev .target(name: "DangerDependencies", dependencies: ["Danger", "WeTransferPRLinter"], path: "Submodules/WeTransfer-iOS-CI/Danger-Swift", sources: ["DangerFakeSource.swift"])
+                        // dev .target(name: "DangerDependencies", dependencies: ["Danger", "WeTransferPRLinter"], path: "Submodules/WeTransfer-iOS-CI/Danger-Swift", sources: ["DangerFakeSource.swift"]),
+                        .target(name: "Mocker", path: "Sources")
                         ],
                       swiftLanguageVersions: [.v5])
