@@ -1,3 +1,10 @@
+### 2.0.2
+
+- Make use of the shared SwiftLint script ([#39](https://github.com/WeTransfer/Mocker/pull/39)) via @AvdLee
+- Enable tag releasing ([#38](https://github.com/WeTransfer/Mocker/pull/38)) via @AvdLee
+- Switch over to Danger-Swift & Bitrise ([#34](https://github.com/WeTransfer/Mocker/pull/34)) via @AvdLee
+- Fix important mismatch for getting the right mock ([#31](https://github.com/WeTransfer/Mocker/pull/31)) via @AvdLee
+
 ### 2.0.1
 
 - Switch over to Danger-Swift & Bitrise ([#34](https://github.com/WeTransfer/Mocker/pull/34)) via @AvdLee
