@@ -268,7 +268,7 @@ final class MockerTests: XCTestCase {
         let onRequestExpectation = expectation(description: "Data request should start")
         let completionExpectation = expectation(description: "Data request should succeed")
         var mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()])
-        mock.onRequest = {
+        mock.onRequest = { _, _ in
             onRequestExpectation.fulfill()
         }
         mock.completion = {
@@ -279,6 +279,28 @@ final class MockerTests: XCTestCase {
         URLSession.shared.dataTask(with: mock.request).resume()
 
         wait(for: [onRequestExpectation, completionExpectation], timeout: 2.0, enforceOrder: true)
+    }
+
+    /// It should report post body arguments if they exist.
+    func testOnRequestPostBodyParameters() throws {
+        let onRequestExpectation = expectation(description: "Data request should start")
+
+        let expectedParameters = ["test": "value"]
+        var request = URLRequest(url: URL(string: "https://www.fakeurl.com")!)
+        request.httpMethod = Mock.HTTPMethod.post.rawValue
+        request.httpBody = try JSONSerialization.data(withJSONObject: expectedParameters, options: .prettyPrinted)
+
+        var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
+        mock.onRequest = { request, postBodyArguments in
+            XCTAssertEqual(request.url, mock.request.url)
+            XCTAssertEqual(expectedParameters, postBodyArguments as? [String: String])
+            onRequestExpectation.fulfill()
+        }
+        mock.register()
+
+        URLSession.shared.dataTask(with: request).resume()
+
+        wait(for: [onRequestExpectation], timeout: 2.0)
     }
 
     /// It should call the mock after a delay.
