@@ -1,3 +1,7 @@
+### 2.1.0
+- Enable post body checks ([#41](https://github.com/WeTransfer/Mocker/pull/41)) via @AvdLee
+- Merge release 2.0.2 into master ([#40](https://github.com/WeTransfer/Mocker/pull/40))
+
 ### 2.0.2
 
 - Make use of the shared SwiftLint script ([#39](https://github.com/WeTransfer/Mocker/pull/39)) via @AvdLee
