@@ -28,6 +28,7 @@ Mocker is a library written in Swift which makes it possible to mock data reques
 	    - [Delayed responses](#delayed-responses)
 	    - [Redirect responses](#redirect-responses)
 	    - [Ignoring URLs](#ignoring-urls)
+	    - [Mock callbacks](#mock-callbacks)
 - [Communication](#communication)
 - [Installation](#installation)
 - [Release Notes](#release-notes)
@@ -185,6 +186,23 @@ As the Mocker catches all URLs when registered, you might end up with a `fatalEr
 let ignoredURL = URL(string: "www.wetransfer.com")!
 Mocker.ignore(ignoredURL)
 ```
+
+##### Mock callbacks
+You can register on `Mock` callbacks to make testing easier.
+
+```swift
+var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
+mock.onRequest = { request, postBodyArguments in
+    XCTAssertEqual(request.url, mock.request.url)
+    XCTAssertEqual(expectedParameters, postBodyArguments as? [String: String])
+    onRequestExpectation.fulfill()
+}
+mock.completion = {
+    endpointIsCalledExpectation.fulfill()
+}
+mock.register()
+```
+
 
 ## Communication
 

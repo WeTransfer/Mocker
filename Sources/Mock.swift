@@ -12,7 +12,7 @@ import Foundation
 
 /// A Mock which can be used for mocking data requests with the `Mocker` by calling `Mocker.register(...)`.
 public struct Mock: Equatable {
-    
+
     /// HTTP method definitions.
     ///
     /// See https://tools.ietf.org/html/rfc7231#section-4.3
@@ -54,6 +54,8 @@ public struct Mock: Equatable {
             }
         }
     }
+
+    public typealias OnRequest = (_ request: URLRequest, _ httpBodyArguments: [String: Any]?) -> Void
     
     /// The type of the data which is returned.
     public let dataType: DataType
@@ -97,7 +99,7 @@ public struct Mock: Equatable {
     public var completion: (() -> Void)?
 
     /// The callback which will be executed everytime this `Mock` was started. Can be used within unit tests for validating that a request has been started.
-    public var onRequest: (() -> Void)?
+    public var onRequest: OnRequest?
     
     private init(url: URL? = nil, ignoreQuery: Bool = false, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
         self.urlToMock = url
