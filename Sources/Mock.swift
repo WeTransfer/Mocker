@@ -95,10 +95,10 @@ public struct Mock: Equatable {
     /// Add a delay to a certain mock, which makes the response returned later.
     public var delay: DispatchTimeInterval?
 
-    /// The callback which will be executed everytime this `Mock` was completed. Can be used within unit tests for validating that a request has been executed.
+    /// The callback which will be executed everytime this `Mock` was completed. Can be used within unit tests for validating that a request has been executed. The callback must be set before calling `register`.
     public var completion: (() -> Void)?
 
-    /// The callback which will be executed everytime this `Mock` was started. Can be used within unit tests for validating that a request has been started.
+    /// The callback which will be executed everytime this `Mock` was started. Can be used within unit tests for validating that a request has been started. The callback must be set before calling `register`.
     public var onRequest: OnRequest?
     
     private init(url: URL? = nil, ignoreQuery: Bool = false, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
