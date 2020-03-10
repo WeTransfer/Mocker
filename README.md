@@ -62,9 +62,9 @@ let urlSession = URLSession(configuration: configuration)
 Quite similar like registering on a custom `URLSession`.
 
 ```swift
-let configuration = URLSessionConfiguration.default
+let configuration = URLSessionConfiguration.af.default
 configuration.protocolClasses = [MockingURLProtocol.self]
-let sessionManager = SessionManager(configuration: configuration)
+let sessionManager = Alamofire.Session(configuration: configuration)
 ```
 
 ### Register Mocks
