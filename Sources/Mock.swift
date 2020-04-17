@@ -60,6 +60,9 @@ public struct Mock: Equatable {
     /// The type of the data which is returned.
     public let dataType: DataType
     
+    /// If set, the error that URLProtocol will report as a result rather than returning data from the mock
+    public let requestError: Error?
+
     /// The headers to send back with the response.
     public let headers: [String: String]
     
@@ -101,7 +104,7 @@ public struct Mock: Equatable {
     /// The callback which will be executed everytime this `Mock` was started. Can be used within unit tests for validating that a request has been started. The callback must be set before calling `register`.
     public var onRequest: OnRequest?
     
-    private init(url: URL? = nil, ignoreQuery: Bool = false, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
+    private init(url: URL? = nil, ignoreQuery: Bool = false, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], requestError: Error? = nil, additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
         self.urlToMock = url
         let generatedURL = URL(string: "https://mocked.wetransfer.com/\(dataType.rawValue)/\(statusCode)/\(data.keys.first!.rawValue)")!
         self.generatedURL = generatedURL
@@ -109,6 +112,7 @@ public struct Mock: Equatable {
         request.httpMethod = data.keys.first!.rawValue
         self.request = request
         self.ignoreQuery = ignoreQuery
+        self.requestError = requestError
         self.dataType = dataType
         self.statusCode = statusCode
         self.data = data
@@ -136,12 +140,13 @@ public struct Mock: Equatable {
     /// - Parameters:
     ///   - url: The URL to match for and to return the mocked data for.
     ///   - ignoreQuery: If `true`, checking the URL will ignore the query and match only for the scheme, host and path. Defaults to `false`.
+    ///   - reportFailure: if `true`, the URLsession will report an error loading the URL rather than returning data. Defaults to `false`.
     ///   - dataType: The type of the data which is returned.
     ///   - statusCode: The HTTP status code to return with the response.
     ///   - data: The data which will be returned as the response based on the HTTP Method.
     ///   - additionalHeaders: Additional headers to be added to the response.
-    public init(url: URL, ignoreQuery: Bool = false, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
-        self.init(url: url, ignoreQuery: ignoreQuery, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
+    public init(url: URL, ignoreQuery: Bool = false, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], requestError: Error? = nil) {
+        self.init(url: url, ignoreQuery: ignoreQuery, dataType: dataType, statusCode: statusCode, data: data, requestError: requestError, additionalHeaders: additionalHeaders, fileExtensions: nil)
     }
     
     /// Creates a `Mock` for the given file extensions. The mock will only be used for urls matching the extension.
