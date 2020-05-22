@@ -8,7 +8,8 @@
 <img src="https://img.shields.io/cocoapods/l/Mocker.svg?style=flat"/>
 <img src="https://img.shields.io/cocoapods/p/Mocker.svg?style=flat"/>
 <img src="https://img.shields.io/badge/language-swift4.2-f48041.svg?style=flat"/>
-<img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat"/>
+<img src="https://img.shields.io/badge/carthage-compatible-4BC51D.svg?style=flat"/>
+<img src="https://img.shields.io/badge/spm-compatible-4BC51D.svg?style=flat"/>
 <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat"/>
 </p>
 
@@ -278,6 +279,40 @@ github "WeTransfer/Mocker" ~> 1.00
 ```
 
 Run `carthage update` to build the framework and drag the built `Mocker.framework` into your Xcode project.
+
+### Swift Package Manager
+
+The [Swift Package Manager](https://swift.org/package-manager/) is a tool for managing the distribution of Swift code. It’s integrated with the Swift build system to automate the process of downloading, compiling, and linking dependencies.
+
+#### Manifest File
+
+Add Mocker as a package to your `Package.swift` file and then specify it as a dependency of the Target in which you wish to use it.
+
+```swift
+import PackageDescription
+
+let package = Package(
+    name: "MyProject",
+    platforms: [
+       .macOS(.v10_15)
+    ],
+    dependencies: [
+        .package(url: "https://github.com/WeTransfer/Mocker.git", .upToNextMajor(from: "2.1.0"))
+    ],
+    targets: [
+        .target(
+            name: "MyProject",
+            dependencies: ["Mocker"]),
+        .testTarget(
+            name: "MyProjectTests",
+            dependencies: ["MyProject"]),
+    ]
+)
+```
+
+#### Xcode
+
+To add Mocker as a [dependency](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) to your Xcode project, select *File > Swift Packages > Add Package Dependency* and enter the repository URL.
 
 ### Manually
 
