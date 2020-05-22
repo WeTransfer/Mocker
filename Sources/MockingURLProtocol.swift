@@ -13,6 +13,7 @@ public final class MockingURLProtocol: URLProtocol {
 
     enum Error: Swift.Error, LocalizedError, CustomDebugStringConvertible {
         case missingMockedData(url: String)
+        case explicitMockFailure(url: String)
 
         var errorDescription: String? {
             return debugDescription
@@ -22,6 +23,8 @@ public final class MockingURLProtocol: URLProtocol {
             switch self {
             case .missingMockedData(let url):
                 return "Missing mock for URL: \(url)"
+            case .explicitMockFailure(url: let url):
+                return "Induced error for URL: \(url)"
             }
         }
     }
@@ -60,6 +63,8 @@ public final class MockingURLProtocol: URLProtocol {
     private func finishRequest(for mock: Mock, data: Data, response: HTTPURLResponse) {
         if let redirectLocation = data.redirectLocation {
             self.client?.urlProtocol(self, wasRedirectedTo: URLRequest(url: redirectLocation), redirectResponse: response)
+        } else if let requestError = mock.requestError {
+            self.client?.urlProtocol(self, didFailWithError: requestError)
         } else {
             self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
             self.client?.urlProtocol(self, didLoad: data)

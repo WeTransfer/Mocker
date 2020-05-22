@@ -203,6 +203,28 @@ mock.completion = {
 mock.register()
 ```
 
+##### Mock errors
+
+You can request a `Mock` to return an error, allowing testing of error handling.
+
+```swift
+Mock(url: originalURL, dataType: .json, statusCode: 500, data: [.get: Data()],
+     requestError: TestExampleError.example).register()
+
+URLSession.shared.dataTask(with: originalURL) { (data, urlresponse, err) in
+    XCTAssertNil(data)
+    XCTAssertNil(urlresponse)
+    XCTAssertNotNil(err)
+    if let err = err {
+        // there's not a particularly elegant way to verify an instance
+        // of an error, but this is a convenient workaround for testing
+        // purposes
+        XCTAssertEqual("example", String(describing: err))
+    }
+
+    expectation.fulfill()
+}.resume()
+```
 
 ## Communication
 
