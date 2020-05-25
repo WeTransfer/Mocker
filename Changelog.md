@@ -1,3 +1,11 @@
+### 2.2.0
+- ignoring query example swap i/o url ([#54](https://github.com/WeTransfer/Mocker/pull/54)) via [@GeRryCh](https://github.com/GeRryCh)
+- Update README.md ([#53](https://github.com/WeTransfer/Mocker/pull/53)) via [@mtsrodrigues](https://github.com/mtsrodrigues)
+- mixing in the ability to send an explicit error from a mock response ([#52](https://github.com/WeTransfer/Mocker/pull/52)) via [@heckj](https://github.com/heckj)
+- Document that onRequest and completion must be set before calling register() ([#47](https://github.com/WeTransfer/Mocker/pull/47)) via [@marcetcheverry](https://github.com/marcetcheverry)
+- Update readme for Alamofire 5 ([#48](https://github.com/WeTransfer/Mocker/pull/48)) via [@AvdLee](https://github.com/AvdLee)
+- Merge release 2.1.0 into master ([#46](https://github.com/WeTransfer/Mocker/pull/46)) via [@WeTransferBot](https://github.com/WeTransferBot)
+
 ### 2.1.0
 - Enable post body checks ([#41](https://github.com/WeTransfer/Mocker/pull/41)) via @AvdLee
 - Merge release 2.0.2 into master ([#40](https://github.com/WeTransfer/Mocker/pull/40))
