@@ -203,6 +203,19 @@ mock.completion = {
 mock.register()
 ```
 
+##### Mock expectations
+Instead of setting the `completion` and `onRequest` you can also make use of expectations:
+
+```swift
+var mock = Mock(url: url, dataType: .json, statusCode: 200, data: [.get: Data()])
+let requestExpectation = expectationForCompletingMock(&mock)
+let completionExpectation = expectationForCompletingMock(&mock)
+mock.register()
+
+URLSession.shared.dataTask(with: URLRequest(url: url)).resume()
+
+wait(for: [requestExpectation, completionExpectation], timeout: 2.0)
+```
 
 ## Communication
 

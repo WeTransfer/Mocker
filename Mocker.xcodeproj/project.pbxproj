@@ -30,6 +30,7 @@
 
 /* Begin PBXFileReference section */
 		501B8FC3247E89C600B885F4 /* XCTest+Mocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+Mocker.swift"; sourceTree = "<group>"; };
+		501B8FC5247E8BDE00B885F4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		501E26941F3DAE370048F39E /* Mocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		501E269D1F3DAE370048F39E /* MockerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MockerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		501F8B2D237594AC008EF77E /* Mocker.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Mocker.podspec; sourceTree = "<group>"; };
@@ -67,6 +68,7 @@
 		501E268A1F3DAE370048F39E = {
 			isa = PBXGroup;
 			children = (
+				501B8FC5247E8BDE00B885F4 /* README.md */,
 				506277CC235F2777000A4316 /* Changelog.md */,
 				501F8B2D237594AC008EF77E /* Mocker.podspec */,
 				501E26951F3DAE370048F39E /* Products */,
