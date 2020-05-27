@@ -43,6 +43,7 @@ public final class MockingURLProtocol: URLProtocol {
         if let onRequest = mock.onRequest {
             onRequest(request, request.postBodyArguments)
         }
+        mock.onRequestExpectation?.fulfill()
 
         guard let delay = mock.delay else {
             finishRequest(for: mock, data: data, response: response)
@@ -67,6 +68,7 @@ public final class MockingURLProtocol: URLProtocol {
         }
 
         mock.completion?()
+        mock.onCompletedExpectation?.fulfill()
     }
     
     /// Implementation does nothing, but is needed for a valid inheritance of URLProtocol.

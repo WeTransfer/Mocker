@@ -346,4 +346,30 @@ final class MockerTests: XCTestCase {
         request.httpMethod = Mock.HTTPMethod.put.rawValue
         XCTAssertNotNil(Mocker.mock(for: request))
     }
+
+    /// It should call the on request expectation.
+    func testOnRequestExpectation() {
+        let url = URL(string: "https://www.fakeurl.com")!
+
+        var mock = Mock(url: url, dataType: .json, statusCode: 200, data: [.get: Data()])
+        let expectation = expectationForRequestingMock(&mock)
+        mock.register()
+
+        URLSession.shared.dataTask(with: URLRequest(url: url)).resume()
+
+        wait(for: [expectation], timeout: 2.0)
+    }
+
+    /// It should call the on completion expectation.
+    func testOnCompletionExpectation() {
+        let url = URL(string: "https://www.fakeurl.com")!
+
+        var mock = Mock(url: url, dataType: .json, statusCode: 200, data: [.get: Data()])
+        let expectation = expectationForCompletingMock(&mock)
+        mock.register()
+
+        URLSession.shared.dataTask(with: URLRequest(url: url)).resume()
+
+        wait(for: [expectation], timeout: 2.0)
+    }
 }
