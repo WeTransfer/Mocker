@@ -372,4 +372,33 @@ final class MockerTests: XCTestCase {
 
         wait(for: [expectation], timeout: 2.0)
     }
+    
+    /// it should return the error we requested from the mock when we pass in an Error.
+    func testMockReturningError() {
+        let expectation = self.expectation(description: "Data request should succeed")
+        let originalURL = URL(string: "https://www.wetransfer.com/example.json")!
+
+        enum TestExampleError: Error {
+            case example
+        }
+        
+        Mock(url: originalURL, dataType: .json, statusCode: 500, data: [.get: Data()], requestError: TestExampleError.example).register()
+        
+        URLSession.shared.dataTask(with: originalURL) { (data, urlresponse, err) in
+
+            XCTAssertNil(data)
+            XCTAssertNil(urlresponse)
+            XCTAssertNotNil(err)
+            if let err = err {
+                // there's not a particularly elegant way to verify an instance
+                // of an error, but this is a convenient workaround for testing
+                // purposes
+                XCTAssertEqual("example", String(describing: err))
+            }
+            
+            expectation.fulfill()
+        }.resume()
+        
+        waitForExpectations(timeout: 10.0, handler: nil)
+    }
 }

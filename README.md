@@ -8,7 +8,8 @@
 <img src="https://img.shields.io/cocoapods/l/Mocker.svg?style=flat"/>
 <img src="https://img.shields.io/cocoapods/p/Mocker.svg?style=flat"/>
 <img src="https://img.shields.io/badge/language-swift4.2-f48041.svg?style=flat"/>
-<img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat"/>
+<img src="https://img.shields.io/badge/carthage-compatible-4BC51D.svg?style=flat"/>
+<img src="https://img.shields.io/badge/spm-compatible-4BC51D.svg?style=flat"/>
 <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat"/>
 </p>
 
@@ -103,8 +104,8 @@ URLSession.shared.dataTask(with: originalURL) { (data, response, error) in
 Some URLs like authentication URLs contain timestamps or UUIDs in the query. To mock these you can ignore the Query for a certain URL:
 
 ``` swift
-/// Would transform to "https://www.example.com/api/authentication?oauth_timestamp=151817037" for example.
-let originalURL = URL(string: "https://www.example.com/api/authentication")!
+/// Would transform to "https://www.example.com/api/authentication" for example.
+let originalURL = URL(string: "https://www.example.com/api/authentication?oauth_timestamp=151817037")!
     
 let mock = Mock(url: originalURL, ignoreQuery: true, dataType: .json, statusCode: 200, data: [
     .get : MockedData.exampleJSON.data // Data containing the JSON response
@@ -185,6 +186,29 @@ As the Mocker catches all URLs when registered, you might end up with a `fatalEr
 ```swift
 let ignoredURL = URL(string: "www.wetransfer.com")!
 Mocker.ignore(ignoredURL)
+```
+
+##### Mock errors
+
+You can request a `Mock` to return an error, allowing testing of error handling.
+
+```swift
+Mock(url: originalURL, dataType: .json, statusCode: 500, data: [.get: Data()],
+     requestError: TestExampleError.example).register()
+
+URLSession.shared.dataTask(with: originalURL) { (data, urlresponse, err) in
+    XCTAssertNil(data)
+    XCTAssertNil(urlresponse)
+    XCTAssertNotNil(err)
+    if let err = err {
+        // there's not a particularly elegant way to verify an instance
+        // of an error, but this is a convenient workaround for testing
+        // purposes
+        XCTAssertEqual("example", String(describing: err))
+    }
+
+    expectation.fulfill()
+}.resume()
 ```
 
 ##### Mock callbacks
@@ -269,6 +293,40 @@ github "WeTransfer/Mocker" ~> 1.00
 ```
 
 Run `carthage update` to build the framework and drag the built `Mocker.framework` into your Xcode project.
+
+### Swift Package Manager
+
+The [Swift Package Manager](https://swift.org/package-manager/) is a tool for managing the distribution of Swift code. It’s integrated with the Swift build system to automate the process of downloading, compiling, and linking dependencies.
+
+#### Manifest File
+
+Add Mocker as a package to your `Package.swift` file and then specify it as a dependency of the Target in which you wish to use it.
+
+```swift
+import PackageDescription
+
+let package = Package(
+    name: "MyProject",
+    platforms: [
+       .macOS(.v10_15)
+    ],
+    dependencies: [
+        .package(url: "https://github.com/WeTransfer/Mocker.git", .upToNextMajor(from: "2.1.0"))
+    ],
+    targets: [
+        .target(
+            name: "MyProject",
+            dependencies: ["Mocker"]),
+        .testTarget(
+            name: "MyProjectTests",
+            dependencies: ["MyProject"]),
+    ]
+)
+```
+
+#### Xcode
+
+To add Mocker as a [dependency](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) to your Xcode project, select *File > Swift Packages > Add Package Dependency* and enter the repository URL.
 
 ### Manually
 
