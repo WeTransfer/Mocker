@@ -188,22 +188,6 @@ let ignoredURL = URL(string: "www.wetransfer.com")!
 Mocker.ignore(ignoredURL)
 ```
 
-##### Mock callbacks
-You can register on `Mock` callbacks to make testing easier.
-
-```swift
-var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
-mock.onRequest = { request, postBodyArguments in
-    XCTAssertEqual(request.url, mock.request.url)
-    XCTAssertEqual(expectedParameters, postBodyArguments as? [String: String])
-    onRequestExpectation.fulfill()
-}
-mock.completion = {
-    endpointIsCalledExpectation.fulfill()
-}
-mock.register()
-```
-
 ##### Mock errors
 
 You can request a `Mock` to return an error, allowing testing of error handling.
@@ -225,6 +209,36 @@ URLSession.shared.dataTask(with: originalURL) { (data, urlresponse, err) in
 
     expectation.fulfill()
 }.resume()
+```
+
+##### Mock callbacks
+You can register on `Mock` callbacks to make testing easier.
+
+```swift
+var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
+mock.onRequest = { request, postBodyArguments in
+    XCTAssertEqual(request.url, mock.request.url)
+    XCTAssertEqual(expectedParameters, postBodyArguments as? [String: String])
+    onRequestExpectation.fulfill()
+}
+mock.completion = {
+    endpointIsCalledExpectation.fulfill()
+}
+mock.register()
+```
+
+##### Mock expectations
+Instead of setting the `completion` and `onRequest` you can also make use of expectations:
+
+```swift
+var mock = Mock(url: url, dataType: .json, statusCode: 200, data: [.get: Data()])
+let requestExpectation = expectationForCompletingMock(&mock)
+let completionExpectation = expectationForCompletingMock(&mock)
+mock.register()
+
+URLSession.shared.dataTask(with: URLRequest(url: url)).resume()
+
+wait(for: [requestExpectation, completionExpectation], timeout: 2.0)
 ```
 
 ## Communication

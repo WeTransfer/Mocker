@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		501B8FC4247E89C600B885F4 /* XCTest+Mocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501B8FC3247E89C600B885F4 /* XCTest+Mocker.swift */; };
 		501E269E1F3DAE370048F39E /* Mocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 501E26941F3DAE370048F39E /* Mocker.framework */; };
 		503446171F3DB4660039D5E4 /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503446141F3DB4660039D5E4 /* Mock.swift */; };
 		503446181F3DB4660039D5E4 /* Mocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503446151F3DB4660039D5E4 /* Mocker.swift */; };
@@ -28,6 +29,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		501B8FC3247E89C600B885F4 /* XCTest+Mocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+Mocker.swift"; sourceTree = "<group>"; };
+		501B8FC5247E8BDE00B885F4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		501E26941F3DAE370048F39E /* Mocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		501E269D1F3DAE370048F39E /* MockerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MockerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		501F8B2D237594AC008EF77E /* Mocker.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Mocker.podspec; sourceTree = "<group>"; };
@@ -65,6 +68,7 @@
 		501E268A1F3DAE370048F39E = {
 			isa = PBXGroup;
 			children = (
+				501B8FC5247E8BDE00B885F4 /* README.md */,
 				506277CC235F2777000A4316 /* Changelog.md */,
 				501F8B2D237594AC008EF77E /* Mocker.podspec */,
 				501E26951F3DAE370048F39E /* Products */,
@@ -89,6 +93,7 @@
 				503446141F3DB4660039D5E4 /* Mock.swift */,
 				503446151F3DB4660039D5E4 /* Mocker.swift */,
 				503446161F3DB4660039D5E4 /* MockingURLProtocol.swift */,
+				501B8FC3247E89C600B885F4 /* XCTest+Mocker.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -264,6 +269,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				503446191F3DB4660039D5E4 /* MockingURLProtocol.swift in Sources */,
+				501B8FC4247E89C600B885F4 /* XCTest+Mocker.swift in Sources */,
 				503446181F3DB4660039D5E4 /* Mocker.swift in Sources */,
 				503446171F3DB4660039D5E4 /* Mock.swift in Sources */,
 			);
@@ -419,6 +425,9 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks\n$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
 				INFOPLIST_FILE = "Mocker/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -439,6 +448,9 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks\n$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
 				INFOPLIST_FILE = "Mocker/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
