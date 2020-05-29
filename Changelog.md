@@ -1,3 +1,7 @@
+### 2.3.0
+- Add XCTest extensions ([#57](https://github.com/WeTransfer/Mocker/pull/57)) via [@AvdLee](https://github.com/AvdLee)
+- Merge release 2.2.0 into master ([#55](https://github.com/WeTransfer/Mocker/pull/55)) via [@WeTransferBot](https://github.com/WeTransferBot)
+
 ### 2.2.0
 - ignoring query example swap i/o url ([#54](https://github.com/WeTransfer/Mocker/pull/54)) via [@GeRryCh](https://github.com/GeRryCh)
 - Update README.md ([#53](https://github.com/WeTransfer/Mocker/pull/53)) via [@mtsrodrigues](https://github.com/mtsrodrigues)
