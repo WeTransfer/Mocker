@@ -85,26 +85,28 @@ public struct Mocker {
         }
     }
     
-    /// Retrieve a Mock for the given request. Matches on `request.url` and `request.httpMethod`.
-    /// if `onMockFor` is set, first see if that closure returns a mock; if it does, use that mock.
-    /// Otherwise, look for a specific mock that has been registered for this request.
-    /// If not found, check for a generic file extension mock.
+    /// Retrieve a Mock for the given request.
+    ///
+    /// Checks in order:
+    /// - If `onMockFor` set, execute with `request` and see if it returns a Mock to use.
+    /// - Check for Mock registered for `request.url` and `request.httpMethod`.
+    /// - Check for a generic file extension mock.
     ///
     /// - Parameter request: The request to search for a mock.
     /// - Returns: A mock if found, `nil` if there's no mocked data registered for the given request.
     static func mock(for request: URLRequest) -> Mock? {
         shared.queue.sync {
-            /// Zeroth support for dynamic mocks via `onMockFor` closure
+            // First, check if `onMockFor` closure provides a Mock to use for this request
             if let mockProvider = onMockFor,
                 let dynamicMock = mockProvider(request) {
                 return dynamicMock
             }
             
-            /// First check for specific URLs
+            // Second, check for specific URLs
             if let specificMock = shared.mocks.first(where: { $0 == request && $0.fileExtensions == nil }) {
                 return specificMock
             }
-            /// Second, check for generic file extension Mocks
+            // Third, check for generic file extension Mocks
             return shared.mocks.first(where: { $0 == request })
         }
     }
