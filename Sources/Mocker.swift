@@ -23,6 +23,11 @@ public struct Mocker {
     /// The HTTP Version to use in the mocked response.
     public static var httpVersion: HTTPVersion = HTTPVersion.http1_1
     
+	/// Allow for dynamic Mocks.
+	/// If closure is assigned and a Mock is returned, that mock will override
+	/// any registered mocks and be used for the indicated request.
+	public var onMockFor: ((URLRequest) -> Mock?)?
+	
     /// The registrated mocks.
     private(set) var mocks: [Mock] = []
     
@@ -75,11 +80,20 @@ public struct Mocker {
     }
     
     /// Retrieve a Mock for the given request. Matches on `request.url` and `request.httpMethod`.
-    ///
+    /// if `onMockFor` is set, first see if that closure returns a mock; if it does, use that mock.
+	/// Otherwise, look for a specific mock that has been registered for this request.
+	/// If not found, check for a generic file extension mock.
+	///
     /// - Parameter request: The request to search for a mock.
     /// - Returns: A mock if found, `nil` if there's no mocked data registered for the given request.
     static func mock(for request: URLRequest) -> Mock? {
         shared.queue.sync {
+			/// Zeroth support for dynamic mocks via `onMockFor` closure
+			if let mockProvider = shared.onMockFor,
+				let dynamicMock = mockProvider(request) {
+					return dynamicMock
+			}
+
             /// First check for specific URLs
             if let specificMock = shared.mocks.first(where: { $0 == request && $0.fileExtensions == nil }) {
                 return specificMock

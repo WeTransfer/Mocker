@@ -19,6 +19,13 @@ final class MockerTests: XCTestCase {
             owner = jsonDictionary["owner"] as? String
         }
     }
+	
+	override func setUp() {
+		super.setUp()
+		
+		// make sure this is cleared before each test to avoid bleed-over between tests.
+		Mocker.shared.onMockFor = nil
+	}
     
     /// It should returned the register mocked image data as response.
     func testImageURLDataRequest() {
@@ -401,4 +408,126 @@ final class MockerTests: XCTestCase {
         
         waitForExpectations(timeout: 10.0, handler: nil)
     }
+
+	/// It should call the `onMockFor` filter closure if set.
+	func testOnMockForFilterCalled() {
+        let url = URL(string: "https://www.fakeurl.com/DynamicTests")!
+		var onMockForCalled = false
+		
+		Mocker.shared.onMockFor = { (request: URLRequest) -> Mock? in
+			onMockForCalled = true
+			return nil
+		}
+		
+        var mock = Mock(url: url, dataType: .json, statusCode: 200, data: [.get: Data()])
+        let expectation = expectationForCompletingMock(&mock)
+        mock.register()
+
+		URLSession.shared.dataTask(with: URLRequest(url: url)).resume()
+		
+        wait(for: [expectation], timeout: 2.0)
+
+		XCTAssert(onMockForCalled, "our onMockFor handler was not called!")
+	}
+	
+	/// It should use the replacement mock set in the `onMockFor` filter closure
+	func testOnMockForReplacementMockUsed() {
+        let url = URL(string: "https://www.fakeurl.com")!
+		let injectedMockData = "{\"key\":\"value\"}".data(using: .utf8)!
+		
+		Mocker.shared.onMockFor = { (request: URLRequest) -> Mock? in
+			return Mock(dataType: .json, statusCode: 200, data: [.get: injectedMockData])
+		}
+		
+		let expectation = self.expectation(description: "Data request should succeed")
+
+		let mock = Mock(url: url, dataType: .json, statusCode: 200, data: [.get: Data()])
+        mock.register()
+
+		URLSession.shared.dataTask(with: URLRequest(url: url)) { (data, urlresponse, err) in
+
+            XCTAssertEqual(data, injectedMockData, "Data from injected mock not present")
+            XCTAssertNotNil(urlresponse)
+			XCTAssertNil(err)
+            
+            expectation.fulfill()
+        }.resume()
+		
+        wait(for: [expectation], timeout: 2.0)
+	}
+	
+	/// `onMockFor` returning nil for non-matching replacement mock shouldn't change previous behavior
+	func testOnMockForReplacementReturnsNil() {
+        let url = URL(string: "https://www.fakeurl.com")!
+		let mockData = "{\"key\":\"value\"}".data(using: .utf8)!
+		
+		Mocker.shared.onMockFor = { (request: URLRequest) -> Mock? in
+			return nil
+		}
+		
+		let expectation = self.expectation(description: "Data request should succeed")
+
+		let mock = Mock(url: url, dataType: .json, statusCode: 200, data: [.get: mockData])
+        mock.register()
+
+		URLSession.shared.dataTask(with: URLRequest(url: url)) { (data, urlresponse, err) in
+
+            XCTAssertEqual(data, mockData, "Data from mock not present")
+            XCTAssertNotNil(urlresponse)
+			XCTAssertNil(err)
+            
+            expectation.fulfill()
+        }.resume()
+		
+        wait(for: [expectation], timeout: 2.0)
+	}
+	
+	/// `onMockFor` can change the Mock used for a url for subsequent fetches during same test
+	func testOnMockForConditionalReplacement() {
+		var problemFixed = false	// imaginary problem flag
+
+		let url = URL(string: "https://www.fakeurl.com/url1")!
+		let goodMockData = "good".data(using: .utf8)!
+		
+		let failingMock = Mock(url: url, dataType: .json, statusCode: 401, data: [.get: Data()])
+		failingMock.register()
+		
+		let succeedingMock = Mock(url: url, dataType: .json, statusCode: 200, data: [.get: goodMockData])
+		// succeedingMock.register() - Do NOT call now as will replace failingMock.
+		// Instead, return `succeedingMock` using new `onMockFor` handler if problem is fixed:
+		
+		Mocker.shared.onMockFor = { _ in
+			if problemFixed {
+				return succeedingMock
+			} else { return nil }
+		}
+
+		let expectFailure = expectation(description: "call url - should get error")
+		
+		URLSession.shared.dataTask(with: URLRequest(url: url)) { (data, urlresponse, err) in
+			XCTAssertNotNil(data)
+			XCTAssert((urlresponse as? HTTPURLResponse)?.statusCode == 401)
+			XCTAssertNil(err)
+            
+			problemFixed = true		// Imagine problem was handled internally by library that
+									// then retries automatically (next call to same url)
+            expectFailure.fulfill()
+        }.resume()
+
+		// Wait to call second "retry" fetch until first one returns.
+        wait(for: [expectFailure], timeout: 2.0)
+
+		let expectSuccess = expectation(description: "call url again - should succeed")
+		
+		// This retry should succeed becuase problemFixed is now true
+		URLSession.shared.dataTask(with: URLRequest(url: url)) { (data, urlresponse, err) in
+            XCTAssertEqual(data, goodMockData)
+            XCTAssertNotNil(urlresponse)
+			XCTAssertNil(err)
+
+            expectSuccess.fulfill()
+        }.resume()
+
+        wait(for: [expectSuccess], timeout: 2.0)
+	}
 }
