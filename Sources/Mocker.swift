@@ -22,12 +22,18 @@ public struct Mocker {
     
     /// The HTTP Version to use in the mocked response.
     public static var httpVersion: HTTPVersion = HTTPVersion.http1_1
-    
+    	
 	/// Allow for dynamic Mocks.
-	/// If closure is assigned and a Mock is returned, that mock will override
+	/// If closure is set and a Mock is returned, that mock will override
 	/// any registered mocks and be used for the indicated request.
-	public var onMockFor: ((URLRequest) -> Mock?)?
+	public static var onMockFor: ((URLRequest) -> Mock?)? {
+		get { return shared.onMockForHandler }
+		set { shared.onMockForHandler = newValue }
+	}
 	
+	/// The saved onMockFor handler
+	internal var onMockForHandler: ((URLRequest) -> Mock?)?
+
     /// The registrated mocks.
     private(set) var mocks: [Mock] = []
     
@@ -89,7 +95,7 @@ public struct Mocker {
     static func mock(for request: URLRequest) -> Mock? {
         shared.queue.sync {
 			/// Zeroth support for dynamic mocks via `onMockFor` closure
-			if let mockProvider = shared.onMockFor,
+			if let mockProvider = onMockFor,
 				let dynamicMock = mockProvider(request) {
 					return dynamicMock
 			}

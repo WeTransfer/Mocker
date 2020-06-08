@@ -24,7 +24,7 @@ final class MockerTests: XCTestCase {
 		super.setUp()
 		
 		// make sure this is cleared before each test to avoid bleed-over between tests.
-		Mocker.shared.onMockFor = nil
+		Mocker.onMockFor = nil
 	}
     
     /// It should returned the register mocked image data as response.
@@ -414,7 +414,7 @@ final class MockerTests: XCTestCase {
         let url = URL(string: "https://www.fakeurl.com/DynamicTests")!
 		var onMockForCalled = false
 		
-		Mocker.shared.onMockFor = { (request: URLRequest) -> Mock? in
+		Mocker.onMockFor = { (request: URLRequest) -> Mock? in
 			onMockForCalled = true
 			return nil
 		}
@@ -435,7 +435,7 @@ final class MockerTests: XCTestCase {
         let url = URL(string: "https://www.fakeurl.com")!
 		let injectedMockData = "{\"key\":\"value\"}".data(using: .utf8)!
 		
-		Mocker.shared.onMockFor = { (request: URLRequest) -> Mock? in
+		Mocker.onMockFor = { (request: URLRequest) -> Mock? in
 			return Mock(dataType: .json, statusCode: 200, data: [.get: injectedMockData])
 		}
 		
@@ -461,7 +461,7 @@ final class MockerTests: XCTestCase {
         let url = URL(string: "https://www.fakeurl.com")!
 		let mockData = "{\"key\":\"value\"}".data(using: .utf8)!
 		
-		Mocker.shared.onMockFor = { (request: URLRequest) -> Mock? in
+		Mocker.onMockFor = { (request: URLRequest) -> Mock? in
 			return nil
 		}
 		
@@ -496,7 +496,7 @@ final class MockerTests: XCTestCase {
 		// succeedingMock.register() - Do NOT call now as will replace failingMock.
 		// Instead, return `succeedingMock` using new `onMockFor` handler if problem is fixed:
 		
-		Mocker.shared.onMockFor = { _ in
+		Mocker.onMockFor = { _ in
 			if problemFixed {
 				return succeedingMock
 			} else { return nil }
