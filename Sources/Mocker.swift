@@ -24,7 +24,7 @@ public struct Mocker {
     public static var httpVersion: HTTPVersion = HTTPVersion.http1_1
     
     /// Allow for dynamic Mocks.
-    /// If closure is set and a Mock is returned, that mock will override
+    /// If the closure is set and a Mock is returned, that mock will override
     /// any registered mocks and be used for the indicated request.
     public static var onMockFor: ((URLRequest) -> Mock?)? {
         get { return shared.onMockForHandler }
