@@ -520,7 +520,7 @@ final class MockerTests: XCTestCase {
         
         let expectSuccess = expectation(description: "call url again - should succeed")
         
-        // This retry should succeed becuase problemFixed is now true
+        // This retry should succeed because `problemFixed` is now `true`
         URLSession.shared.dataTask(with: URLRequest(url: url)) { (data, urlresponse, err) in
             XCTAssertEqual(data, goodMockData)
             XCTAssertNotNil(urlresponse)
