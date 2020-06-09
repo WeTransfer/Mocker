@@ -456,7 +456,7 @@ final class MockerTests: XCTestCase {
         wait(for: [expectation], timeout: 2.0)
     }
     
-    /// `onMockFor` returning nil for non-matching replacement mock shouldn't change previous behavior
+    /// It should not change previous behavior when `onMockFor` returns `nil`.
     func testOnMockForReplacementReturnsNil() {
         let url = URL(string: "https://www.fakeurl.com")!
         let mockData = "{\"key\":\"value\"}".data(using: .utf8)!
