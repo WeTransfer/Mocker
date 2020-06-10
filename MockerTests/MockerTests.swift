@@ -456,7 +456,7 @@ final class MockerTests: XCTestCase {
         wait(for: [expectation], timeout: 2.0)
     }
     
-    /// `onMockFor` returning nil for non-matching replacement mock shouldn't change previous behavior
+    /// It should not change previous behavior when `onMockFor` returns `nil`.
     func testOnMockForReplacementReturnsNil() {
         let url = URL(string: "https://www.fakeurl.com")!
         let mockData = "{\"key\":\"value\"}".data(using: .utf8)!
@@ -482,6 +482,7 @@ final class MockerTests: XCTestCase {
         wait(for: [expectation], timeout: 2.0)
     }
     
+    /// It should call `onMockFor` to change the mock used for a url for subsequent fetches during the same test
     /// `onMockFor` can change the Mock used for a url for subsequent fetches during same test
     func testOnMockForConditionalReplacement() {
         var problemFixed = false    // imaginary problem flag
@@ -519,7 +520,7 @@ final class MockerTests: XCTestCase {
         
         let expectSuccess = expectation(description: "call url again - should succeed")
         
-        // This retry should succeed becuase problemFixed is now true
+        // This retry should succeed because `problemFixed` is now `true`
         URLSession.shared.dataTask(with: URLRequest(url: url)) { (data, urlresponse, err) in
             XCTAssertEqual(data, goodMockData)
             XCTAssertNotNil(urlresponse)
