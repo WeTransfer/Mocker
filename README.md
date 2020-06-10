@@ -241,6 +241,45 @@ URLSession.shared.dataTask(with: URLRequest(url: url)).resume()
 wait(for: [requestExpectation, completionExpectation], timeout: 2.0)
 ```
 
+##### Dynamic Mocks
+Similar to registering on `Mock` callbacks, you can register an `onMockFor` callback with `Mocker` for dynamic `Mock` matching. 
+
+Example use case:  Return a failure `Mock` for the first fetch of a "serviceURL" and then a success `Mock` for a subsequent request to the *same* URL when your network layer is setup to catch an "expired token" eror response, automatically refresh the token via a call to a "refreshURL", and then retry the original request.
+
+```
+... // init of URLS, currentToken to bad value, newGoodToken to success payload value,
+    // and mock payload data in usual `MockedData`
+
+    // Add refreshURL `Mock` to return a new token
+let refreshMock = Mock(url: refreshURL, dataType: .json, statusCode: 200, data: [.get: MockedData.goodRefreshTokenData])
+refreshMock.register()
+
+    // Add service failure `Mock` for a serviceURL
+let failureMock = Mock(url: serviceURL, dataType: .json, statusCode: 401, data: [.get: Data()])
+failureMock.register()
+
+    // Create, but do not register, a `Mock` for a successful serviceURL fetch
+let successMock = Mock(url: serviceURL, dataType: .json, statusCode: 200, data: [.get: MockedData.goodMockData])
+// Do Not Register - will replace failureMock because same URL
+
+    // Finally, add an `onMockFor` closure to `Mocker` which checks for a refreshed token 
+    // and returns `successMock` if have it, nil for default `Mock` matching if not.
+Mocker.onMockFor = { (request: URLRequest) -> Mock? in
+  guard request.url == serviceURL else { return nil }
+  if currentToken == newGoodToken {
+	  return successMock
+  }
+  return nil
+}
+
+...  
+
+// Make your network call to `serviceURL` as usual and 
+// if the auto-token-refresh is working you'll get `goodMockData` 
+// despite starting with a bad token value in `currentToken`.
+
+```
+
 ## Communication
 
 - If you **found a bug**, open an issue.
