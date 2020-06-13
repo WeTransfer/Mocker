@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2FBE74052494492D00444193 /* DynamicMocksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBE74042494492D00444193 /* DynamicMocksTests.swift */; };
 		501B8FC4247E89C600B885F4 /* XCTest+Mocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501B8FC3247E89C600B885F4 /* XCTest+Mocker.swift */; };
 		501E269E1F3DAE370048F39E /* Mocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 501E26941F3DAE370048F39E /* Mocker.framework */; };
 		503446171F3DB4660039D5E4 /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503446141F3DB4660039D5E4 /* Mock.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2FBE74042494492D00444193 /* DynamicMocksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicMocksTests.swift; sourceTree = "<group>"; };
 		501B8FC3247E89C600B885F4 /* XCTest+Mocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+Mocker.swift"; sourceTree = "<group>"; };
 		501B8FC5247E8BDE00B885F4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		501E26941F3DAE370048F39E /* Mocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,6 +105,7 @@
 			children = (
 				50D4605B20653EAF00A85D93 /* MockedData.swift */,
 				50D4605C20653EAF00A85D93 /* MockerTests.swift */,
+				2FBE74042494492D00444193 /* DynamicMocksTests.swift */,
 				50D4607220653F4500A85D93 /* Resources */,
 				50D4606220653EAF00A85D93 /* Supporting Files */,
 			);
@@ -280,6 +283,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				50D4607120653F2700A85D93 /* MockerTests.swift in Sources */,
+				2FBE74052494492D00444193 /* DynamicMocksTests.swift in Sources */,
 				50D4607020653F2500A85D93 /* MockedData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
