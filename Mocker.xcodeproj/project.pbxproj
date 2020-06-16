@@ -79,6 +79,7 @@
 				503446131F3DB4660039D5E4 /* Sources */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		501E26951F3DAE370048F39E /* Products */ = {
 			isa = PBXGroup;
