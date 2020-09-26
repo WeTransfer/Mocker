@@ -289,7 +289,7 @@ $ brew install carthage
 To integrate Mocker into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "WeTransfer/Mocker" ~> 1.00
+github "WeTransfer/Mocker" ~> 1.0.0
 ```
 
 Run `carthage update` to build the framework and drag the built `Mocker.framework` into your Xcode project.
