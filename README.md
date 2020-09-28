@@ -265,7 +265,7 @@ platform :ios, '10.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'Mocker', '~> 1.0.0'
+    pod 'Mocker', '~> 2.3.0'
 end
 ```
 
@@ -289,7 +289,7 @@ $ brew install carthage
 To integrate Mocker into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "WeTransfer/Mocker" ~> 1.00
+github "WeTransfer/Mocker" ~> 2.3.0
 ```
 
 Run `carthage update` to build the framework and drag the built `Mocker.framework` into your Xcode project.
@@ -311,7 +311,7 @@ let package = Package(
        .macOS(.v10_15)
     ],
     dependencies: [
-        .package(url: "https://github.com/WeTransfer/Mocker.git", .upToNextMajor(from: "2.1.0"))
+        .package(url: "https://github.com/WeTransfer/Mocker.git", .upToNextMajor(from: "2.3.0"))
     ],
     targets: [
         .target(
