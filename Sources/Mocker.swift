@@ -27,7 +27,28 @@ public struct Mocker {
     private(set) var mocks: [Mock] = []
     
     /// URLs to ignore for mocking.
-    private(set) var ignoredURLs: [URL] = []
+    public var ignoredURLs: [URL] {
+        ignoredRules.map { $0.urlToIgnore }
+    }
+
+    private var ignoredRules: [IgnoredRule] = []
+
+    private struct IgnoredRule: Equatable {
+        let urlToIgnore: URL
+        let ignoreQuery: Bool
+
+        /// Checks if the passed URL should be handled by the Mocker.
+        ///
+        /// - Parameter url: The URL to check for.
+        /// - Returns: `true` if it should be mocked, `false` if the URL is registered as ignored.
+        func shouldHandle(_ url: URL) -> Bool {
+            if ignoreQuery {
+                return urlToIgnore.baseString == url.baseString
+            }
+
+            return urlToIgnore.absoluteString == url.absoluteString
+        }
+    }
 
     /// For Thread Safety access.
     private let queue = DispatchQueue(label: "mocker.mocks.access.queue", attributes: .concurrent)
@@ -51,9 +72,11 @@ public struct Mocker {
     /// Register an URL to ignore for mocking. This will let the URL work as if the Mocker doesn't exist.
     ///
     /// - Parameter url: The URL to mock.
-    public static func ignore(_ url: URL) {
+    /// - Parameter ignoreQuery: If `true`, checking the URL will ignore the query and match only for the scheme, host and path. Defaults to `false`.
+    public static func ignore(_ url: URL, ignoreQuery: Bool = false) {
         shared.queue.async(flags: .barrier) {
-            shared.ignoredURLs.append(url)
+            let rule = IgnoredRule(urlToIgnore: url, ignoreQuery: ignoreQuery)
+            shared.ignoredRules.append(rule)
         }
     }
     
@@ -63,7 +86,11 @@ public struct Mocker {
     /// - Returns: `true` if it should be mocked, `false` if the URL is registered as ignored.
     public static func shouldHandle(_ url: URL) -> Bool {
         shared.queue.sync {
-            return !shared.ignoredURLs.contains(url)
+            guard let rule = shared.ignoredRules.first(where: { $0.urlToIgnore == url }) else {
+                return true // No rule was found, it should be mocked
+            }
+
+            return rule.shouldHandle(url)
         }
     }
 

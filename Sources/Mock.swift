@@ -197,7 +197,7 @@ public struct Mock: Equatable {
     }
 }
 
-private extension URL {
+extension URL {
     /// Returns the base URL string build with the scheme, host and path. "https://www.wetransfer.com/v1/test?param=test" would be "https://www.wetransfer.com/v1/test".
     var baseString: String? {
         guard let scheme = scheme, let host = host else { return nil }

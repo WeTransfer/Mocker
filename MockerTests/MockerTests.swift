@@ -252,6 +252,17 @@ final class MockerTests: XCTestCase {
         Mocker.ignore(ignoredURL)
         XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURL)) == false)
     }
+
+    /// It should be possible to ignore URLs and not let them be handled.
+    func testIgnoreURLsIgnoreQueries() {
+
+        let ignoredURL = URL(string: "https://www.wetransfer.com/sample-image.png")!
+        let ignoredURLQueries = URL(string: "https://www.wetransfer.com/sample-image.png?width=200&height=200")!
+
+        XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURLQueries)) == true)
+        Mocker.ignore(ignoredURL)
+        XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURLQueries)) == true)
+    }
     
     /// It should be possible to compose a url relative to a base and still have it match the full url
     func testComposedURLMatch() {
