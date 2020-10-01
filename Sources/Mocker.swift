@@ -37,11 +37,11 @@ public struct Mocker {
         let urlToIgnore: URL
         let ignoreQuery: Bool
 
-        /// Checks if the passed URL should be handled by the Mocker.
+        /// Checks if the passed URL should be ignored.
         ///
         /// - Parameter url: The URL to check for.
-        /// - Returns: `true` if it should be mocked, `false` if the URL is registered as ignored.
-        func shouldHandle(_ url: URL) -> Bool {
+        /// - Returns: `true` if it should be ignored, `false` if the URL doesn't correspond to ignored rules.
+        func shouldIgnore(_ url: URL) -> Bool {
             if ignoreQuery {
                 return urlToIgnore.baseString == url.baseString
             }
@@ -86,11 +86,7 @@ public struct Mocker {
     /// - Returns: `true` if it should be mocked, `false` if the URL is registered as ignored.
     public static func shouldHandle(_ url: URL) -> Bool {
         shared.queue.sync {
-            guard let rule = shared.ignoredRules.first(where: { $0.urlToIgnore == url }) else {
-                return true // No rule was found, it should be mocked
-            }
-
-            return rule.shouldHandle(url)
+            return !shared.ignoredRules.contains(where: { $0.shouldIgnore(url) })
         }
     }
 

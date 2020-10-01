@@ -260,7 +260,7 @@ final class MockerTests: XCTestCase {
         let ignoredURLQueries = URL(string: "https://www.wetransfer.com/sample-image.png?width=200&height=200")!
 
         XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURLQueries)) == true)
-        Mocker.ignore(ignoredURL)
+        Mocker.ignore(ignoredURL, ignoreQuery: true)
         XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURLQueries)) == true)
     }
     
