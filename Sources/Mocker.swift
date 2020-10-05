@@ -10,7 +10,23 @@ import Foundation
 
 /// Can be used for registering Mocked data, returned by the `MockingURLProtocol`.
 public struct Mocker {
-    
+    private struct IgnoredRule: Equatable {
+        let urlToIgnore: URL
+        let ignoreQuery: Bool
+
+        /// Checks if the passed URL should be ignored.
+        ///
+        /// - Parameter url: The URL to check for.
+        /// - Returns: `true` if it should be ignored, `false` if the URL doesn't correspond to ignored rules.
+        func shouldIgnore(_ url: URL) -> Bool {
+            if ignoreQuery {
+                return urlToIgnore.baseString == url.baseString
+            }
+
+            return urlToIgnore.absoluteString == url.absoluteString
+        }
+    }
+
     public enum HTTPVersion: String {
         case http1_0 = "HTTP/1.0"
         case http1_1 = "HTTP/1.1"
@@ -32,23 +48,6 @@ public struct Mocker {
     }
 
     private var ignoredRules: [IgnoredRule] = []
-
-    private struct IgnoredRule: Equatable {
-        let urlToIgnore: URL
-        let ignoreQuery: Bool
-
-        /// Checks if the passed URL should be ignored.
-        ///
-        /// - Parameter url: The URL to check for.
-        /// - Returns: `true` if it should be ignored, `false` if the URL doesn't correspond to ignored rules.
-        func shouldIgnore(_ url: URL) -> Bool {
-            if ignoreQuery {
-                return urlToIgnore.baseString == url.baseString
-            }
-
-            return urlToIgnore.absoluteString == url.absoluteString
-        }
-    }
 
     /// For Thread Safety access.
     private let queue = DispatchQueue(label: "mocker.mocks.access.queue", attributes: .concurrent)
