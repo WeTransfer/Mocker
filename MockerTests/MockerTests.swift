@@ -261,7 +261,7 @@ final class MockerTests: XCTestCase {
 
         XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURLQueries)) == true)
         Mocker.ignore(ignoredURL, ignoreQuery: true)
-        XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURLQueries)) == true)
+        XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURLQueries)) == false)
     }
     
     /// It should be possible to compose a url relative to a base and still have it match the full url
