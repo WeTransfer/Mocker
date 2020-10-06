@@ -10,7 +10,23 @@ import Foundation
 
 /// Can be used for registering Mocked data, returned by the `MockingURLProtocol`.
 public struct Mocker {
-    
+    private struct IgnoredRule: Equatable {
+        let urlToIgnore: URL
+        let ignoreQuery: Bool
+
+        /// Checks if the passed URL should be ignored.
+        ///
+        /// - Parameter url: The URL to check for.
+        /// - Returns: `true` if it should be ignored, `false` if the URL doesn't correspond to ignored rules.
+        func shouldIgnore(_ url: URL) -> Bool {
+            if ignoreQuery {
+                return urlToIgnore.baseString == url.baseString
+            }
+
+            return urlToIgnore.absoluteString == url.absoluteString
+        }
+    }
+
     public enum HTTPVersion: String {
         case http1_0 = "HTTP/1.0"
         case http1_1 = "HTTP/1.1"
@@ -27,7 +43,11 @@ public struct Mocker {
     private(set) var mocks: [Mock] = []
     
     /// URLs to ignore for mocking.
-    private(set) var ignoredURLs: [URL] = []
+    public var ignoredURLs: [URL] {
+        ignoredRules.map { $0.urlToIgnore }
+    }
+
+    private var ignoredRules: [IgnoredRule] = []
 
     /// For Thread Safety access.
     private let queue = DispatchQueue(label: "mocker.mocks.access.queue", attributes: .concurrent)
@@ -51,9 +71,11 @@ public struct Mocker {
     /// Register an URL to ignore for mocking. This will let the URL work as if the Mocker doesn't exist.
     ///
     /// - Parameter url: The URL to mock.
-    public static func ignore(_ url: URL) {
+    /// - Parameter ignoreQuery: If `true`, checking the URL will ignore the query and match only for the scheme, host and path. Defaults to `false`.
+    public static func ignore(_ url: URL, ignoreQuery: Bool = false) {
         shared.queue.async(flags: .barrier) {
-            shared.ignoredURLs.append(url)
+            let rule = IgnoredRule(urlToIgnore: url, ignoreQuery: ignoreQuery)
+            shared.ignoredRules.append(rule)
         }
     }
     
@@ -63,7 +85,7 @@ public struct Mocker {
     /// - Returns: `true` if it should be mocked, `false` if the URL is registered as ignored.
     public static func shouldHandle(_ url: URL) -> Bool {
         shared.queue.sync {
-            return !shared.ignoredURLs.contains(url)
+            return !shared.ignoredRules.contains(where: { $0.shouldIgnore(url) })
         }
     }
 
