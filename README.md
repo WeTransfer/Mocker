@@ -328,6 +328,10 @@ let package = Package(
 
 To add Mocker as a [dependency](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) to your Xcode project, select *File > Swift Packages > Add Package Dependency* and enter the repository URL.
 
+#### Resolving Build Errors
+If you get the following error: *cannot find auto-link library XCTest and XCTestSwiftSupport*, set the following property under Build Options from No to Yes.  
+ENABLE_TESTING_SEARCH_PATHS to YES
+
 ### Manually
 
 If you prefer not to use any of the aforementioned dependency managers, you can integrate Mocker into your project manually.
