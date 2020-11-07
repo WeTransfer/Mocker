@@ -99,6 +99,9 @@ public struct Mock: Equatable {
     /// Add a delay to a certain mock, which makes the response returned later.
     public var delay: DispatchTimeInterval?
 
+    /// Allow response cache
+    public var cacheStoragePolicy: URLCache.StoragePolicy = .notAllowed
+
     /// The callback which will be executed everytime this `Mock` was completed. Can be used within unit tests for validating that a request has been executed. The callback must be set before calling `register`.
     public var completion: (() -> Void)?
 
@@ -111,7 +114,7 @@ public struct Mock: Equatable {
     /// Can only be set internally as it's used by the `expectationForCompletingMock(_:)` method.
     var onCompletedExpectation: XCTestExpectation?
     
-    private init(url: URL? = nil, ignoreQuery: Bool = false, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], requestError: Error? = nil, additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
+    private init(url: URL? = nil, ignoreQuery: Bool = false, cacheStoragePolicy: URLCache.StoragePolicy = .notAllowed, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], requestError: Error? = nil, additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
         self.urlToMock = url
         let generatedURL = URL(string: "https://mocked.wetransfer.com/\(dataType.rawValue)/\(statusCode)/\(data.keys.first!.rawValue)")!
         self.generatedURL = generatedURL
@@ -123,6 +126,7 @@ public struct Mock: Equatable {
         self.dataType = dataType
         self.statusCode = statusCode
         self.data = data
+        self.cacheStoragePolicy = cacheStoragePolicy
 
         var headers = additionalHeaders
         headers["Content-Type"] = dataType.headerValue
@@ -147,13 +151,14 @@ public struct Mock: Equatable {
     /// - Parameters:
     ///   - url: The URL to match for and to return the mocked data for.
     ///   - ignoreQuery: If `true`, checking the URL will ignore the query and match only for the scheme, host and path. Defaults to `false`.
+    ///   - cacheStoragePolicy: The caching strategy. Defaults to `notAllowed`.
     ///   - reportFailure: if `true`, the URLsession will report an error loading the URL rather than returning data. Defaults to `false`.
     ///   - dataType: The type of the data which is returned.
     ///   - statusCode: The HTTP status code to return with the response.
     ///   - data: The data which will be returned as the response based on the HTTP Method.
     ///   - additionalHeaders: Additional headers to be added to the response.
-    public init(url: URL, ignoreQuery: Bool = false, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], requestError: Error? = nil) {
-        self.init(url: url, ignoreQuery: ignoreQuery, dataType: dataType, statusCode: statusCode, data: data, requestError: requestError, additionalHeaders: additionalHeaders, fileExtensions: nil)
+    public init(url: URL, ignoreQuery: Bool = false, cacheStoragePolicy: URLCache.StoragePolicy = .notAllowed, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], requestError: Error? = nil) {
+        self.init(url: url, ignoreQuery: ignoreQuery, cacheStoragePolicy: cacheStoragePolicy, dataType: dataType, statusCode: statusCode, data: data, requestError: requestError, additionalHeaders: additionalHeaders, fileExtensions: nil)
     }
     
     /// Creates a `Mock` for the given file extensions. The mock will only be used for urls matching the extension.
