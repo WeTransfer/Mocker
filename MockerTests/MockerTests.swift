@@ -412,4 +412,33 @@ final class MockerTests: XCTestCase {
         
         waitForExpectations(timeout: 10.0, handler: nil)
     }
+
+    /// It should cache response
+    func testMockCachePolicy() {
+        let expectation = self.expectation(description: "Data request should succeed")
+        let originalURL = URL(string: "https://www.wetransfer.com/example.json")!
+
+        Mock(url: originalURL, cacheStoragePolicy: .allowed,
+             dataType: .json, statusCode: 200,
+             data: [.get: MockedData.exampleJSON.data],
+             additionalHeaders: ["Cache-Control": "public, max-age=31557600, immutable"]
+        ).register()
+
+        let configuration = URLSessionConfiguration.default
+        configuration.urlCache = URLCache()
+        configuration.protocolClasses = [MockingURLProtocol.self]
+        let urlSession = URLSession(configuration: configuration)
+
+        urlSession.dataTask(with: originalURL) { (_, _, error) in
+            XCTAssert(error == nil)
+
+            let cachedResponse = configuration.urlCache?.cachedResponse(for: URLRequest(url: originalURL))
+            XCTAssertNotNil(cachedResponse)
+            XCTAssertEqual(cachedResponse!.data, MockedData.exampleJSON.data)
+
+            expectation.fulfill()
+        }.resume()
+
+        waitForExpectations(timeout: 10.0, handler: nil)
+    }
 }

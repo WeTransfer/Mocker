@@ -67,7 +67,7 @@ public final class MockingURLProtocol: URLProtocol {
         } else if let requestError = mock.requestError {
             self.client?.urlProtocol(self, didFailWithError: requestError)
         } else {
-            self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+            self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: mock.cacheStoragePolicy)
             self.client?.urlProtocol(self, didLoad: data)
             self.client?.urlProtocolDidFinishLoading(self)
         }
