@@ -265,7 +265,7 @@ platform :ios, '10.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'Mocker', '~> 2.3.0'
+    pod 'Mocker', '~> 2.2.0'
 end
 ```
 
