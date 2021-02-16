@@ -32,16 +32,19 @@ public struct Mocker {
         case http1_1 = "HTTP/1.1"
         case http2_0 = "HTTP/2.0"
     }
-    
+
+    /// The way Mocker handles unknown URLs
+    public static var mode : Mode = .optout
+
     /// The shared instance of the Mocker, can be used to register and return mocks.
     internal static var shared = Mocker()
-    
+
     /// The HTTP Version to use in the mocked response.
     public static var httpVersion: HTTPVersion = HTTPVersion.http1_1
-    
+
     /// The registrated mocks.
     private(set) var mocks: [Mock] = []
-    
+
     /// URLs to ignore for mocking.
     public var ignoredURLs: [URL] {
         ignoredRules.map { $0.urlToIgnore }
@@ -56,7 +59,7 @@ public struct Mocker {
         // Whenever someone is requesting the Mocker, we want the URL protocol to be activated.
         URLProtocol.registerClass(MockingURLProtocol.self)
     }
-    
+
     /// Register new Mocked data. If a mock for the same URL and HTTPMethod exists, it will be overwritten.
     ///
     /// - Parameter mock: The Mock to be registered for future requests.
@@ -67,7 +70,7 @@ public struct Mocker {
             shared.mocks.append(mock)
         }
     }
-    
+
     /// Register an URL to ignore for mocking. This will let the URL work as if the Mocker doesn't exist.
     ///
     /// - Parameter url: The URL to mock.
@@ -78,14 +81,17 @@ public struct Mocker {
             shared.ignoredRules.append(rule)
         }
     }
-    
+
     /// Checks if the passed URL should be handled by the Mocker. If the URL is registered to be ignored, it will not handle the URL.
     ///
     /// - Parameter url: The URL to check for.
     /// - Returns: `true` if it should be mocked, `false` if the URL is registered as ignored.
     public static func shouldHandle(_ url: URL) -> Bool {
         shared.queue.sync {
-            return !shared.ignoredRules.contains(where: { $0.shouldIgnore(url) })
+            switch mode {
+            case .optout: return !shared.ignoredRules.contains(where: { $0.shouldIgnore(url) })
+            case .optin: return shared.mocks.contains(where: { $0.url == url })
+            }
         }
     }
 
@@ -95,7 +101,7 @@ public struct Mocker {
             shared.mocks.removeAll()
         }
     }
-    
+
     /// Retrieve a Mock for the given request. Matches on `request.url` and `request.httpMethod`.
     ///
     /// - Parameter request: The request to search for a mock.
@@ -109,5 +115,21 @@ public struct Mocker {
             /// Second, check for generic file extension Mocks
             return shared.mocks.first(where: { $0 == request })
         }
+    }
+
+    /// The way Mocker handles unregistered urls
+    public enum Mode {
+        /// The default mode: only URLs registered with the `ignore(_ url: URL)` method are ignored for mocking.
+        ///
+        /// - Registered mocked URL: Mocked.
+        /// - Registered ignored URL: Ignored by Mocker, default process is applied as if the Mocker doesn't exist.
+        /// - Any other URL: Raises an error.
+        case optout
+
+        /// Only registered mocked URLs are mocked, all others pass through.
+        ///
+        /// - Registered mocked URL: Mocked.
+        /// - Any other URL: Ignored by Mocker, default process is applied as if the Mocker doesn't exist.
+        case optin
     }
 }
