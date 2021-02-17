@@ -105,8 +105,10 @@ public struct Mocker {
     public static func shouldHandle(_ url: URL) -> Bool {
         shared.queue.sync {
             switch mode {
-            case .optout: return !shared.ignoredRules.contains(where: { $0.shouldIgnore(url) })
-            case .optin: return shared.mocks.contains(where: { $0.url == url })
+            case .optout:
+                return !shared.ignoredRules.contains(where: { $0.shouldIgnore(url) })
+            case .optin:
+                return shared.mocks.contains(where: { $0.url == url })
             }
         }
     }
