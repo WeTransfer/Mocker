@@ -33,8 +33,24 @@ public struct Mocker {
         case http2_0 = "HTTP/2.0"
     }
 
-    /// The way Mocker handles unknown URLs
-    public static var mode : Mode = .optout
+    /// The way Mocker handles unregistered urls
+    public enum Mode {
+        /// The default mode: only URLs registered with the `ignore(_ url: URL)` method are ignored for mocking.
+        ///
+        /// - Registered mocked URL: Mocked.
+        /// - Registered ignored URL: Ignored by Mocker, default process is applied as if the Mocker doesn't exist.
+        /// - Any other URL: Raises an error.
+        case optout
+
+        /// Only registered mocked URLs are mocked, all others pass through.
+        ///
+        /// - Registered mocked URL: Mocked.
+        /// - Any other URL: Ignored by Mocker, default process is applied as if the Mocker doesn't exist.
+        case optin
+    }
+
+    /// The mode defines how unknown URLs are handled. Defaults to `optout` which means requests without a mock will fail.
+    public static var mode: Mode = .optout
 
     /// The shared instance of the Mocker, can be used to register and return mocks.
     internal static var shared = Mocker()
@@ -115,21 +131,5 @@ public struct Mocker {
             /// Second, check for generic file extension Mocks
             return shared.mocks.first(where: { $0 == request })
         }
-    }
-
-    /// The way Mocker handles unregistered urls
-    public enum Mode {
-        /// The default mode: only URLs registered with the `ignore(_ url: URL)` method are ignored for mocking.
-        ///
-        /// - Registered mocked URL: Mocked.
-        /// - Registered ignored URL: Ignored by Mocker, default process is applied as if the Mocker doesn't exist.
-        /// - Any other URL: Raises an error.
-        case optout
-
-        /// Only registered mocked URLs are mocked, all others pass through.
-        ///
-        /// - Registered mocked URL: Mocked.
-        /// - Any other URL: Ignored by Mocker, default process is applied as if the Mocker doesn't exist.
-        case optin
     }
 }
