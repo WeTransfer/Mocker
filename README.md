@@ -194,7 +194,7 @@ However if you need the Mocker to catch only mocked URLs and ignore every other 
 Mocker.mode = .optin
 ```
 
-If you want to set the original mode back, you have juste to set it to `.optout`.
+If you want to set the original mode back, you have just to set it to `.optout`.
 
 ```swift
 Mocker.mode = .optout
