@@ -181,11 +181,23 @@ Mock(url: URL(string: "https://wetransfer.com/redirect")!, dataType: .json, stat
 ```
 
 ##### Ignoring URLs
-As the Mocker catches all URLs when registered, you might end up with a `fatalError` thrown in cases you don't need a mocked request. In that case you can ignore the URL:
+As the Mocker catches all URLs by default when registered, you might end up with a `fatalError` thrown in cases you don't need a mocked request. In that case you can ignore the URL:
 
 ```swift
 let ignoredURL = URL(string: "www.wetransfer.com")!
 Mocker.ignore(ignoredURL)
+```
+
+However if you need the Mocker to catch only mocked URLs and ignore every other URL, you can set the `mode` attribute to `.optin`. 
+
+```swift
+Mocker.mode = .optin
+```
+
+If you want to set the original mode back, you have juste to set it to `.optout`.
+
+```swift
+Mocker.mode = .optout
 ```
 
 ##### Mock errors
