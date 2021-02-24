@@ -441,4 +441,58 @@ final class MockerTests: XCTestCase {
 
         waitForExpectations(timeout: 10.0, handler: nil)
     }
+
+    /// It should process unknown URL
+    func testMockerOptoutMode() {
+        Mocker.mode = .optout
+
+        let mockedURL = URL(string: "www.google.com")!
+        let ignoredURL = URL(string: "www.wetransfer.com")!
+        let unknownURL = URL(string: "www.netflix.com")!
+
+        // Mocking
+        Mock(url: mockedURL, dataType: .json, statusCode: 200, data: [.get: Data()])
+            .register()
+
+        // Ignoring
+        Mocker.ignore(ignoredURL)
+
+        // Checking mocked URL are processed by Mocker
+        XCTAssertTrue(MockingURLProtocol.canInit(with: URLRequest(url: mockedURL)))
+        // Checking ignored URL are not processed by Mocker
+        XCTAssertFalse(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURL)))
+
+        // Checking unknown URL are processed by Mocker (.optout mode)
+        XCTAssertTrue(MockingURLProtocol.canInit(with: URLRequest(url: unknownURL)))
+    }
+
+    /// It should not process unknown URL
+    func testMockerOptinMode() {
+        Mocker.mode = .optin
+
+        let mockedURL = URL(string: "www.google.com")!
+        let ignoredURL = URL(string: "www.wetransfer.com")!
+        let unknownURL = URL(string: "www.netflix.com")!
+
+        // Mocking
+        Mock(url: mockedURL, dataType: .json, statusCode: 200, data: [.get: Data()])
+            .register()
+
+        // Ignoring
+        Mocker.ignore(ignoredURL)
+
+        // Checking mocked URL are processed by Mocker
+        XCTAssertTrue(MockingURLProtocol.canInit(with: URLRequest(url: mockedURL)))
+        // Checking ignored URL are not processed by Mocker
+        XCTAssertFalse(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURL)))
+
+        // Checking unknown URL are not processed by Mocker (.optin mode)
+        XCTAssertFalse(MockingURLProtocol.canInit(with: URLRequest(url: unknownURL)))
+    }
+
+    /// Default mode should be .optout
+    func testDefaultMode() {
+        /// Checking default mode
+        XCTAssertEqual(.optout, Mocker.mode)
+    }
 }
