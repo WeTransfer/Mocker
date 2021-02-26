@@ -1,3 +1,7 @@
+### 2.5.1
+- Fix tests and make sure the new opt-in mode is working with existing logic ([#86](https://github.com/WeTransfer/Mocker/pull/86)) via [@AvdLee](https://github.com/AvdLee)
+- Merge release 2.5.0 into master ([#85](https://github.com/WeTransfer/Mocker/pull/85)) via [@wetransferplatform](https://github.com/wetransferplatform)
+
 ### 2.5.0
 - Feat: Global mode to choose only to mock registered routes ([#84](https://github.com/WeTransfer/Mocker/pull/84)) via [@letatas](https://github.com/letatas)
 - Update README.md ([#74](https://github.com/WeTransfer/Mocker/pull/74)) via [@airowe](https://github.com/airowe)
