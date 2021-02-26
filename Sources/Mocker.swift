@@ -102,14 +102,15 @@ public struct Mocker {
     ///
     /// - Parameter url: The URL to check for.
     /// - Returns: `true` if it should be mocked, `false` if the URL is registered as ignored.
-    public static func shouldHandle(_ url: URL) -> Bool {
-        shared.queue.sync {
-            switch mode {
-            case .optout:
-                return !shared.ignoredRules.contains(where: { $0.shouldIgnore(url) })
-            case .optin:
-                return shared.mocks.contains(where: { $0.url == url })
+    public static func shouldHandle(_ request: URLRequest) -> Bool {
+        switch mode {
+        case .optout:
+            guard let url = request.url else { return false }
+            return shared.queue.sync {
+                !shared.ignoredRules.contains(where: { $0.shouldIgnore(url) })
             }
+        case .optin:
+            return mock(for: request) != nil
         }
     }
 
@@ -117,6 +118,7 @@ public struct Mocker {
     public static func removeAll() {
         shared.queue.sync(flags: .barrier) {
             shared.mocks.removeAll()
+            shared.ignoredRules.removeAll()
         }
     }
 

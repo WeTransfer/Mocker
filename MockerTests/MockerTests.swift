@@ -20,6 +20,17 @@ final class MockerTests: XCTestCase {
         }
     }
     
+    override func setUp() {
+        super.setUp()
+        Mocker.mode = .optout
+    }
+    
+    override func tearDown() {
+        Mocker.removeAll()
+        Mocker.mode = .optout
+        super.tearDown()
+    }
+    
     /// It should returned the register mocked image data as response.
     func testImageURLDataRequest() {
         let expectation = self.expectation(description: "Data request should succeed")
@@ -77,7 +88,10 @@ final class MockerTests: XCTestCase {
 
         URLSession.shared.dataTask(with: originalURL) { (data, _, error) in
             XCTAssert(error == nil)
-            let image: UIImage = UIImage(data: data!)!
+            guard let data = data, let image: UIImage = UIImage(data: data) else {
+                XCTFail("Invalid data")
+                return
+            }
             let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
 
             XCTAssert(image.size == sampleImage.size, "Image should be returned mocked")
@@ -101,7 +115,10 @@ final class MockerTests: XCTestCase {
 
         URLSession.shared.dataTask(with: customURL) { (data, _, error) in
             XCTAssert(error == nil)
-            let image: UIImage = UIImage(data: data!)!
+            guard let data = data, let image: UIImage = UIImage(data: data) else {
+                XCTFail("Invalid data")
+                return
+            }
             let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
 
             XCTAssert(image.size == sampleImage.size, "Image should be returned mocked")
@@ -188,7 +205,10 @@ final class MockerTests: XCTestCase {
         
         urlSession.dataTask(with: originalURL!) { (data, _, error) in
             XCTAssert(error == nil)
-            let image: UIImage = UIImage(data: data!)!
+            guard let data = data, let image: UIImage = UIImage(data: data) else {
+                XCTFail("Invalid data")
+                return
+            }
             let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
             
             XCTAssert(image.size == sampleImage.size, "Image should be returned mocked")
@@ -389,22 +409,24 @@ final class MockerTests: XCTestCase {
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://www.wetransfer.com/example.json")!
 
-        enum TestExampleError: Error {
+        enum TestExampleError: Error, LocalizedError {
             case example
+            
+            var errorDescription: String { "example" }
         }
         
         Mock(url: originalURL, dataType: .json, statusCode: 500, data: [.get: Data()], requestError: TestExampleError.example).register()
         
-        URLSession.shared.dataTask(with: originalURL) { (data, urlresponse, err) in
+        URLSession.shared.dataTask(with: originalURL) { (data, urlresponse, error) in
 
             XCTAssertNil(data)
             XCTAssertNil(urlresponse)
-            XCTAssertNotNil(err)
-            if let err = err {
+            XCTAssertNotNil(error)
+            if let error = error {
                 // there's not a particularly elegant way to verify an instance
                 // of an error, but this is a convenient workaround for testing
                 // purposes
-                XCTAssertEqual("example", String(describing: err))
+                XCTAssertTrue(String(describing: error).contains("TestExampleError"))
             }
             
             expectation.fulfill()
