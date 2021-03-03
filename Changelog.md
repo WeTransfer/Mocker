@@ -1,4 +1,9 @@
 ### 2.5.2
+- Merge release 2.5.2 into master ([#90](https://github.com/WeTransfer/Mocker/pull/90)) via [@wetransferplatform](https://github.com/wetransferplatform)
+- Fixing usage of XCTest framework ([#89](https://github.com/WeTransfer/Mocker/pull/89)) via [@letatas](https://github.com/letatas)
+- Merge release 2.5.1 into master ([#87](https://github.com/WeTransfer/Mocker/pull/87)) via [@wetransferplatform](https://github.com/wetransferplatform)
+
+### 2.5.2
 - Fixing usage of XCTest framework ([#89](https://github.com/WeTransfer/Mocker/pull/89)) via [@letatas](https://github.com/letatas)
 - Merge release 2.5.1 into master ([#87](https://github.com/WeTransfer/Mocker/pull/87)) via [@wetransferplatform](https://github.com/wetransferplatform)
 
