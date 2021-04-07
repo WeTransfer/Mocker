@@ -74,7 +74,7 @@ It's recommend to create a class with all your mocked data accessible. An exampl
 
 ```swift
 public final class MockedData {
-    public static let botAvatarImageResponseHead: Data = Bundle(for: MockedData.self).url(forResource: "Resources/Responses/bot-avatar-image-head", withExtension: "data")!.data
+    public static let botAvatarImageResponseHead: Data = try! Data(contentsOf: Bundle(for: MockedData.self).url(forResource: "Resources/Responses/bot-avatar-image-head", withExtension: "data")!)
     public static let botAvatarImageFileUrl: URL = Bundle(for: MockedData.self).url(forResource: "wetransfer_bot_avater", withExtension: "png")!
     public static let exampleJSON: URL = Bundle(for: MockedData.self).url(forResource: "Resources/JSON Files/example", withExtension: "json")!
 }
@@ -85,7 +85,7 @@ public final class MockedData {
 let originalURL = URL(string: "https://www.wetransfer.com/example.json")!
     
 let mock = Mock(url: originalURL, dataType: .json, statusCode: 200, data: [
-    .get : MockedData.exampleJSON.data // Data containing the JSON response
+    .get : try! Data(contentsOf: MockedData.exampleJSON) // Data containing the JSON response
 ])
 mock.register()
 
@@ -108,7 +108,7 @@ Some URLs like authentication URLs contain timestamps or UUIDs in the query. To 
 let originalURL = URL(string: "https://www.example.com/api/authentication?oauth_timestamp=151817037")!
     
 let mock = Mock(url: originalURL, ignoreQuery: true, dataType: .json, statusCode: 200, data: [
-    .get : MockedData.exampleJSON.data // Data containing the JSON response
+    .get : try! Data(contentsOf: MockedData.exampleJSON) // Data containing the JSON response
 ])
 mock.register()
 
@@ -128,7 +128,7 @@ URLSession.shared.dataTask(with: originalURL) { (data, response, error) in
 let imageURL = URL(string: "https://www.wetransfer.com/sample-image.png")!
 
 Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 200, data: [
-    .get: MockedData.botAvatarImageFileUrl.data
+    .get: try! Data(contentsOf: MockedData.botAvatarImageFileUrl)
 ]).register()
 
 URLSession.shared.dataTask(with: imageURL) { (data, response, error) in
@@ -141,8 +141,8 @@ URLSession.shared.dataTask(with: imageURL) { (data, response, error) in
 let exampleURL = URL(string: "https://www.wetransfer.com/api/endpoint")!
 
 Mock(url: exampleURL, dataType: .json, statusCode: 200, data: [
-    .head: MockedData.headResponse.data,
-    .get: MockedData.exampleJSON.data
+    .head: try! Data(contentsOf: MockedData.headResponse),
+    .get: try! Data(contentsOf: MockedData.exampleJSON)
 ]).register()
 
 URLSession.shared.dataTask(with: exampleURL) { (data, response, error) in
@@ -157,8 +157,8 @@ Sometimes you want to test if cancellation of requests is working. In that case,
 let exampleURL = URL(string: "https://www.wetransfer.com/api/endpoint")!
 
 var mock = Mock(url: exampleURL, dataType: .json, statusCode: 200, data: [
-    .head: MockedData.headResponse.data,
-    .get: MockedData.exampleJSON.data
+    .head: try! Data(contentsOf: MockedData.headResponse),
+    .get: try! Data(contentsOf: MockedData.exampleJSON)
 ])
 mock.delay = DispatchTimeInterval.seconds(5)
 mock.register()
@@ -176,8 +176,8 @@ By creating a mock for the short URL and the redirect URL, you can mock redirect
 
 ```swift
 let urlWhichRedirects: URL = URL(string: "https://we.tl/redirect")!
-Mock(url: urlWhichRedirects, dataType: .html, statusCode: 200, data: [.get: MockedData.redirectGET.data]).register()
-Mock(url: URL(string: "https://wetransfer.com/redirect")!, dataType: .json, statusCode: 200, data: [.get: MockedData.exampleJSON.data]).register()
+Mock(url: urlWhichRedirects, dataType: .html, statusCode: 200, data: [.get: try! Data(contentsOf: MockedData.redirectGET)]).register()
+Mock(url: URL(string: "https://wetransfer.com/redirect")!, dataType: .json, statusCode: 200, data: [.get: try! Data(contentsOf: MockedData.exampleJSON)]).register()
 ```
 
 ##### Ignoring URLs
