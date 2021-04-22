@@ -1,3 +1,8 @@
+### 2.5.3
+- Make sure file extension mocks are matching correctly ([#95](https://github.com/WeTransfer/Mocker/pull/95)) via [@AvdLee](https://github.com/AvdLee)
+- Replace occurrences of internal `.data` with `Data(contentsOf:)` ([#92](https://github.com/WeTransfer/Mocker/pull/92)) via [@rogerluan](https://github.com/rogerluan)
+- Merge release 2.5.2 into master ([#91](https://github.com/WeTransfer/Mocker/pull/91)) via [@wetransferplatform](https://github.com/wetransferplatform)
+
 ### 2.5.2
 - Merge release 2.5.2 into master ([#90](https://github.com/WeTransfer/Mocker/pull/90)) via [@wetransferplatform](https://github.com/wetransferplatform)
 - Fixing usage of XCTest framework ([#89](https://github.com/WeTransfer/Mocker/pull/89)) via [@letatas](https://github.com/letatas)
