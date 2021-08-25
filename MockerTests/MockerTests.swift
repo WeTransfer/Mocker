@@ -88,7 +88,11 @@ final class MockerTests: XCTestCase {
 
         URLSession.shared.dataTask(with: originalURL) { (data, _, error) in
             XCTAssertNil(error)
-            guard let data = data, let image: UIImage = UIImage(data: data) else {
+            guard let data = data else {
+                XCTFail("Data is nil")
+                return
+            }
+            guard let image: UIImage = UIImage(data: data) else {
                 XCTFail("Invalid data \(String(describing: data))")
                 return
             }
@@ -115,7 +119,12 @@ final class MockerTests: XCTestCase {
 
         URLSession.shared.dataTask(with: customURL) { (data, _, error) in
             XCTAssertNil(error)
-            guard let data = data, let image: UIImage = UIImage(data: data) else {
+            guard let data = data else {
+                XCTFail("Data is nil")
+                return
+            }
+
+            guard let image: UIImage = UIImage(data: data) else {
                 XCTFail("Invalid data \(String(describing: data))")
                 return
             }
@@ -140,7 +149,12 @@ final class MockerTests: XCTestCase {
         
         URLSession.shared.dataTask(with: originalURL) { (data, _, _) in
 
-            guard let data = data, let jsonDictionary = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
+            guard let data = data else {
+                XCTFail("Data is nil")
+                return
+            }
+
+            guard let jsonDictionary = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
                 XCTFail("Wrong data response \(String(describing: data))")
                 expectation.fulfill()
                 return
@@ -205,7 +219,12 @@ final class MockerTests: XCTestCase {
         
         urlSession.dataTask(with: originalURL!) { (data, _, error) in
             XCTAssertNil(error)
-            guard let data = data, let image: UIImage = UIImage(data: data) else {
+            guard let data = data else {
+                XCTFail("Data is nil")
+                return
+            }
+
+            guard let image: UIImage = UIImage(data: data) else {
                 XCTFail("Invalid data \(String(describing: data))")
                 return
             }
@@ -247,7 +266,12 @@ final class MockerTests: XCTestCase {
         
         URLSession.shared.dataTask(with: urlWhichRedirects) { (data, _, _) in
             
-            guard let data = data, let jsonDictionary = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
+            guard let data = data else {
+                XCTFail("Data is nil")
+                return
+            }
+
+            guard let jsonDictionary = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
                 XCTFail("Wrong data response \(String(describing: data))")
                 expectation.fulfill()
                 return
