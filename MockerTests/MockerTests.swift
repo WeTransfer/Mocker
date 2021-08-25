@@ -42,11 +42,11 @@ final class MockerTests: XCTestCase {
         
         mock.register()
         URLSession.shared.dataTask(with: originalURL) { (data, _, error) in
-            XCTAssert(error == nil)
+            XCTAssertNil(error)
             let image: UIImage = UIImage(data: data!)!
             let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
             
-            XCTAssert(image.size == sampleImage.size, "Image should be returned mocked")
+            XCTAssertEqual(image.size, sampleImage.size, "Image should be returned mocked")
             expectation.fulfill()
         }.resume()
         
@@ -63,11 +63,11 @@ final class MockerTests: XCTestCase {
         ]).register()
         
         URLSession.shared.dataTask(with: originalURL!) { (data, _, error) in
-            XCTAssert(error == nil)
+            XCTAssertNil(error)
             let image: UIImage = UIImage(data: data!)!
             let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
             
-            XCTAssert(image.size == sampleImage.size, "Image should be returned mocked")
+            XCTAssertEqual(image.size, sampleImage.size, "Image should be returned mocked")
             expectation.fulfill()
         }.resume()
         
@@ -87,14 +87,14 @@ final class MockerTests: XCTestCase {
         ]).register()
 
         URLSession.shared.dataTask(with: originalURL) { (data, _, error) in
-            XCTAssert(error == nil)
+            XCTAssertNil(error)
             guard let data = data, let image: UIImage = UIImage(data: data) else {
-                XCTFail("Invalid data")
+                XCTFail("Invalid data \(String(describing: data))")
                 return
             }
             let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
 
-            XCTAssert(image.size == sampleImage.size, "Image should be returned mocked")
+            XCTAssertEqual(image.size, sampleImage.size, "Image should be returned mocked")
             expectation.fulfill()
         }.resume()
 
@@ -114,14 +114,14 @@ final class MockerTests: XCTestCase {
         let customURL = URL(string: originalURL.absoluteString + "&" + UUID().uuidString)!
 
         URLSession.shared.dataTask(with: customURL) { (data, _, error) in
-            XCTAssert(error == nil)
+            XCTAssertNil(error)
             guard let data = data, let image: UIImage = UIImage(data: data) else {
-                XCTFail("Invalid data")
+                XCTFail("Invalid data \(String(describing: data))")
                 return
             }
             let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
 
-            XCTAssert(image.size == sampleImage.size, "Image should be returned mocked")
+            XCTAssertEqual(image.size, sampleImage.size, "Image should be returned mocked")
             expectation.fulfill()
         }.resume()
 
@@ -141,14 +141,14 @@ final class MockerTests: XCTestCase {
         URLSession.shared.dataTask(with: originalURL) { (data, _, _) in
 
             guard let data = data, let jsonDictionary = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String: Any] else {
-                XCTFail("Wrong data response")
+                XCTFail("Wrong data response \(String(describing: data))")
                 expectation.fulfill()
                 return
             }
             
             let framework = Framework(jsonDictionary: jsonDictionary)
-            XCTAssert(framework.name == "Mocker")
-            XCTAssert(framework.owner == "WeTransfer")
+            XCTAssertEqual(framework.name, "Mocker")
+            XCTAssertEqual(framework.owner, "WeTransfer")
             
             expectation.fulfill()
         }.resume()
@@ -164,8 +164,8 @@ final class MockerTests: XCTestCase {
         mock.register()
         
         URLSession.shared.dataTask(with: mock.request) { (_, response, error) in
-            XCTAssert(error == nil)
-            XCTAssert(((response as! HTTPURLResponse).allHeaderFields["testkey"] as! String) == "testvalue", "Additional headers should be added.")
+            XCTAssertNil(error)
+            XCTAssertEqual(((response as? HTTPURLResponse)?.allHeaderFields["testkey"] as? String), "testvalue", "Additional headers should be added.")
             expectation.fulfill()
         }.resume()
         
@@ -182,8 +182,8 @@ final class MockerTests: XCTestCase {
         newMock.register()
         
         URLSession.shared.dataTask(with: mock.request) { (_, response, error) in
-            XCTAssert(error == nil)
-            XCTAssert(((response as! HTTPURLResponse).allHeaderFields["newkey"] as! String) == "newvalue", "Additional headers should be added.")
+            XCTAssertNil(error)
+            XCTAssertEqual(((response as? HTTPURLResponse)?.allHeaderFields["newkey"] as? String), "newvalue", "Additional headers should be added.")
             expectation.fulfill()
         }.resume()
         
@@ -204,14 +204,14 @@ final class MockerTests: XCTestCase {
         let urlSession = URLSession(configuration: configuration)
         
         urlSession.dataTask(with: originalURL!) { (data, _, error) in
-            XCTAssert(error == nil)
+            XCTAssertNil(error)
             guard let data = data, let image: UIImage = UIImage(data: data) else {
-                XCTFail("Invalid data")
+                XCTFail("Invalid data \(String(describing: data))")
                 return
             }
             let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
             
-            XCTAssert(image.size == sampleImage.size, "Image should be returned mocked")
+            XCTAssertEqual(image.size, sampleImage.size, "Image should be returned mocked")
             expectation.fulfill()
             }.resume()
         
@@ -226,7 +226,7 @@ final class MockerTests: XCTestCase {
         mock.register()
         
         let task = URLSession.shared.dataTask(with: mock.request) { (_, _, error) in
-            XCTAssert(error?._code == NSURLErrorCancelled)
+            XCTAssertEqual(error?._code, NSURLErrorCancelled)
             expectation.fulfill()
         }
         
@@ -248,14 +248,14 @@ final class MockerTests: XCTestCase {
         URLSession.shared.dataTask(with: urlWhichRedirects) { (data, _, _) in
             
             guard let data = data, let jsonDictionary = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String: Any] else {
-                XCTFail("Wrong data response")
+                XCTFail("Wrong data response \(String(describing: data))")
                 expectation.fulfill()
                 return
             }
             
             let framework = Framework(jsonDictionary: jsonDictionary)
-            XCTAssert(framework.name == "Mocker")
-            XCTAssert(framework.owner == "WeTransfer")
+            XCTAssertEqual(framework.name, "Mocker")
+            XCTAssertEqual(framework.owner, "WeTransfer")
             
             expectation.fulfill()
         }.resume()
@@ -268,9 +268,9 @@ final class MockerTests: XCTestCase {
         
         let ignoredURL = URL(string: "www.wetransfer.com")!
         
-        XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURL)) == true)
+        XCTAssertTrue(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURL)))
         Mocker.ignore(ignoredURL)
-        XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURL)) == false)
+        XCTAssertFalse(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURL)))
     }
 
     /// It should be possible to ignore URLs and not let them be handled.
@@ -279,9 +279,9 @@ final class MockerTests: XCTestCase {
         let ignoredURL = URL(string: "https://www.wetransfer.com/sample-image.png")!
         let ignoredURLQueries = URL(string: "https://www.wetransfer.com/sample-image.png?width=200&height=200")!
 
-        XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURLQueries)) == true)
+        XCTAssertTrue(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURLQueries)))
         Mocker.ignore(ignoredURL, ignoreQuery: true)
-        XCTAssert(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURLQueries)) == false)
+        XCTAssertFalse(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURLQueries)))
     }
     
     /// It should be possible to compose a url relative to a base and still have it match the full url
@@ -290,7 +290,7 @@ final class MockerTests: XCTestCase {
         let simpleURL = URL(string: "https://host.com/api/resource")
         let mock = Mock(url: composedURL, dataType: .json, statusCode: 200, data: [.get: MockedData.exampleJSON.data])
         let urlRequest = URLRequest(url: simpleURL!)
-        XCTAssertEqual(composedURL.absoluteString, simpleURL!.absoluteString)
+        XCTAssertEqual(composedURL.absoluteString, simpleURL?.absoluteString)
         XCTAssert(mock == urlRequest)
     }
 
@@ -350,7 +350,7 @@ final class MockerTests: XCTestCase {
         }
         nonDelayMock.register()
 
-        XCTAssertNotEqual(delayedMock.request.url!, nonDelayMock.request.url!)
+        XCTAssertNotEqual(delayedMock.request.url, nonDelayMock.request.url)
 
         URLSession.shared.dataTask(with: delayedMock.request).resume()
         URLSession.shared.dataTask(with: nonDelayMock.request).resume()
@@ -452,7 +452,7 @@ final class MockerTests: XCTestCase {
         let urlSession = URLSession(configuration: configuration)
 
         urlSession.dataTask(with: originalURL) { (_, _, error) in
-            XCTAssert(error == nil)
+            XCTAssertNil(error)
 
             let cachedResponse = configuration.urlCache?.cachedResponse(for: URLRequest(url: originalURL))
             XCTAssertNotNil(cachedResponse)
