@@ -140,7 +140,7 @@ final class MockerTests: XCTestCase {
         
         URLSession.shared.dataTask(with: originalURL) { (data, _, _) in
 
-            guard let data = data, let jsonDictionary = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String: Any] else {
+            guard let data = data, let jsonDictionary = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
                 XCTFail("Wrong data response \(String(describing: data))")
                 expectation.fulfill()
                 return
@@ -247,7 +247,7 @@ final class MockerTests: XCTestCase {
         
         URLSession.shared.dataTask(with: urlWhichRedirects) { (data, _, _) in
             
-            guard let data = data, let jsonDictionary = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String: Any] else {
+            guard let data = data, let jsonDictionary = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
                 XCTFail("Wrong data response \(String(describing: data))")
                 expectation.fulfill()
                 return
