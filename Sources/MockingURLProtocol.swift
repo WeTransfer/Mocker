@@ -75,12 +75,12 @@ public final class MockingURLProtocol: URLProtocol {
         mock.completion?()
         mock.onCompletedExpectation?.fulfill()
     }
-    
+
     /// Implementation does nothing, but is needed for a valid inheritance of URLProtocol.
     override public func stopLoading() {
         responseWorkItem?.cancel()
     }
-    
+
     /// Simply sends back the passed request. Implementation is needed for a valid inheritance of URLProtocol.
     override public class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
@@ -98,7 +98,7 @@ private extension Data {
         let locationComponent = String(data: self, encoding: String.Encoding.utf8)?.components(separatedBy: "\n").first(where: { (value) -> Bool in
             return value.contains("Location:")
         })
-        
+
         guard let redirectLocationString = locationComponent?.components(separatedBy: "Location:").last, let redirectLocation = URL(string: redirectLocationString.trimmingCharacters(in: NSCharacterSet.whitespaces)) else {
             return nil
         }
