@@ -14,20 +14,20 @@ final class MockTests: XCTestCase {
         super.setUp()
         Mocker.mode = .optout
     }
-    
+
     override func tearDown() {
         Mocker.removeAll()
         Mocker.mode = .optout
         super.tearDown()
     }
-    
+
     /// It should match two file extension mocks correctly.
     func testFileExtensionMocksComparing() {
         let mock200 = Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 200, data: [.put: Data()])
         let secondMock200 = Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 200, data: [.put: Data()])
         let mock400 = Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 400, data: [.put: Data()])
         let mockJPEG = Mock(fileExtensions: "jpeg", dataType: .imagePNG, statusCode: 200, data: [.put: Data()])
-        
+
         XCTAssertEqual(mock200, secondMock200)
         XCTAssertEqual(mock200, mock400)
         XCTAssertNotEqual(mock200, mockJPEG)

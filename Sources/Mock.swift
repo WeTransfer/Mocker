@@ -28,7 +28,7 @@ public struct Mock: Equatable {
         case trace   = "TRACE"
         case connect = "CONNECT"
     }
-    
+
     /// The types of content of a request. Will be used as Content-Type header inside a `Mock`.
     public enum DataType: String {
         case json
@@ -37,7 +37,7 @@ public struct Mock: Equatable {
         case pdf
         case mp4
         case zip
-        
+
         var headerValue: String {
             switch self {
             case .json:
@@ -57,19 +57,19 @@ public struct Mock: Equatable {
     }
 
     public typealias OnRequest = (_ request: URLRequest, _ httpBodyArguments: [String: Any]?) -> Void
-    
+
     /// The type of the data which is returned.
     public let dataType: DataType
-    
+
     /// If set, the error that URLProtocol will report as a result rather than returning data from the mock
     public let requestError: Error?
 
     /// The headers to send back with the response.
     public let headers: [String: String]
-    
+
     /// The HTTP status code to return with the response.
     public let statusCode: Int
-    
+
     /// The URL value generated based on the Mock data. Force unwrapped on purpose. If you access this URL while it's not set, this is a programming error.
     public var url: URL {
         if urlToMock == nil && !data.keys.contains(.get) {
@@ -89,13 +89,13 @@ public struct Mock: Equatable {
 
     /// If `true`, checking the URL will ignore the query and match only for the scheme, host and path.
     public let ignoreQuery: Bool
-    
+
     /// The file extensions to match for.
     public let fileExtensions: [String]?
-    
+
     /// The data which will be returned as the response based on the HTTP Method.
     private let data: [HTTPMethod: Data]
-    
+
     /// Add a delay to a certain mock, which makes the response returned later.
     public var delay: DispatchTimeInterval?
 
@@ -113,7 +113,7 @@ public struct Mock: Equatable {
 
     /// Can only be set internally as it's used by the `expectationForCompletingMock(_:)` method.
     var onCompletedExpectation: XCTestExpectation?
-    
+
     private init(url: URL? = nil, ignoreQuery: Bool = false, cacheStoragePolicy: URLCache.StoragePolicy = .notAllowed, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], requestError: Error? = nil, additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
         self.urlToMock = url
         let generatedURL = URL(string: "https://mocked.wetransfer.com/\(dataType.rawValue)/\(statusCode)/\(data.keys.first!.rawValue)")!
@@ -134,7 +134,7 @@ public struct Mock: Equatable {
 
         self.fileExtensions = fileExtensions?.map({ $0.replacingOccurrences(of: ".", with: "") })
     }
-    
+
     /// Creates a `Mock` for the given data type. The mock will be automatically matched based on a URL created from the given parameters.
     ///
     /// - Parameters:
@@ -145,7 +145,7 @@ public struct Mock: Equatable {
     public init(dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
         self.init(url: nil, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
     }
-    
+
     /// Creates a `Mock` for the given URL.
     ///
     /// - Parameters:
@@ -160,7 +160,7 @@ public struct Mock: Equatable {
     public init(url: URL, ignoreQuery: Bool = false, cacheStoragePolicy: URLCache.StoragePolicy = .notAllowed, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], requestError: Error? = nil) {
         self.init(url: url, ignoreQuery: ignoreQuery, cacheStoragePolicy: cacheStoragePolicy, dataType: dataType, statusCode: statusCode, data: data, requestError: requestError, additionalHeaders: additionalHeaders, fileExtensions: nil)
     }
-    
+
     /// Creates a `Mock` for the given file extensions. The mock will only be used for urls matching the extension.
     ///
     /// - Parameters:
@@ -172,12 +172,12 @@ public struct Mock: Equatable {
     public init(fileExtensions: String..., dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
         self.init(url: nil, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: fileExtensions)
     }
-    
+
     /// Registers the mock with the shared `Mocker`.
     public func register() {
         Mocker.register(self)
     }
-    
+
     /// Returns `Data` based on the HTTP Method of the passed request.
     ///
     /// - Parameter request: The request to match data for.
@@ -186,11 +186,11 @@ public struct Mock: Equatable {
         guard let requestHTTPMethod = Mock.HTTPMethod(rawValue: request.httpMethod ?? "") else { return nil }
         return data[requestHTTPMethod]
     }
-    
+
     /// Used to compare the Mock data with the given `URLRequest`.
     static func == (mock: Mock, request: URLRequest) -> Bool {
         guard let requestHTTPMethod = Mock.HTTPMethod(rawValue: request.httpMethod ?? "") else { return false }
-        
+
         if let fileExtensions = mock.fileExtensions {
             // If the mock contains a file extension, this should always be used to match for.
             guard let pathExtension = request.url?.pathExtension else { return false }
@@ -201,16 +201,16 @@ public struct Mock: Equatable {
 
         return mock.request.url!.absoluteString == request.url?.absoluteString && mock.data.keys.contains(requestHTTPMethod)
     }
-    
+
     public static func == (lhs: Mock, rhs: Mock) -> Bool {
         let lhsHTTPMethods: [String] = lhs.data.keys.compactMap { $0.rawValue }
         let rhsHTTPMethods: [String] = rhs.data.keys.compactMap { $0.rawValue }
-        
+
         if let lhsFileExtensions = lhs.fileExtensions, let rhsFileExtensions = rhs.fileExtensions, (!lhsFileExtensions.isEmpty || !rhsFileExtensions.isEmpty) {
             /// The mocks are targeting file extensions specifically, check on those.
             return lhsFileExtensions == rhsFileExtensions && lhsHTTPMethods == rhsHTTPMethods
         }
-        
+
         return lhs.request.url!.absoluteString == rhs.request.url!.absoluteString && lhsHTTPMethods == rhsHTTPMethods
     }
 }
