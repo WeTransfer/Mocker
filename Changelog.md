@@ -1,3 +1,10 @@
+### 2.5.4
+- Improve test expressivity ([#101](https://github.com/WeTransfer/Mocker/pull/101)) via [@BasThomas](https://github.com/BasThomas)
+- Installation via CocoaPods is Broken ([#94](https://github.com/WeTransfer/Mocker/issues/94)) via [@BasThomas](https://github.com/BasThomas)
+- Update to latest pod version in README ([#103](https://github.com/WeTransfer/Mocker/pull/103)) via [@BasThomas](https://github.com/BasThomas)
+- Update CI ([#99](https://github.com/WeTransfer/Mocker/pull/99)) via [@kairadiagne](https://github.com/kairadiagne)
+- Merge release 2.5.3 into master ([#96](https://github.com/WeTransfer/Mocker/pull/96)) via [@wetransferplatform](https://github.com/wetransferplatform)
+
 ### 2.5.3
 - Make sure file extension mocks are matching correctly ([#95](https://github.com/WeTransfer/Mocker/pull/95)) via [@AvdLee](https://github.com/AvdLee)
 - Replace occurrences of internal `.data` with `Data(contentsOf:)` ([#92](https://github.com/WeTransfer/Mocker/pull/92)) via [@rogerluan](https://github.com/rogerluan)
