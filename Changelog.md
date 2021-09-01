@@ -1,4 +1,12 @@
 ### 2.5.4
+- Merge release 2.5.4 into master ([#104](https://github.com/WeTransfer/Mocker/pull/104)) via [@wetransferplatform](https://github.com/wetransferplatform)
+- Update to latest pod version in README ([#103](https://github.com/WeTransfer/Mocker/pull/103)) via [@BasThomas](https://github.com/BasThomas)
+- Installation via CocoaPods is Broken ([#94](https://github.com/WeTransfer/Mocker/issues/94)) via [@BasThomas](https://github.com/BasThomas)
+- Improve test expressivity ([#101](https://github.com/WeTransfer/Mocker/pull/101)) via [@BasThomas](https://github.com/BasThomas)
+- Update CI ([#99](https://github.com/WeTransfer/Mocker/pull/99)) via [@kairadiagne](https://github.com/kairadiagne)
+- Merge release 2.5.3 into master ([#96](https://github.com/WeTransfer/Mocker/pull/96)) via [@wetransferplatform](https://github.com/wetransferplatform)
+
+### 2.5.4
 - Improve test expressivity ([#101](https://github.com/WeTransfer/Mocker/pull/101)) via [@BasThomas](https://github.com/BasThomas)
 - Installation via CocoaPods is Broken ([#94](https://github.com/WeTransfer/Mocker/issues/94)) via [@BasThomas](https://github.com/BasThomas)
 - Update to latest pod version in README ([#103](https://github.com/WeTransfer/Mocker/pull/103)) via [@BasThomas](https://github.com/BasThomas)
