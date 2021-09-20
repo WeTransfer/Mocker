@@ -541,4 +541,103 @@ final class MockerTests: XCTestCase {
         /// Checking default mode
         XCTAssertEqual(.optout, Mocker.mode)
     }
+
+    // MARK: - ChainedMocks
+
+    func testChainedMocksAreConsumedInOrder() {
+        let firstURL = URL(string: "https://avatars3.githubusercontent.com/u/26250426?v=4&s=400")!
+        let firstMock = Mock(url: firstURL, dataType: .imagePNG, statusCode: 200, data: [
+            .get: MockedData.botAvatarImageFileUrl.data
+        ])
+
+        let secondURL = URL(string: "https://www.wetransfer.com/example.json")!
+        let secondMock = Mock(url: secondURL, dataType: .json, statusCode: 200, data: [
+            .get: MockedData.exampleJSON.data
+        ])
+
+        firstMock.chain(secondMock).register()
+
+        let expectation = self.expectation(description: "Second data request should not succeed before first")
+        URLSession.shared.dataTask(with: secondURL) { (_, _, error) in
+            XCTAssertNotNil(error)
+            expectation.fulfill()
+        }.resume()
+
+        waitForExpectations(timeout: 10.0, handler: nil)
+    }
+
+    func testChainedMocksAreConsumable() {
+        let firstURL = URL(string: "https://avatars3.githubusercontent.com/u/26250426?v=4&s=400")!
+        let firstMock = Mock(url: firstURL, dataType: .imagePNG, statusCode: 200, data: [
+            .get: MockedData.botAvatarImageFileUrl.data
+        ])
+
+        let secondURL = URL(string: "https://www.wetransfer.com/example.json")!
+        let secondMock = Mock(url: secondURL, dataType: .json, statusCode: 200, data: [
+            .get: MockedData.exampleJSON.data
+        ])
+
+        firstMock.chain(secondMock).register()
+
+        let firstExpectation = self.expectation(description: "First data request should succeed")
+        URLSession.shared.dataTask(with: firstURL) { (data, _, error) in
+            XCTAssertNil(error)
+            XCTAssertNotNil(data)
+            firstExpectation.fulfill()
+        }.resume()
+
+        let secondExpectation = self.expectation(description: "Second data request should succeed")
+        URLSession.shared.dataTask(with: secondURL) { (data, _, error) in
+            XCTAssertNil(error)
+            XCTAssertNotNil(data)
+            secondExpectation.fulfill()
+        }.resume()
+
+        wait(for: [firstExpectation, secondExpectation], timeout: 1.0)
+
+        XCTAssertEqual(Mocker.shared.mocks.count, 0) // No mocks left, all are consumed.
+
+        let thirdExpectation = self.expectation(description: "First data request should not succeed again")
+        URLSession.shared.dataTask(with: firstURL) { (_, _, error) in
+            XCTAssertNotNil(error)
+            thirdExpectation.fulfill()
+        }.resume()
+
+        wait(for: [thirdExpectation], timeout: 1.0)
+    }
+
+    func testChainedMocksCanBeTheSame() {
+        let url = URL(string: "https://www.wetransfer.com/example.json")!
+        let firstMock = Mock(url: url, dataType: .json, statusCode: 200, data: [
+            .get: MockedData.exampleJSON.data
+        ])
+
+        let secondMock = Mock(url: url, dataType: .json, statusCode: 200, data: [
+            .get: MockedData.anotherExampleJSON.data
+        ])
+
+        firstMock.chain(secondMock).register()
+
+        var combinedResult: [Data] = []
+
+        let firstExpectation = self.expectation(description: "First data request should succeed")
+        URLSession.shared.dataTask(with: url) { (data, _, error) in
+            XCTAssertNil(error)
+            XCTAssertNotNil(data)
+            combinedResult.append(data!)
+            firstExpectation.fulfill()
+        }.resume()
+
+        let secondExpectation = self.expectation(description: "Second data request should succeed")
+        URLSession.shared.dataTask(with: url) { (data, _, error) in
+            XCTAssertNil(error)
+            XCTAssertNotNil(data)
+            combinedResult.append(data!)
+            secondExpectation.fulfill()
+        }.resume()
+
+        wait(for: [firstExpectation, secondExpectation], timeout: 1.0)
+
+        XCTAssertEqual(combinedResult, [MockedData.exampleJSON.data, MockedData.anotherExampleJSON.data])
+    }
 }

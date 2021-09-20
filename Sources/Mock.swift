@@ -178,6 +178,11 @@ public struct Mock: Equatable {
         Mocker.register(self)
     }
 
+    /// Chains two mocks together and returns `ChainedMocks` that can be registered with the `Mocker` by calling `register()` method.
+    public func chain(_ anotherMock: Mock) -> ChainedMocks {
+        return ChainedMocks([self, anotherMock])
+    }
+
     /// Returns `Data` based on the HTTP Method of the passed request.
     ///
     /// - Parameter request: The request to match data for.

@@ -61,6 +61,9 @@ public struct Mocker {
     /// The registrated mocks.
     private(set) var mocks: [Mock] = []
 
+    /// The registered chained mocks.
+    private(set) var chainedMocks = ChainedMocks([])
+
     /// URLs to ignore for mocking.
     public var ignoredURLs: [URL] {
         ignoredRules.map { $0.urlToIgnore }
@@ -84,6 +87,18 @@ public struct Mocker {
             /// Delete the Mock if it was already registered.
             shared.mocks.removeAll(where: { $0 == mock })
             shared.mocks.append(mock)
+        }
+    }
+
+    /// Register new chained mocks. The mocks in the chain will be consumed by perfomed requests.
+    ///
+    /// - Parameter chainedMocks: The chained mocks.
+    public static func register(_ chainedMocks: ChainedMocks) {
+        if let mock = chainedMocks.mocks.first {
+            register(mock)
+            shared.queue.async(flags: .barrier) {
+                shared.chainedMocks = chainedMocks
+            }
         }
     }
 
@@ -127,7 +142,7 @@ public struct Mocker {
     /// - Parameter request: The request to search for a mock.
     /// - Returns: A mock if found, `nil` if there's no mocked data registered for the given request.
     static func mock(for request: URLRequest) -> Mock? {
-        shared.queue.sync {
+        let mock = shared.queue.sync { () -> Mock? in
             /// First check for specific URLs
             if let specificMock = shared.mocks.first(where: { $0 == request && $0.fileExtensions == nil }) {
                 return specificMock
@@ -135,5 +150,20 @@ public struct Mocker {
             /// Second, check for generic file extension Mocks
             return shared.mocks.first(where: { $0 == request })
         }
+        if let mock = mock {
+            shared.queue.async(flags: .barrier) {
+                if shared.chainedMocks.mocks.first == mock {
+                    // Delete the current mock.
+                    shared.mocks.removeAll(where: { $0 == mock })
+
+                    // Add the next mock from the chain.
+                    if let nextMock = shared.chainedMocks.consume() {
+                        shared.mocks.removeAll(where: { $0 == nextMock })
+                        shared.mocks.append(nextMock)
+                    }
+                }
+            }
+        }
+        return mock
     }
 }
