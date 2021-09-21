@@ -134,6 +134,7 @@ public struct Mocker {
         shared.queue.sync(flags: .barrier) {
             shared.mocks.removeAll()
             shared.ignoredRules.removeAll()
+            shared.chainedMocks = ChainedMocks([])
         }
     }
 

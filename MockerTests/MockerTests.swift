@@ -383,7 +383,7 @@ final class MockerTests: XCTestCase {
     }
 
     /// It should remove all registered mocks correctly.
-    func testRemoveAll() {
+    func testRemoveAllMocks() {
         let mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()])
         mock.register()
         Mocker.removeAll()
@@ -544,6 +544,16 @@ final class MockerTests: XCTestCase {
 
     // MARK: - ChainedMocks
 
+    /// It should remove all registered chained mocks correctly.
+    func testRemoveAllChainedMocks() {
+        Mock(dataType: .json, statusCode: 200, data: [.get: Data()])
+            .chain(Mock(dataType: .json, statusCode: 200, data: [.get: Data()]))
+            .register()
+        Mocker.removeAll()
+        XCTAssertTrue(Mocker.shared.chainedMocks.mocks.isEmpty)
+    }
+
+    // It should allow to check order for chained mocks.
     func testChainedMocksAreConsumedInOrder() {
         let firstURL = URL(string: "https://avatars3.githubusercontent.com/u/26250426?v=4&s=400")!
         let firstMock = Mock(url: firstURL, dataType: .imagePNG, statusCode: 200, data: [
@@ -566,6 +576,7 @@ final class MockerTests: XCTestCase {
         waitForExpectations(timeout: 10.0, handler: nil)
     }
 
+    // Chained mocks should be consumable.
     func testChainedMocksAreConsumable() {
         let firstURL = URL(string: "https://avatars3.githubusercontent.com/u/26250426?v=4&s=400")!
         let firstMock = Mock(url: firstURL, dataType: .imagePNG, statusCode: 200, data: [
@@ -606,6 +617,7 @@ final class MockerTests: XCTestCase {
         wait(for: [thirdExpectation], timeout: 1.0)
     }
 
+    // Chained mocks can be the same.
     func testChainedMocksCanBeTheSame() {
         let url = URL(string: "https://www.wetransfer.com/example.json")!
         let firstMock = Mock(url: url, dataType: .json, statusCode: 200, data: [
