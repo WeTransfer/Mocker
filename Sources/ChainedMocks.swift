@@ -10,7 +10,7 @@ import Foundation
 
 /// Chained mocks representation which can be used for mocking data requests where
 /// order is important or same requests can return different data.
-public class ChainedMocks {
+public final class ChainedMocks {
     /// The array of mocks.
     var mocks: [Mock]
 
