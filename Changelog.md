@@ -1,3 +1,6 @@
+### 2.5.5
+- Allow subclassing the MockingURLProtocol, fallback for HTTP Body ([#109](https://github.com/WeTransfer/Mocker/pull/109)) via [@AvdLee](https://github.com/AvdLee)
+
 ### 2.5.4
 - Improve test expressivity ([#101](https://github.com/WeTransfer/Mocker/pull/101)) via [@BasThomas](https://github.com/BasThomas)
 - Installation via CocoaPods is Broken ([#94](https://github.com/WeTransfer/Mocker/issues/94)) via [@BasThomas](https://github.com/BasThomas)
