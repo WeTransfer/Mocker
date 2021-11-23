@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name             = 'Mocker'
-  spec.version          = '2.5.4'
+  spec.version          = '2.5.5'
   spec.summary          = 'Mock data requests using a custom URLProtocol and run them offline.'
   spec.description      = 'Mocker is a library written in Swift which makes it possible to mock data requests using a custom URLProtocol and run them offline.'
 
