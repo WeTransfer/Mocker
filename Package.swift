@@ -22,7 +22,7 @@ let package = Package(name: "Mocker",
                         // dev .target(name: "DangerDependencies", dependencies: [
                         // dev     .product(name: "Danger", package: "danger-swift"),
                         // dev     .product(name: "WeTransferPRLinter", package: "WeTransferPRLinter")
-                        // dev ], path: "Submodules/WeTransfer-iOS-CI/DangerFakeSources", sources: ["DangerFakeSource.swift"])
+                        // dev ], path: "Submodules/WeTransfer-iOS-CI/DangerFakeSources", sources: ["DangerFakeSource.swift"]),
                         .target(name: "Mocker", path: "Sources"),
                         .testTarget(name: "MockerTests", dependencies: ["Mocker"], path: "MockerTests")
                         ],
