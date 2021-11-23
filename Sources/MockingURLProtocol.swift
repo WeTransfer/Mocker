@@ -9,7 +9,7 @@
 import Foundation
 
 /// The protocol which can be used to send Mocked data back. Use the `Mocker` to register `Mock` data
-public final class MockingURLProtocol: URLProtocol {
+open class MockingURLProtocol: URLProtocol {
 
     enum Error: Swift.Error, LocalizedError, CustomDebugStringConvertible {
         case missingMockedData(url: String)
@@ -108,7 +108,7 @@ private extension Data {
 
 private extension URLRequest {
     var postBodyArguments: [String: Any]? {
-        guard let httpBody = httpBodyStreamData() else { return nil }
+        guard let httpBody = httpBodyStreamData() ?? httpBody else { return nil }
         return try? JSONSerialization.jsonObject(with: httpBody, options: .fragmentsAllowed) as? [String: Any]
     }
 
