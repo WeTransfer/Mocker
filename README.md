@@ -244,7 +244,7 @@ Instead of setting the `completion` and `onRequest` you can also make use of exp
 
 ```swift
 var mock = Mock(url: url, dataType: .json, statusCode: 200, data: [.get: Data()])
-let requestExpectation = expectationForCompletingMock(&mock)
+let requestExpectation = expectationForRequestingMock(&mock)
 let completionExpectation = expectationForCompletingMock(&mock)
 mock.register()
 
