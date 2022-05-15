@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// Can be used for registering Mocked data, returned by the `MockingURLProtocol`.
 public struct Mocker {
