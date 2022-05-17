@@ -76,7 +76,7 @@ public struct Mocker {
 
     private init() {
         // Whenever someone is requesting the Mocker, we want the URL protocol to be activated.
-        URLProtocol.registerClass(MockingURLProtocol.self)
+        _ = URLProtocol.registerClass(MockingURLProtocol.self)
     }
 
     /// Register new Mocked data. If a mock for the same URL and HTTPMethod exists, it will be overwritten.
