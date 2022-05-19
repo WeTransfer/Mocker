@@ -10,6 +10,9 @@
 
 import Foundation
 import XCTest
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// A Mock which can be used for mocking data requests with the `Mocker` by calling `Mocker.register(...)`.
 public struct Mock: Equatable {
