@@ -7,13 +7,18 @@
 //
 
 import Foundation
-import UIKit
 
 /// Contains all available Mocked data.
 public final class MockedData {
-    public static let botAvatarImageFileUrl: URL = Bundle(for: MockedData.self).url(forResource: "wetransfer_bot_avatar", withExtension: "png")!
-    public static let exampleJSON: URL = Bundle(for: MockedData.self).url(forResource: "Resources/JSON Files/example", withExtension: "json")!
-    public static let redirectGET: URL = Bundle(for: MockedData.self).url(forResource: "Resources/sample-redirect-get", withExtension: "data")!
+    public static let botAvatarImageFileUrl: URL = Bundle.module.url(forResource: "wetransfer_bot_avatar", withExtension: "png")!
+    public static let exampleJSON: URL = Bundle.module.url(forResource: "example", withExtension: "json")!
+    public static let redirectGET: URL = Bundle.module.url(forResource: "sample-redirect-get", withExtension: "data")!
+}
+
+extension Bundle {
+#if !SWIFT_PACKAGE
+    static let module = Bundle(for: MockedData.self)
+#endif
 }
 
 internal extension URL {

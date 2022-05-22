@@ -24,6 +24,6 @@ let package = Package(name: "Mocker",
                         // dev     .product(name: "WeTransferPRLinter", package: "WeTransferPRLinter")
                         // dev ], path: "Submodules/WeTransfer-iOS-CI/DangerFakeSources", sources: ["DangerFakeSource.swift"]),
                         .target(name: "Mocker", path: "Sources"),
-                        .testTarget(name: "MockerTests", dependencies: ["Mocker"], path: "MockerTests")
+                        .testTarget(name: "MockerTests", dependencies: ["Mocker"], path: "MockerTests", resources: [.process("Resources")])
                         ],
                       swiftLanguageVersions: [.v5])
