@@ -152,9 +152,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 501E26A81F3DAE370048F39E /* Build configuration list for PBXNativeTarget "Mocker" */;
 			buildPhases = (
+				501E26911F3DAE370048F39E /* Headers */,
 				501E268F1F3DAE370048F39E /* Sources */,
 				501E26901F3DAE370048F39E /* Frameworks */,
-				501E26911F3DAE370048F39E /* Headers */,
 				501E26921F3DAE370048F39E /* Resources */,
 				503446441F3DE70C0039D5E4 /* SwiftLint */,
 			);
