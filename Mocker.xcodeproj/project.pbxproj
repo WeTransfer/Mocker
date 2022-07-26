@@ -18,6 +18,7 @@
 		8ED91F36283AFDC300EA8E99 /* wetransfer_bot_avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 8ED91F32283AFDC300EA8E99 /* wetransfer_bot_avatar.png */; };
 		8ED91F37283AFDC300EA8E99 /* example.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ED91F34283AFDC300EA8E99 /* example.json */; };
 		8ED91F38283AFDC300EA8E99 /* sample-redirect-get.data in Resources */ = {isa = PBXBuildFile; fileRef = 8ED91F35283AFDC300EA8E99 /* sample-redirect-get.data */; };
+		A4B51386288FD81B00C52F4A /* Mock+DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B51385288FD81B00C52F4A /* Mock+DataType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		8ED91F32283AFDC300EA8E99 /* wetransfer_bot_avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wetransfer_bot_avatar.png; sourceTree = "<group>"; };
 		8ED91F34283AFDC300EA8E99 /* example.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = example.json; sourceTree = "<group>"; };
 		8ED91F35283AFDC300EA8E99 /* sample-redirect-get.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "sample-redirect-get.data"; sourceTree = "<group>"; };
+		A4B51385288FD81B00C52F4A /* Mock+DataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+DataType.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 				503446151F3DB4660039D5E4 /* Mocker.swift */,
 				503446161F3DB4660039D5E4 /* MockingURLProtocol.swift */,
 				501B8FC3247E89C600B885F4 /* XCTest+Mocker.swift */,
+				A4B51385288FD81B00C52F4A /* Mock+DataType.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 			files = (
 				503446191F3DB4660039D5E4 /* MockingURLProtocol.swift in Sources */,
 				501B8FC4247E89C600B885F4 /* XCTest+Mocker.swift in Sources */,
+				A4B51386288FD81B00C52F4A /* Mock+DataType.swift in Sources */,
 				503446181F3DB4660039D5E4 /* Mocker.swift in Sources */,
 				503446171F3DB4660039D5E4 /* Mock.swift in Sources */,
 			);
