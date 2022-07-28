@@ -32,33 +32,6 @@ public struct Mock: Equatable {
         case connect = "CONNECT"
     }
 
-    /// The types of content of a request. Will be used as Content-Type header inside a `Mock`.
-    public enum DataType: String {
-        case json
-        case html
-        case imagePNG
-        case pdf
-        case mp4
-        case zip
-
-        var headerValue: String {
-            switch self {
-            case .json:
-                return "application/json; charset=utf-8"
-            case .html:
-                return "text/html; charset=utf-8"
-            case .imagePNG:
-                return "image/png"
-            case .pdf:
-                return "application/pdf"
-            case .mp4:
-                return "video/mp4"
-            case .zip:
-                return "application/zip"
-            }
-        }
-    }
-
     public typealias OnRequest = (_ request: URLRequest, _ httpBodyArguments: [String: Any]?) -> Void
 
     /// The type of the data which is returned.
@@ -119,7 +92,7 @@ public struct Mock: Equatable {
 
     private init(url: URL? = nil, ignoreQuery: Bool = false, cacheStoragePolicy: URLCache.StoragePolicy = .notAllowed, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], requestError: Error? = nil, additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
         self.urlToMock = url
-        let generatedURL = URL(string: "https://mocked.wetransfer.com/\(dataType.rawValue)/\(statusCode)/\(data.keys.first!.rawValue)")!
+        let generatedURL = URL(string: "https://mocked.wetransfer.com/\(dataType.name)/\(statusCode)/\(data.keys.first!.rawValue)")!
         self.generatedURL = generatedURL
         var request = URLRequest(url: url ?? generatedURL)
         request.httpMethod = data.keys.first!.rawValue

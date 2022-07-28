@@ -150,6 +150,22 @@ URLSession.shared.dataTask(with: exampleURL) { (data, response, error) in
 }.resume()
 ```
 
+##### Custom DataType
+In addition to the already build in static `DataType` implementations it is possible to create custom ones which will be used as the value to the `Content-Type` header key. 
+
+```swift
+let xmlURL = URL(string: "https://www.wetransfer.com/sample-xml.xml")!
+
+Mock(fileExtensions: "png", dataType: .init(name: "xml", headerValue: "text/xml"), statusCode: 200, data: [
+    .get: try! Data(contentsOf: MockedData.sampleXML)
+]).register()
+
+URLSession.shared.dataTask(with: xmlURL) { (data, response, error) in
+    let sampleXML: Data = data // This is the xml from your resources.
+}.resume(
+```
+
+
 ##### Delayed responses
 Sometimes you want to test if cancellation of requests is working. In that case, the mocked request should not finish immediately and you need an delay. This can be added easily:
 
