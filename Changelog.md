@@ -1,3 +1,8 @@
+### 2.6.0
+- Add option to create a custom data type ([#121](https://github.com/WeTransfer/Mocker/pull/121)) via [@alexanderwe](https://github.com/alexanderwe)
+- Enable swift PM tests on Linux and macOS ([#118](https://github.com/WeTransfer/Mocker/pull/118)) via [@vox-humana](https://github.com/vox-humana)
+- Merge release 2.5.6 into master ([#117](https://github.com/WeTransfer/Mocker/pull/117)) via [@wetransferplatform](https://github.com/wetransferplatform)
+
 ### 2.5.6
 - Linux support ([#116](https://github.com/WeTransfer/Mocker/pull/116)) via [@vox-humana](https://github.com/vox-humana)
 - Adds Raphael as a code owner ([#114](https://github.com/WeTransfer/Mocker/pull/114)) via [@kairadiagne](https://github.com/kairadiagne)
