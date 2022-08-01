@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// The protocol which can be used to send Mocked data back. Use the `Mocker` to register `Mock` data
 open class MockingURLProtocol: URLProtocol {

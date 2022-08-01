@@ -7,6 +7,9 @@
 //
 
 import XCTest
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 @testable import Mocker
 
 final class MockerTests: XCTestCase {
@@ -36,17 +39,15 @@ final class MockerTests: XCTestCase {
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://avatars3.githubusercontent.com/u/26250426?v=4&s=400")!
 
+        let mockedData = MockedData.botAvatarImageFileUrl.data
         let mock = Mock(url: originalURL, dataType: .imagePNG, statusCode: 200, data: [
-            .get: MockedData.botAvatarImageFileUrl.data
+            .get: mockedData
         ])
 
         mock.register()
         URLSession.shared.dataTask(with: originalURL) { (data, _, error) in
             XCTAssertNil(error)
-            let image: UIImage = UIImage(data: data!)!
-            let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
-
-            XCTAssertEqual(image.size, sampleImage.size, "Image should be returned mocked")
+            XCTAssertEqual(data, mockedData, "Image should be returned mocked")
             expectation.fulfill()
         }.resume()
 
@@ -58,16 +59,14 @@ final class MockerTests: XCTestCase {
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png")
 
+        let mockedData = MockedData.botAvatarImageFileUrl.data
         Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 200, data: [
-            .get: MockedData.botAvatarImageFileUrl.data
+            .get: mockedData
         ]).register()
 
         URLSession.shared.dataTask(with: originalURL!) { (data, _, error) in
             XCTAssertNil(error)
-            let image: UIImage = UIImage(data: data!)!
-            let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
-
-            XCTAssertEqual(image.size, sampleImage.size, "Image should be returned mocked")
+            XCTAssertEqual(data, mockedData, "Image should be returned mocked")
             expectation.fulfill()
         }.resume()
 
@@ -82,23 +81,15 @@ final class MockerTests: XCTestCase {
         Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 400, data: [
             .get: Data()
         ]).register()
+
+        let mockedData = MockedData.botAvatarImageFileUrl.data
         Mock(url: originalURL, ignoreQuery: true, dataType: .imagePNG, statusCode: 200, data: [
-            .get: MockedData.botAvatarImageFileUrl.data
+            .get: mockedData
         ]).register()
 
         URLSession.shared.dataTask(with: originalURL) { (data, _, error) in
             XCTAssertNil(error)
-            guard let data = data else {
-                XCTFail("Data is nil")
-                return
-            }
-            guard let image: UIImage = UIImage(data: data) else {
-                XCTFail("Invalid data \(String(describing: data))")
-                return
-            }
-            let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
-
-            XCTAssertEqual(image.size, sampleImage.size, "Image should be returned mocked")
+            XCTAssertEqual(data, mockedData, "Image should be returned mocked")
             expectation.fulfill()
         }.resume()
 
@@ -110,8 +101,9 @@ final class MockerTests: XCTestCase {
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png?width=200&height=200")!
 
+        let mockedData = MockedData.botAvatarImageFileUrl.data
         Mock(url: originalURL, ignoreQuery: true, dataType: .imagePNG, statusCode: 200, data: [
-            .get: MockedData.botAvatarImageFileUrl.data
+            .get: mockedData
         ]).register()
 
         /// Make it different compared to the mocked URL.
@@ -119,18 +111,7 @@ final class MockerTests: XCTestCase {
 
         URLSession.shared.dataTask(with: customURL) { (data, _, error) in
             XCTAssertNil(error)
-            guard let data = data else {
-                XCTFail("Data is nil")
-                return
-            }
-
-            guard let image: UIImage = UIImage(data: data) else {
-                XCTFail("Invalid data \(String(describing: data))")
-                return
-            }
-            let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
-
-            XCTAssertEqual(image.size, sampleImage.size, "Image should be returned mocked")
+            XCTAssertEqual(data, mockedData, "Image should be returned mocked")
             expectation.fulfill()
         }.resume()
 
@@ -173,13 +154,13 @@ final class MockerTests: XCTestCase {
     /// It should return the additional headers.
     func testAdditionalHeaders() {
         let expectation = self.expectation(description: "Data request should succeed")
-        let headers = ["testkey": "testvalue"]
+        let headers = ["Testkey": "testvalue"]
         let mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: headers)
         mock.register()
 
         URLSession.shared.dataTask(with: mock.request) { (_, response, error) in
             XCTAssertNil(error)
-            XCTAssertEqual(((response as? HTTPURLResponse)?.allHeaderFields["testkey"] as? String), "testvalue", "Additional headers should be added.")
+            XCTAssertEqual(((response as? HTTPURLResponse)?.allHeaderFields["Testkey"] as? String), "testvalue", "Additional headers should be added.")
             expectation.fulfill()
         }.resume()
 
@@ -192,12 +173,12 @@ final class MockerTests: XCTestCase {
         let mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: ["testkey": "testvalue"])
         mock.register()
 
-        let newMock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: ["newkey": "newvalue"])
+        let newMock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: ["Newkey": "newvalue"])
         newMock.register()
 
         URLSession.shared.dataTask(with: mock.request) { (_, response, error) in
             XCTAssertNil(error)
-            XCTAssertEqual(((response as? HTTPURLResponse)?.allHeaderFields["newkey"] as? String), "newvalue", "Additional headers should be added.")
+            XCTAssertEqual(((response as? HTTPURLResponse)?.allHeaderFields["Newkey"] as? String), "newvalue", "Additional headers should be added.")
             expectation.fulfill()
         }.resume()
 
@@ -209,8 +190,9 @@ final class MockerTests: XCTestCase {
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png")
 
+        let mockedData = MockedData.botAvatarImageFileUrl.data
         Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 200, data: [
-            .get: MockedData.botAvatarImageFileUrl.data
+            .get: mockedData
         ]).register()
 
         let configuration = URLSessionConfiguration.default
@@ -219,18 +201,7 @@ final class MockerTests: XCTestCase {
 
         urlSession.dataTask(with: originalURL!) { (data, _, error) in
             XCTAssertNil(error)
-            guard let data = data else {
-                XCTFail("Data is nil")
-                return
-            }
-
-            guard let image: UIImage = UIImage(data: data) else {
-                XCTFail("Invalid data \(String(describing: data))")
-                return
-            }
-            let sampleImage: UIImage = UIImage(contentsOfFile: MockedData.botAvatarImageFileUrl.path)!
-
-            XCTAssertEqual(image.size, sampleImage.size, "Image should be returned mocked")
+            XCTAssertEqual(data, mockedData, "Image should be returned mocked")
             expectation.fulfill()
         }.resume()
 
@@ -258,7 +229,10 @@ final class MockerTests: XCTestCase {
     }
 
     /// It should correctly handle redirect responses.
-    func testRedirectResponse() {
+    func testRedirectResponse() throws {
+        #if os(Linux)
+        throw XCTSkip("The URLSession swift-corelibs-foundation implementation doesn't currently handle redirects directly")
+        #endif
         let expectation = self.expectation(description: "Data request should be cancelled")
         let urlWhichRedirects: URL = URL(string: "https://we.tl/redirect")!
         Mock(url: urlWhichRedirects, dataType: .html, statusCode: 200, data: [.get: MockedData.redirectGET.data]).register()
@@ -447,10 +421,14 @@ final class MockerTests: XCTestCase {
             XCTAssertNil(urlresponse)
             XCTAssertNotNil(error)
             if let error = error {
+                #if os(Linux)
+                XCTAssertEqual(error as? TestExampleError, .example)
+                #else
                 // there's not a particularly elegant way to verify an instance
                 // of an error, but this is a convenient workaround for testing
                 // purposes
                 XCTAssertTrue(String(describing: error).contains("TestExampleError"))
+                #endif
             }
 
             expectation.fulfill()
@@ -460,7 +438,10 @@ final class MockerTests: XCTestCase {
     }
 
     /// It should cache response
-    func testMockCachePolicy() {
+    func testMockCachePolicy() throws {
+        #if os(Linux)
+        throw XCTSkip("URLSessionTask in swift-corelibs-foundation doesn't cache response for custom protocols")
+        #endif
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://www.wetransfer.com/example.json")!
 
@@ -471,7 +452,9 @@ final class MockerTests: XCTestCase {
         ).register()
 
         let configuration = URLSessionConfiguration.default
+        #if !os(Linux)
         configuration.urlCache = URLCache()
+        #endif
         configuration.protocolClasses = [MockingURLProtocol.self]
         let urlSession = URLSession(configuration: configuration)
 

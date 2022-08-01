@@ -15,7 +15,10 @@
 		50D4606E20653F1F00A85D93 /* Mocker.h in Headers */ = {isa = PBXBuildFile; fileRef = 50D4606B20653F1F00A85D93 /* Mocker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		50D4607020653F2500A85D93 /* MockedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D4605B20653EAF00A85D93 /* MockedData.swift */; };
 		50D4607120653F2700A85D93 /* MockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D4605C20653EAF00A85D93 /* MockerTests.swift */; };
-		50D4607320653F4500A85D93 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 50D4607220653F4500A85D93 /* Resources */; };
+		8ED91F36283AFDC300EA8E99 /* wetransfer_bot_avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 8ED91F32283AFDC300EA8E99 /* wetransfer_bot_avatar.png */; };
+		8ED91F37283AFDC300EA8E99 /* example.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ED91F34283AFDC300EA8E99 /* example.json */; };
+		8ED91F38283AFDC300EA8E99 /* sample-redirect-get.data in Resources */ = {isa = PBXBuildFile; fileRef = 8ED91F35283AFDC300EA8E99 /* sample-redirect-get.data */; };
+		A4B51386288FD81B00C52F4A /* Mock+DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B51385288FD81B00C52F4A /* Mock+DataType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,7 +46,10 @@
 		50D4606320653EAF00A85D93 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50D4606B20653F1F00A85D93 /* Mocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mocker.h; sourceTree = "<group>"; };
 		50D4606D20653F1F00A85D93 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		50D4607220653F4500A85D93 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
+		8ED91F32283AFDC300EA8E99 /* wetransfer_bot_avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wetransfer_bot_avatar.png; sourceTree = "<group>"; };
+		8ED91F34283AFDC300EA8E99 /* example.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = example.json; sourceTree = "<group>"; };
+		8ED91F35283AFDC300EA8E99 /* sample-redirect-get.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "sample-redirect-get.data"; sourceTree = "<group>"; };
+		A4B51385288FD81B00C52F4A /* Mock+DataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mock+DataType.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +100,7 @@
 				503446151F3DB4660039D5E4 /* Mocker.swift */,
 				503446161F3DB4660039D5E4 /* MockingURLProtocol.swift */,
 				501B8FC3247E89C600B885F4 /* XCTest+Mocker.swift */,
+				A4B51385288FD81B00C52F4A /* Mock+DataType.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -101,9 +108,9 @@
 		50D4605A20653EAF00A85D93 /* MockerTests */ = {
 			isa = PBXGroup;
 			children = (
+				8ED91F31283AFDC300EA8E99 /* Resources */,
 				50D4605B20653EAF00A85D93 /* MockedData.swift */,
 				50D4605C20653EAF00A85D93 /* MockerTests.swift */,
-				50D4607220653F4500A85D93 /* Resources */,
 				50D4606220653EAF00A85D93 /* Supporting Files */,
 			);
 			path = MockerTests;
@@ -134,6 +141,24 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		8ED91F31283AFDC300EA8E99 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8ED91F32283AFDC300EA8E99 /* wetransfer_bot_avatar.png */,
+				8ED91F33283AFDC300EA8E99 /* JSON Files */,
+				8ED91F35283AFDC300EA8E99 /* sample-redirect-get.data */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		8ED91F33283AFDC300EA8E99 /* JSON Files */ = {
+			isa = PBXGroup;
+			children = (
+				8ED91F34283AFDC300EA8E99 /* example.json */,
+			);
+			path = "JSON Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -152,9 +177,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 501E26A81F3DAE370048F39E /* Build configuration list for PBXNativeTarget "Mocker" */;
 			buildPhases = (
+				501E26911F3DAE370048F39E /* Headers */,
 				501E268F1F3DAE370048F39E /* Sources */,
 				501E26901F3DAE370048F39E /* Frameworks */,
-				501E26911F3DAE370048F39E /* Headers */,
 				501E26921F3DAE370048F39E /* Resources */,
 				503446441F3DE70C0039D5E4 /* SwiftLint */,
 			);
@@ -240,7 +265,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				50D4607320653F4500A85D93 /* Resources in Resources */,
+				8ED91F36283AFDC300EA8E99 /* wetransfer_bot_avatar.png in Resources */,
+				8ED91F38283AFDC300EA8E99 /* sample-redirect-get.data in Resources */,
+				8ED91F37283AFDC300EA8E99 /* example.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,6 +297,7 @@
 			files = (
 				503446191F3DB4660039D5E4 /* MockingURLProtocol.swift in Sources */,
 				501B8FC4247E89C600B885F4 /* XCTest+Mocker.swift in Sources */,
+				A4B51386288FD81B00C52F4A /* Mock+DataType.swift in Sources */,
 				503446181F3DB4660039D5E4 /* Mocker.swift in Sources */,
 				503446171F3DB4660039D5E4 /* Mock.swift in Sources */,
 			);
