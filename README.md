@@ -70,7 +70,7 @@ let sessionManager = Alamofire.Session(configuration: configuration)
 
 ### Register Mocks
 ##### Create your mocked data
-It's recommend to create a class with all your mocked data accessible. An example of this can be found in the unit tests of this project:
+It's recommended to create a class with all your mocked data accessible. An example of this can be found in the unit tests of this project:
 
 ```swift
 public final class MockedData {
@@ -151,7 +151,7 @@ URLSession.shared.dataTask(with: exampleURL) { (data, response, error) in
 ```
 
 ##### Custom DataType
-In addition to the already build in static `DataType` implementations it is possible to create custom ones which will be used as the value to the `Content-Type` header key. 
+In addition to the already build in static `DataType` implementations it is possible to create custom ones that will be used as the value to the `Content-Type` header key. 
 
 ```swift
 let xmlURL = URL(string: "https://www.wetransfer.com/sample-xml.xml")!
@@ -167,7 +167,7 @@ URLSession.shared.dataTask(with: xmlURL) { (data, response, error) in
 
 
 ##### Delayed responses
-Sometimes you want to test if cancellation of requests is working. In that case, the mocked request should not finish immediately and you need an delay. This can be added easily:
+Sometimes you want to test if the cancellation of requests is working. In that case, the mocked request should not finish immediately and you need a delay. This can be added easily:
 
 ```swift
 let exampleURL = URL(string: "https://www.wetransfer.com/api/endpoint")!
@@ -181,14 +181,14 @@ mock.register()
 ```
 
 ##### Redirect responses
-Sometimes you want to mock short URLs or other redirect URLs. This is possible by saving the response and mock the redirect location, which can be found inside the response:
+Sometimes you want to mock short URLs or other redirect URLs. This is possible by saving the response and mocking the redirect location, which can be found inside the response:
 
 ```
 Date: Tue, 10 Oct 2017 07:28:33 GMT
 Location: https://wetransfer.com/redirect
 ```
 
-By creating a mock for the short URL and the redirect URL, you can mock redirect and test this behaviour:
+By creating a mock for the short URL and the redirect URL, you can mock redirect and test this behavior:
 
 ```swift
 let urlWhichRedirects: URL = URL(string: "https://we.tl/redirect")!
@@ -197,14 +197,14 @@ Mock(url: URL(string: "https://wetransfer.com/redirect")!, dataType: .json, stat
 ```
 
 ##### Ignoring URLs
-As the Mocker catches all URLs by default when registered, you might end up with a `fatalError` thrown in cases you don't need a mocked request. In that case you can ignore the URL:
+As the Mocker catches all URLs by default when registered, you might end up with a `fatalError` thrown in cases you don't need a mocked request. In that case, you can ignore the URL:
 
 ```swift
 let ignoredURL = URL(string: "www.wetransfer.com")!
 Mocker.ignore(ignoredURL)
 ```
 
-However if you need the Mocker to catch only mocked URLs and ignore every other URL, you can set the `mode` attribute to `.optin`. 
+However, if you need the Mocker to catch only mocked URLs and ignore every other URL, you can set the `mode` attribute to `.optin`. 
 
 ```swift
 Mocker.mode = .optin
