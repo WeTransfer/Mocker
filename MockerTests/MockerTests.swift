@@ -331,6 +331,28 @@ final class MockerTests: XCTestCase {
 
         wait(for: [onRequestExpectation], timeout: 2.0)
     }
+    
+    /// It should report post body arguments with top level collection type if they exist.
+    func testOnRequestPostBodyParametersWithTopLevelCollectionType() throws {
+        let onRequestExpectation = expectation(description: "Data request should start")
+
+        let expectedParameters = [["test": "value"], ["test": "value"]]
+        var request = URLRequest(url: URL(string: "https://www.fakeurl.com")!)
+        request.httpMethod = Mock.HTTPMethod.post.rawValue
+        request.httpBody = try JSONSerialization.data(withJSONObject: expectedParameters, options: .prettyPrinted)
+
+        var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
+        mock.onRequest = { request, postBodyArguments in
+            XCTAssertEqual(request.url, mock.request.url)
+            XCTAssertEqual(expectedParameters, postBodyArguments as? [[String: String]])
+            onRequestExpectation.fulfill()
+        }
+        mock.register()
+
+        URLSession.shared.dataTask(with: request).resume()
+
+        wait(for: [onRequestExpectation], timeout: 2.0)
+    }
 
     /// It should call the mock after a delay.
     func testDelayedMock() {
