@@ -1,3 +1,9 @@
+### 2.7.0
+- Support collection types as a top level object ([#125](https://github.com/WeTransfer/Mocker/pull/125)) via [@batuhansk](https://github.com/batuhansk)
+- Fixing CI for the new restructure of lanes ([#126](https://github.com/WeTransfer/Mocker/pull/126)) via [@AvdLee](https://github.com/AvdLee)
+- Change: improve read me ([#124](https://github.com/WeTransfer/Mocker/pull/124)) via [@stavares843](https://github.com/stavares843)
+- Merge release 2.6.0 into master ([#122](https://github.com/WeTransfer/Mocker/pull/122)) via [@wetransferplatform](https://github.com/wetransferplatform)
+
 ### 2.6.0
 - Add option to create a custom data type ([#121](https://github.com/WeTransfer/Mocker/pull/121)) via [@alexanderwe](https://github.com/alexanderwe)
 - Enable swift PM tests on Linux and macOS ([#118](https://github.com/WeTransfer/Mocker/pull/118)) via [@vox-humana](https://github.com/vox-humana)
