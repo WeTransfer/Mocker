@@ -32,7 +32,7 @@ public struct Mock: Equatable {
         case connect = "CONNECT"
     }
 
-    public typealias OnRequest = (_ request: URLRequest, _ httpBodyArguments: [String: Any]?) -> Void
+    public typealias OnRequest = (_ request: URLRequest, _ httpBodyArguments: Any?) -> Void
 
     /// The type of the data which is returned.
     public let dataType: DataType

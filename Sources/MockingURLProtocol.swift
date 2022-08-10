@@ -110,9 +110,9 @@ private extension Data {
 }
 
 private extension URLRequest {
-    var postBodyArguments: [String: Any]? {
+    var postBodyArguments: Any? {
         guard let httpBody = httpBodyStreamData() ?? httpBody else { return nil }
-        return try? JSONSerialization.jsonObject(with: httpBody, options: .fragmentsAllowed) as? [String: Any]
+        return try? JSONSerialization.jsonObject(with: httpBody, options: .fragmentsAllowed)
     }
 
     /// We need to use the http body stream data as the URLRequest once launched converts the `httpBody` to this stream of data.
