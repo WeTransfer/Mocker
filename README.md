@@ -30,6 +30,8 @@ Mocker is a library written in Swift which makes it possible to mock data reques
 	    - [Redirect responses](#redirect-responses)
 	    - [Ignoring URLs](#ignoring-urls)
 	    - [Mock callbacks](#mock-callbacks)
+    - [Unregister Mocks](#unregister-mocks)
+	    - [Clear all registered mocks](#clear-all-registered-mocks)
 - [Communication](#communication)
 - [Installation](#installation)
 - [Release Notes](#release-notes)
@@ -267,6 +269,14 @@ mock.register()
 URLSession.shared.dataTask(with: URLRequest(url: url)).resume()
 
 wait(for: [requestExpectation, completionExpectation], timeout: 2.0)
+```
+
+### Unregister Mocks
+##### Clear all registered mocks
+You can clear all registered mocks:
+
+```swift
+Mocker.removeAll()
 ```
 
 ## Communication
