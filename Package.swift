@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.6
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 // We're hiding dev, test, and danger dependencies with // dev to make sure they're not fetched by users of this package.
 
@@ -17,6 +17,7 @@ let package = Package(name: "Mocker",
                       dependencies: [
                         // dev .package(name: "danger-swift", url: "https://github.com/danger/swift", from: "3.12.1"),
                         // dev .package(name: "WeTransferPRLinter", path: "Submodules/WeTransfer-iOS-CI/WeTransferPRLinter")
+                        .package(url: "https://github.com/apple/swift-docc-plugin.git", from: "1.0.0")
                         ],
                       targets: [
                         // dev .target(name: "DangerDependencies", dependencies: [
