@@ -429,29 +429,14 @@ final class MockerTests: XCTestCase {
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://www.wetransfer.com/example.json")!
 
-        enum TestExampleError: Error, LocalizedError {
-            case example
-
-            var errorDescription: String { "example" }
-        }
-
-        Mock(url: originalURL, dataType: .json, statusCode: 500, data: [.get: Data()], requestError: TestExampleError.example).register()
+        Mock(url: originalURL, dataType: .json, statusCode: 500, data: [.get: Data()], requestError: URLError(.notConnectedToInternet)).register()
 
         URLSession.shared.dataTask(with: originalURL) { (data, urlresponse, error) in
 
             XCTAssertNil(data)
             XCTAssertNil(urlresponse)
             XCTAssertNotNil(error)
-            if let error = error {
-                #if os(Linux)
-                XCTAssertEqual(error as? TestExampleError, .example)
-                #else
-                // there's not a particularly elegant way to verify an instance
-                // of an error, but this is a convenient workaround for testing
-                // purposes
-                XCTAssertTrue(String(describing: error).contains("TestExampleError"))
-                #endif
-            }
+            XCTAssertEqual((error as? URLError)?.code, URLError(.notConnectedToInternet).code, "Wrong error is thrown: \(String(describing: error))")
 
             expectation.fulfill()
         }.resume()
