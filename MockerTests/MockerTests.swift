@@ -160,7 +160,10 @@ final class MockerTests: XCTestCase {
 
         URLSession.shared.dataTask(with: mock.request) { (_, response, error) in
             XCTAssertNil(error)
-            XCTAssertEqual(((response as? HTTPURLResponse)?.allHeaderFields["Testkey"] as? String), "testvalue", "Additional headers should be added.")
+            XCTAssertEqual(
+                ((response as? HTTPURLResponse)?.allHeaderFields["Testkey"] as? String),
+                "testvalue", "Additional headers should be added."
+            )
             expectation.fulfill()
         }.resume()
 
@@ -178,7 +181,10 @@ final class MockerTests: XCTestCase {
 
         URLSession.shared.dataTask(with: mock.request) { (_, response, error) in
             XCTAssertNil(error)
-            XCTAssertEqual(((response as? HTTPURLResponse)?.allHeaderFields["Newkey"] as? String), "newvalue", "Additional headers should be added.")
+            XCTAssertEqual(
+                ((response as? HTTPURLResponse)?.allHeaderFields["Newkey"] as? String),
+                "newvalue", "Additional headers should be added."
+            )
             expectation.fulfill()
         }.resume()
 
@@ -429,14 +435,15 @@ final class MockerTests: XCTestCase {
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://www.wetransfer.com/example.json")!
 
-        Mock(url: originalURL, dataType: .json, statusCode: 500, data: [.get: Data()], requestError: URLError(.notConnectedToInternet)).register()
+        Mock(url: originalURL, dataType: .json, statusCode: 500, data: [.get: Data()], requestError: URLError(.notConnectedToInternet))
+            .register()
 
         URLSession.shared.dataTask(with: originalURL) { (data, urlresponse, error) in
 
             XCTAssertNil(data)
             XCTAssertNil(urlresponse)
             XCTAssertNotNil(error)
-            XCTAssertEqual((error as? URLError)?.code, URLError(.notConnectedToInternet).code, "Wrong error is thrown: \(String(describing: error))")
+            XCTAssertEqual((error as? URLError)?.code, URLError(.notConnectedToInternet).code)
 
             expectation.fulfill()
         }.resume()
