@@ -11,24 +11,23 @@
 import Foundation
 import XCTest
 #if canImport(FoundationNetworking)
-import FoundationNetworking
+    import FoundationNetworking
 #endif
 
 /// A Mock which can be used for mocking data requests with the `Mocker` by calling `Mocker.register(...)`.
 public struct Mock: Equatable {
-
     /// HTTP method definitions.
     ///
     /// See https://tools.ietf.org/html/rfc7231#section-4.3
     public enum HTTPMethod: String {
         case options = "OPTIONS"
-        case get     = "GET"
-        case head    = "HEAD"
-        case post    = "POST"
-        case put     = "PUT"
-        case patch   = "PATCH"
-        case delete  = "DELETE"
-        case trace   = "TRACE"
+        case get = "GET"
+        case head = "HEAD"
+        case post = "POST"
+        case put = "PUT"
+        case patch = "PATCH"
+        case delete = "DELETE"
+        case trace = "TRACE"
         case connect = "CONNECT"
     }
 
@@ -48,7 +47,7 @@ public struct Mock: Equatable {
 
     /// The URL value generated based on the Mock data. Force unwrapped on purpose. If you access this URL while it's not set, this is a programming error.
     public var url: URL {
-        if urlToMock == nil && !data.keys.contains(.get) {
+        if urlToMock == nil, !data.keys.contains(.get) {
             assertionFailure("For non GET mocks you should use the `request` property so the HTTP method is set.")
         }
         return urlToMock ?? generatedURL
@@ -91,7 +90,7 @@ public struct Mock: Equatable {
     var onCompletedExpectation: XCTestExpectation?
 
     private init(url: URL? = nil, ignoreQuery: Bool = false, cacheStoragePolicy: URLCache.StoragePolicy = .notAllowed, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], requestError: Error? = nil, additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
-        self.urlToMock = url
+        urlToMock = url
         let generatedURL = URL(string: "https://mocked.wetransfer.com/\(dataType.name)/\(statusCode)/\(data.keys.first!.rawValue)")!
         self.generatedURL = generatedURL
         var request = URLRequest(url: url ?? generatedURL)
@@ -108,7 +107,7 @@ public struct Mock: Equatable {
         headers["Content-Type"] = dataType.headerValue
         self.headers = headers
 
-        self.fileExtensions = fileExtensions?.map({ $0.replacingOccurrences(of: ".", with: "") })
+        self.fileExtensions = fileExtensions?.map { $0.replacingOccurrences(of: ".", with: "") }
     }
 
     /// Creates a `Mock` for the given data type. The mock will be automatically matched based on a URL created from the given parameters.
@@ -182,7 +181,7 @@ public struct Mock: Equatable {
         let lhsHTTPMethods: [String] = lhs.data.keys.compactMap { $0.rawValue }
         let rhsHTTPMethods: [String] = rhs.data.keys.compactMap { $0.rawValue }
 
-        if let lhsFileExtensions = lhs.fileExtensions, let rhsFileExtensions = rhs.fileExtensions, (!lhsFileExtensions.isEmpty || !rhsFileExtensions.isEmpty) {
+        if let lhsFileExtensions = lhs.fileExtensions, let rhsFileExtensions = rhs.fileExtensions, !lhsFileExtensions.isEmpty || !rhsFileExtensions.isEmpty {
             /// The mocks are targeting file extensions specifically, check on those.
             return lhsFileExtensions == rhsFileExtensions && lhsHTTPMethods == rhsHTTPMethods
         }

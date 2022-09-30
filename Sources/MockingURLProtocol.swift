@@ -1,6 +1,6 @@
 //
 //  MockingURLProtocol.swift
-//  Rabbit
+//  Mocker
 //
 //  Created by Antoine van der Lee on 04/05/2017.
 //  Copyright © 2017 WeTransfer. All rights reserved.
@@ -8,12 +8,11 @@
 
 import Foundation
 #if canImport(FoundationNetworking)
-import FoundationNetworking
+    import FoundationNetworking
 #endif
 
 /// The protocol which can be used to send Mocked data back. Use the `Mocker` to register `Mock` data
 open class MockingURLProtocol: URLProtocol {
-
     enum Error: Swift.Error, LocalizedError, CustomDebugStringConvertible {
         case missingMockedData(url: String)
         case explicitMockFailure(url: String)
@@ -56,7 +55,7 @@ open class MockingURLProtocol: URLProtocol {
             return
         }
 
-        self.responseWorkItem = DispatchWorkItem(block: { [weak self] in
+        responseWorkItem = DispatchWorkItem(block: { [weak self] in
             guard let self = self else { return }
             self.finishRequest(for: mock, data: data, response: response)
         })
@@ -66,13 +65,13 @@ open class MockingURLProtocol: URLProtocol {
 
     private func finishRequest(for mock: Mock, data: Data, response: HTTPURLResponse) {
         if let redirectLocation = data.redirectLocation {
-            self.client?.urlProtocol(self, wasRedirectedTo: URLRequest(url: redirectLocation), redirectResponse: response)
+            client?.urlProtocol(self, wasRedirectedTo: URLRequest(url: redirectLocation), redirectResponse: response)
         } else if let requestError = mock.requestError {
-            self.client?.urlProtocol(self, didFailWithError: requestError)
+            client?.urlProtocol(self, didFailWithError: requestError)
         } else {
-            self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: mock.cacheStoragePolicy)
-            self.client?.urlProtocol(self, didLoad: data)
-            self.client?.urlProtocolDidFinishLoading(self)
+            client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: mock.cacheStoragePolicy)
+            client?.urlProtocol(self, didLoad: data)
+            client?.urlProtocolDidFinishLoading(self)
         }
 
         mock.completion?()
@@ -98,8 +97,8 @@ open class MockingURLProtocol: URLProtocol {
 private extension Data {
     /// Returns the redirect location from the raw HTTP response if exists.
     var redirectLocation: URL? {
-        let locationComponent = String(data: self, encoding: String.Encoding.utf8)?.components(separatedBy: "\n").first(where: { (value) -> Bool in
-            return value.contains("Location:")
+        let locationComponent = String(data: self, encoding: String.Encoding.utf8)?.components(separatedBy: "\n").first(where: { value -> Bool in
+            value.contains("Location:")
         })
 
         guard let redirectLocationString = locationComponent?.components(separatedBy: "Location:").last, let redirectLocation = URL(string: redirectLocationString.trimmingCharacters(in: NSCharacterSet.whitespaces)) else {
@@ -117,12 +116,12 @@ private extension URLRequest {
 
     /// We need to use the http body stream data as the URLRequest once launched converts the `httpBody` to this stream of data.
     private func httpBodyStreamData() -> Data? {
-        guard let bodyStream = self.httpBodyStream else { return nil }
+        guard let bodyStream = httpBodyStream else { return nil }
 
         bodyStream.open()
 
         // Will read 16 chars per iteration. Can use bigger buffer if needed
-        let bufferSize: Int = 16
+        let bufferSize = 16
         let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
         var data = Data()
 

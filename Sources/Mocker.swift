@@ -1,6 +1,6 @@
 //
 //  Mocker.swift
-//  Rabbit
+//  Mocker
 //
 //  Created by Antoine van der Lee on 04/05/2017.
 //  Copyright © 2017 WeTransfer. All rights reserved.
@@ -8,7 +8,7 @@
 
 import Foundation
 #if canImport(FoundationNetworking)
-import FoundationNetworking
+    import FoundationNetworking
 #endif
 
 /// Can be used for registering Mocked data, returned by the `MockingURLProtocol`.
@@ -59,7 +59,7 @@ public struct Mocker {
     internal static var shared = Mocker()
 
     /// The HTTP Version to use in the mocked response.
-    public static var httpVersion: HTTPVersion = HTTPVersion.http1_1
+    public static var httpVersion: HTTPVersion = .http1_1
 
     /// The registrated mocks.
     private(set) var mocks: [Mock] = []
