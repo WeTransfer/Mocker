@@ -8,7 +8,7 @@
 
 import XCTest
 #if canImport(FoundationNetworking)
-import FoundationNetworking
+    import FoundationNetworking
 #endif
 @testable import Mocker
 
@@ -45,7 +45,7 @@ final class MockerTests: XCTestCase {
         ])
 
         mock.register()
-        URLSession.shared.dataTask(with: originalURL) { (data, _, error) in
+        URLSession.shared.dataTask(with: originalURL) { data, _, error in
             XCTAssertNil(error)
             XCTAssertEqual(data, mockedData, "Image should be returned mocked")
             expectation.fulfill()
@@ -64,7 +64,7 @@ final class MockerTests: XCTestCase {
             .get: mockedData
         ]).register()
 
-        URLSession.shared.dataTask(with: originalURL!) { (data, _, error) in
+        URLSession.shared.dataTask(with: originalURL!) { data, _, error in
             XCTAssertNil(error)
             XCTAssertEqual(data, mockedData, "Image should be returned mocked")
             expectation.fulfill()
@@ -87,7 +87,7 @@ final class MockerTests: XCTestCase {
             .get: mockedData
         ]).register()
 
-        URLSession.shared.dataTask(with: originalURL) { (data, _, error) in
+        URLSession.shared.dataTask(with: originalURL) { data, _, error in
             XCTAssertNil(error)
             XCTAssertEqual(data, mockedData, "Image should be returned mocked")
             expectation.fulfill()
@@ -109,7 +109,7 @@ final class MockerTests: XCTestCase {
         /// Make it different compared to the mocked URL.
         let customURL = URL(string: originalURL.absoluteString + "&" + UUID().uuidString)!
 
-        URLSession.shared.dataTask(with: customURL) { (data, _, error) in
+        URLSession.shared.dataTask(with: customURL) { data, _, error in
             XCTAssertNil(error)
             XCTAssertEqual(data, mockedData, "Image should be returned mocked")
             expectation.fulfill()
@@ -125,10 +125,9 @@ final class MockerTests: XCTestCase {
 
         Mock(url: originalURL, dataType: .json, statusCode: 200, data: [
             .get: MockedData.exampleJSON.data
-        ]
-        ).register()
+        ]).register()
 
-        URLSession.shared.dataTask(with: originalURL) { (data, _, _) in
+        URLSession.shared.dataTask(with: originalURL) { data, _, _ in
 
             guard let data = data else {
                 XCTFail("Data is nil")
@@ -158,10 +157,10 @@ final class MockerTests: XCTestCase {
         let mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: headers)
         mock.register()
 
-        URLSession.shared.dataTask(with: mock.request) { (_, response, error) in
+        URLSession.shared.dataTask(with: mock.request) { _, response, error in
             XCTAssertNil(error)
             XCTAssertEqual(
-                ((response as? HTTPURLResponse)?.allHeaderFields["Testkey"] as? String),
+                (response as? HTTPURLResponse)?.allHeaderFields["Testkey"] as? String,
                 "testvalue", "Additional headers should be added."
             )
             expectation.fulfill()
@@ -179,10 +178,10 @@ final class MockerTests: XCTestCase {
         let newMock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: ["Newkey": "newvalue"])
         newMock.register()
 
-        URLSession.shared.dataTask(with: mock.request) { (_, response, error) in
+        URLSession.shared.dataTask(with: mock.request) { _, response, error in
             XCTAssertNil(error)
             XCTAssertEqual(
-                ((response as? HTTPURLResponse)?.allHeaderFields["Newkey"] as? String),
+                (response as? HTTPURLResponse)?.allHeaderFields["Newkey"] as? String,
                 "newvalue", "Additional headers should be added."
             )
             expectation.fulfill()
@@ -205,7 +204,7 @@ final class MockerTests: XCTestCase {
         configuration.protocolClasses = [MockingURLProtocol.self]
         let urlSession = URLSession(configuration: configuration)
 
-        urlSession.dataTask(with: originalURL!) { (data, _, error) in
+        urlSession.dataTask(with: originalURL!) { data, _, error in
             XCTAssertNil(error)
             XCTAssertEqual(data, mockedData, "Image should be returned mocked")
             expectation.fulfill()
@@ -221,30 +220,30 @@ final class MockerTests: XCTestCase {
         mock.delay = DispatchTimeInterval.seconds(5)
         mock.register()
 
-        let task = URLSession.shared.dataTask(with: mock.request) { (_, _, error) in
+        let task = URLSession.shared.dataTask(with: mock.request) { _, _, error in
             XCTAssertEqual(error?._code, NSURLErrorCancelled)
             expectation.fulfill()
         }
 
         task.resume()
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             task.cancel()
-        })
+        }
         waitForExpectations(timeout: 10.0, handler: nil)
     }
 
     /// It should correctly handle redirect responses.
     func testRedirectResponse() throws {
         #if os(Linux)
-        throw XCTSkip("The URLSession swift-corelibs-foundation implementation doesn't currently handle redirects directly")
+            throw XCTSkip("The URLSession swift-corelibs-foundation implementation doesn't currently handle redirects directly")
         #endif
         let expectation = self.expectation(description: "Data request should be cancelled")
-        let urlWhichRedirects: URL = URL(string: "https://we.tl/redirect")!
+        let urlWhichRedirects = URL(string: "https://we.tl/redirect")!
         Mock(url: urlWhichRedirects, dataType: .html, statusCode: 200, data: [.get: MockedData.redirectGET.data]).register()
         Mock(url: URL(string: "https://wetransfer.com/redirect")!, dataType: .json, statusCode: 200, data: [.get: MockedData.exampleJSON.data]).register()
 
-        URLSession.shared.dataTask(with: urlWhichRedirects) { (data, _, _) in
+        URLSession.shared.dataTask(with: urlWhichRedirects) { data, _, _ in
 
             guard let data = data else {
                 XCTFail("Data is nil")
@@ -269,7 +268,6 @@ final class MockerTests: XCTestCase {
 
     /// It should be possible to ignore URLs and not let them be handled.
     func testIgnoreURLs() {
-
         let ignoredURL = URL(string: "www.wetransfer.com")!
 
         XCTAssertTrue(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURL)))
@@ -279,7 +277,6 @@ final class MockerTests: XCTestCase {
 
     /// It should be possible to ignore URLs and not let them be handled.
     func testIgnoreURLsIgnoreQueries() {
-
         let ignoredURL = URL(string: "https://www.wetransfer.com/sample-image.png")!
         let ignoredURLQueries = URL(string: "https://www.wetransfer.com/sample-image.png?width=200&height=200")!
 
@@ -337,7 +334,7 @@ final class MockerTests: XCTestCase {
 
         wait(for: [onRequestExpectation], timeout: 2.0)
     }
-    
+
     /// It should report post body arguments with top level collection type if they exist.
     func testOnRequestPostBodyParametersWithTopLevelCollectionType() throws {
         let onRequestExpectation = expectation(description: "Data request should start")
@@ -438,7 +435,7 @@ final class MockerTests: XCTestCase {
         Mock(url: originalURL, dataType: .json, statusCode: 500, data: [.get: Data()], requestError: URLError(.notConnectedToInternet))
             .register()
 
-        URLSession.shared.dataTask(with: originalURL) { (data, urlresponse, error) in
+        URLSession.shared.dataTask(with: originalURL) { data, urlresponse, error in
 
             XCTAssertNil(data)
             XCTAssertNil(urlresponse)
@@ -454,7 +451,7 @@ final class MockerTests: XCTestCase {
     /// It should cache response
     func testMockCachePolicy() throws {
         #if os(Linux)
-        throw XCTSkip("URLSessionTask in swift-corelibs-foundation doesn't cache response for custom protocols")
+            throw XCTSkip("URLSessionTask in swift-corelibs-foundation doesn't cache response for custom protocols")
         #endif
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://www.wetransfer.com/example.json")!
@@ -462,17 +459,16 @@ final class MockerTests: XCTestCase {
         Mock(url: originalURL, cacheStoragePolicy: .allowed,
              dataType: .json, statusCode: 200,
              data: [.get: MockedData.exampleJSON.data],
-             additionalHeaders: ["Cache-Control": "public, max-age=31557600, immutable"]
-        ).register()
+             additionalHeaders: ["Cache-Control": "public, max-age=31557600, immutable"]).register()
 
         let configuration = URLSessionConfiguration.default
         #if !os(Linux)
-        configuration.urlCache = URLCache()
+            configuration.urlCache = URLCache()
         #endif
         configuration.protocolClasses = [MockingURLProtocol.self]
         let urlSession = URLSession(configuration: configuration)
 
-        urlSession.dataTask(with: originalURL) { (_, _, error) in
+        urlSession.dataTask(with: originalURL) { _, _, error in
             XCTAssertNil(error)
 
             let cachedResponse = configuration.urlCache?.cachedResponse(for: URLRequest(url: originalURL))

@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import XCTest
 @testable import Mocker
+import XCTest
 
 final class MockTests: XCTestCase {
     override func setUp() {
