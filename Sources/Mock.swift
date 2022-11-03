@@ -14,6 +14,10 @@ import XCTest
 import FoundationNetworking
 #endif
 
+struct OnRequestHandler<T> {
+
+}
+
 /// A Mock which can be used for mocking data requests with the `Mocker` by calling `Mocker.register(...)`.
 public struct Mock: Equatable {
 
@@ -32,7 +36,7 @@ public struct Mock: Equatable {
         case connect = "CONNECT"
     }
 
-    public typealias OnRequest = (_ request: URLRequest, _ httpBodyArguments: Any?) -> Void
+    public typealias OnRequest = (_ request: URLRequest, _ httpBodyArguments: [String: Any]?) -> Void
 
     /// The type of the data which is returned.
     public let dataType: DataType
