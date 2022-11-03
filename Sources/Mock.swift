@@ -14,10 +14,6 @@ import XCTest
 import FoundationNetworking
 #endif
 
-struct OnRequestHandler<T> {
-
-}
-
 /// A Mock which can be used for mocking data requests with the `Mocker` by calling `Mocker.register(...)`.
 public struct Mock: Equatable {
 
