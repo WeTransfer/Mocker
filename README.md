@@ -246,11 +246,11 @@ You can register on `Mock` callbacks to make testing easier.
 
 ```swift
 var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
-mock.onRequest = { request, postBodyArguments in
+mock.onRequestHandler = OnRequestHandler(httpBodyType: [[String:String]].self, callback: { request, postBodyArguments in
     XCTAssertEqual(request.url, mock.request.url)
-    XCTAssertEqual(expectedParameters, postBodyArguments as? [String: String])
+    XCTAssertEqual(expectedParameters, postBodyArguments)
     onRequestExpectation.fulfill()
-}
+})
 mock.completion = {
     endpointIsCalledExpectation.fulfill()
 }
