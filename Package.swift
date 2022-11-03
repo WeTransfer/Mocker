@@ -14,7 +14,9 @@ let package = Package(
         .library(name: "Mocker", targets: ["Mocker"])
     ],
     targets: [
-        .target(name: "Mocker"),
+        .target(
+            name: "Mocker"
+        ),
         .testTarget(
             name: "MockerTests",
             dependencies: ["Mocker"],
