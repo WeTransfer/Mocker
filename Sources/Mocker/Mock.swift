@@ -88,8 +88,7 @@ public struct Mock: Equatable {
             onRequestHandler = OnRequestHandler(callback: newValue)
         }
         get {
-            assertionFailure("Getter is no longer supported")
-            return nil
+            onRequestHandler?.legacyCallback
         }
     }
 

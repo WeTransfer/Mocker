@@ -14,6 +14,7 @@ public struct OnRequestHandler {
     public typealias OnRequest<HTTPBody> = (_ request: URLRequest, _ httpBody: HTTPBody?) -> Void
 
     private let internalCallback: (_ request: URLRequest) -> Void
+    let legacyCallback: Mock.OnRequest?
 
     /// Creates a new request handler using the given `HTTPBody` type, which can be any `Decodable`.
     /// - Parameters:
@@ -30,6 +31,7 @@ public struct OnRequestHandler {
             }
             callback(request, decodedObject)
         }
+        legacyCallback = nil
     }
 
     init(callback: Mock.OnRequest?) {
@@ -43,6 +45,7 @@ public struct OnRequestHandler {
             }
             callback?(request, jsonObject)
         }
+        self.legacyCallback = callback
     }
 
     func handleRequest(_ request: URLRequest) {
