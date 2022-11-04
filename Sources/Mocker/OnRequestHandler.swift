@@ -37,18 +37,66 @@ public struct OnRequestHandler {
         legacyCallback = nil
     }
 
-    init(callback: Mock.OnRequest?) {
+    /// Creates a new request handler using the given callback to call on request without parsing the body arguments.
+    /// - Parameter requestCallback: The callback which will be executed just before the request executes, containing the request.
+    public init(requestCallback: @escaping (_ request: URLRequest) -> Void) {
+        self.internalCallback = requestCallback
+        legacyCallback = nil
+    }
+
+    /// Creates a new request handler using the given callback to call on request without parsing the body arguments and without passing the request.
+    /// - Parameter callback: The callback which will be executed just before the request executes.
+    public init(callback: @escaping () -> Void) {
+        self.internalCallback = { _ in
+            callback()
+        }
+        legacyCallback = nil
+    }
+
+    /// Creates a new request handler using the given callback to call on request.
+    /// - Parameter jsonDictionaryCallback: The callback that executes just before the request executes, containing the HTTP Body Arguments as a JSON Object Dictionary.
+    public init(jsonDictionaryCallback: @escaping ((_ request: URLRequest, _ httpBodyArguments: [String: Any]?) -> Void)) {
         self.internalCallback = { request in
             guard
                 let httpBody = request.httpBodyStreamData() ?? request.httpBody,
                 let jsonObject = try? JSONSerialization.jsonObject(with: httpBody, options: .fragmentsAllowed) as? [String: Any]
             else {
-                callback?(request, nil)
+                jsonDictionaryCallback(request, nil)
                 return
             }
-            callback?(request, jsonObject)
+            jsonDictionaryCallback(request, jsonObject)
         }
-        self.legacyCallback = callback
+        self.legacyCallback = nil
+    }
+
+    /// Creates a new request handler using the given callback to call on request.
+    /// - Parameter jsonDictionaryCallback: The callback that executes just before the request executes, containing the HTTP Body Arguments as a JSON Object Array.
+    public init(jsonArrayCallback: @escaping ((_ request: URLRequest, _ httpBodyArguments: [[String: Any]]?) -> Void)) {
+        self.internalCallback = { request in
+            guard
+                let httpBody = request.httpBodyStreamData() ?? request.httpBody,
+                let jsonObject = try? JSONSerialization.jsonObject(with: httpBody, options: .fragmentsAllowed) as? [[String: Any]]
+            else {
+                jsonArrayCallback(request, nil)
+                return
+            }
+            jsonArrayCallback(request, jsonObject)
+        }
+        self.legacyCallback = nil
+    }
+
+    init(legacyCallback: Mock.OnRequest?) {
+        self.internalCallback = { request in
+            guard
+                let httpBody = request.httpBodyStreamData() ?? request.httpBody,
+                let jsonObject = try? JSONSerialization.jsonObject(with: httpBody, options: .fragmentsAllowed) as? [String: Any]
+            else {
+                legacyCallback?(request, nil)
+                return
+            }
+            legacyCallback?(request, jsonObject)
+        }
+        self.legacyCallback = legacyCallback
     }
 
     func handleRequest(_ request: URLRequest) {
