@@ -32,7 +32,7 @@ public struct Mock: Equatable {
         case connect = "CONNECT"
     }
 
-    public typealias OnRequest = (_ request: URLRequest, _ httpBodyArguments: Any?) -> Void
+    public typealias OnRequest = (_ request: URLRequest, _ httpBodyArguments: [String: Any]?) -> Void
 
     /// The type of the data which is returned.
     public let dataType: DataType
@@ -82,7 +82,18 @@ public struct Mock: Equatable {
     public var completion: (() -> Void)?
 
     /// The callback which will be executed everytime this `Mock` was started. Can be used within unit tests for validating that a request has been started. The callback must be set before calling `register`.
-    public var onRequest: OnRequest?
+    @available(*, deprecated, message: "Use `onRequestHandler` instead.")
+    public var onRequest: OnRequest? {
+        set {
+            onRequestHandler = OnRequestHandler(callback: newValue)
+        }
+        get {
+            onRequestHandler?.legacyCallback
+        }
+    }
+
+    /// The on request handler which will be executed everytime this `Mock` was started. Can be used within unit tests for validating that a request has been started. The handler must be set before calling `register`.
+    public var onRequestHandler: OnRequestHandler?
 
     /// Can only be set internally as it's used by the `expectationForRequestingMock(_:)` method.
     var onRequestExpectation: XCTestExpectation?
