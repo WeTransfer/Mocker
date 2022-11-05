@@ -157,9 +157,7 @@ final class MockerTests: XCTestCase {
         var request = URLRequest(url: originalURL)
         request.httpMethod = "PUT"
 
-        Mock(url: originalURL, dataType: nil, statusCode: 202, data: [
-            .put: Data()
-        ]).register()
+        Mock(request: request, statusCode: 202).register()
 
         URLSession.shared.dataTask(with: request) { (data, response, _) in
             guard let response = response as? HTTPURLResponse else {

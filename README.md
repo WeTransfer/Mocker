@@ -108,9 +108,7 @@ let originalURL = URL(string: "https://www.wetransfer.com/api/foobar")!
 var request = URLRequest(url: originalURL)
 request.httpMethod = "PUT"
     
-let mock = Mock(url: originalURL, statusCode: 204, data: [
-    .put : Data()
-])
+let mock = Mock(request: request, statusCode: 204)
 mock.register()
 
 URLSession.shared.dataTask(with: originalURL) { (data, response, error) in
