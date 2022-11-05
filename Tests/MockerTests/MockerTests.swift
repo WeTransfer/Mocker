@@ -125,8 +125,7 @@ final class MockerTests: XCTestCase {
 
         Mock(url: originalURL, dataType: .json, statusCode: 200, data: [
             .get: MockedData.exampleJSON.data
-        ]
-        ).register()
+        ]).register()
 
         URLSession.shared.dataTask(with: originalURL) { (data, _, _) in
 
@@ -144,6 +143,33 @@ final class MockerTests: XCTestCase {
             let framework = Framework(jsonDictionary: jsonDictionary)
             XCTAssertEqual(framework.name, "Mocker")
             XCTAssertEqual(framework.owner, "WeTransfer")
+
+            expectation.fulfill()
+        }.resume()
+
+        waitForExpectations(timeout: 10.0, handler: nil)
+    }
+    
+    /// No Content-Type should be included in the headers
+    func testNoDataType() {
+        let expectation = self.expectation(description: "Data request should succeed")
+        let originalURL = URL(string: "https://www.wetransfer.com/api/foobar")!
+        var request = URLRequest(url: originalURL)
+        request.httpMethod = "PUT"
+
+        Mock(url: originalURL, dataType: nil, statusCode: 202, data: [
+            .put: Data()
+        ]).register()
+
+        URLSession.shared.dataTask(with: request) { (data, response, _) in
+            guard let response = response as? HTTPURLResponse else {
+                XCTFail("Unexpected response")
+                return
+            }
+            
+            // data is only nil if there is an error
+            XCTAssertEqual(data, Data())
+            XCTAssertNil(response.allHeaderFields["Content-Type"])
 
             expectation.fulfill()
         }.resume()

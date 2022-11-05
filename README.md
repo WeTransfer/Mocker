@@ -102,6 +102,22 @@ URLSession.shared.dataTask(with: originalURL) { (data, response, error) in
 }.resume()
 ```
 
+##### Empty Responses
+``` swift
+let originalURL = URL(string: "https://www.wetransfer.com/api/foobar")!
+var request = URLRequest(url: originalURL)
+request.httpMethod = "PUT"
+    
+let mock = Mock(url: originalURL, statusCode: 204, data: [
+    .put : Data()
+])
+mock.register()
+
+URLSession.shared.dataTask(with: originalURL) { (data, response, error) in
+    // ....
+}.resume()
+```
+
 ##### Ignoring the query
 Some URLs like authentication URLs contain timestamps or UUIDs in the query. To mock these you can ignore the Query for a certain URL:
 
