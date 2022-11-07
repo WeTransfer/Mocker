@@ -311,7 +311,7 @@ final class MockerTests: XCTestCase {
     }
 
     /// It should report post body arguments if they exist.
-    func testOnRequestPostBodyParameters() throws {
+    func testOnRequestLegacyPostBodyParameters() throws {
         let onRequestExpectation = expectation(description: "Data request should start")
 
         let expectedParameters = ["test": "value"]
@@ -331,7 +331,70 @@ final class MockerTests: XCTestCase {
 
         wait(for: [onRequestExpectation], timeout: 2.0)
     }
-    
+
+    func testOnRequestDecodablePostBodyParameters() throws {
+        struct RequestParameters: Codable, Equatable {
+            let name: String
+        }
+
+        let onRequestExpectation = expectation(description: "Data request should start")
+
+        let expectedParameters = RequestParameters(name: UUID().uuidString)
+        var request = URLRequest(url: URL(string: "https://www.fakeurl.com")!)
+        request.httpMethod = Mock.HTTPMethod.post.rawValue
+        request.httpBody = try JSONEncoder().encode(expectedParameters)
+
+        var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
+        mock.onRequestHandler = .init(httpBodyType: RequestParameters.self, callback: { request, postBodyDecodable in
+            XCTAssertEqual(request.url, mock.request.url)
+            XCTAssertEqual(expectedParameters, postBodyDecodable)
+            onRequestExpectation.fulfill()
+        })
+        mock.register()
+
+        URLSession.shared.dataTask(with: request).resume()
+
+        wait(for: [onRequestExpectation], timeout: 2.0)
+    }
+
+    func testOnRequestJSONDictionaryPostBodyParameters() throws {
+        let onRequestExpectation = expectation(description: "Data request should start")
+
+        let expectedParameters = ["test": "value"]
+        var request = URLRequest(url: URL(string: "https://www.fakeurl.com")!)
+        request.httpMethod = Mock.HTTPMethod.post.rawValue
+        request.httpBody = try JSONSerialization.data(withJSONObject: expectedParameters, options: .prettyPrinted)
+
+        var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
+        mock.onRequestHandler = .init(jsonDictionaryCallback: { request, postBodyArguments in
+            XCTAssertEqual(request.url, mock.request.url)
+            XCTAssertEqual(expectedParameters, postBodyArguments as? [String: String])
+            onRequestExpectation.fulfill()
+        })
+        mock.register()
+
+        URLSession.shared.dataTask(with: request).resume()
+
+        wait(for: [onRequestExpectation], timeout: 2.0)
+    }
+
+    func testOnRequestCallbackWithoutRequestAndParameters() throws {
+        let onRequestExpectation = expectation(description: "Data request should start")
+
+        var request = URLRequest(url: URL(string: "https://www.fakeurl.com")!)
+        request.httpMethod = Mock.HTTPMethod.post.rawValue
+
+        var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
+        mock.onRequestHandler = .init(callback: {
+            onRequestExpectation.fulfill()
+        })
+        mock.register()
+
+        URLSession.shared.dataTask(with: request).resume()
+
+        wait(for: [onRequestExpectation], timeout: 2.0)
+    }
+
     /// It should report post body arguments with top level collection type if they exist.
     func testOnRequestPostBodyParametersWithTopLevelCollectionType() throws {
         let onRequestExpectation = expectation(description: "Data request should start")
@@ -342,9 +405,9 @@ final class MockerTests: XCTestCase {
         request.httpBody = try JSONSerialization.data(withJSONObject: expectedParameters, options: .prettyPrinted)
 
         var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
-        mock.onRequestHandler = OnRequestHandler(httpBodyType: [[String:String]].self, callback: { request, postBodyArguments in
+        mock.onRequestHandler = OnRequestHandler(jsonArrayCallback: { request, postBodyArguments in
             XCTAssertEqual(request.url, mock.request.url)
-            XCTAssertEqual(expectedParameters, postBodyArguments)
+            XCTAssertEqual(expectedParameters, postBodyArguments as? [[String: String]])
             onRequestExpectation.fulfill()
         })
         mock.register()
