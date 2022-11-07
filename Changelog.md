@@ -1,3 +1,12 @@
+### 3.0.0
+- Revert breaking change and add `OnRequestHandler` ([#135](https://github.com/WeTransfer/Mocker/pull/135)) via [@AvdLee](https://github.com/AvdLee)
+- Support collection types as a top level object ([#125](https://github.com/WeTransfer/Mocker/pull/125)) via [@batuhansk](https://github.com/batuhansk)
+- Update README.md ([#128](https://github.com/WeTransfer/Mocker/pull/128)) via [@farrasdoko](https://github.com/farrasdoko)
+- Merge release 2.7.0 into master ([#127](https://github.com/WeTransfer/Mocker/pull/127)) via [@wetransferplatform](https://github.com/wetransferplatform)
+- Change: improve read me ([#124](https://github.com/WeTransfer/Mocker/pull/124)) via [@stavares843](https://github.com/stavares843)
+- Fixing CI for the new restructure of lanes ([#126](https://github.com/WeTransfer/Mocker/pull/126)) via [@AvdLee](https://github.com/AvdLee)
+- Merge release 2.6.0 into master ([#122](https://github.com/WeTransfer/Mocker/pull/122)) via [@wetransferplatform](https://github.com/wetransferplatform)
+
 ### 2.7.0
 - Support collection types as a top level object ([#125](https://github.com/WeTransfer/Mocker/pull/125)) via [@batuhansk](https://github.com/batuhansk)
 - Fixing CI for the new restructure of lanes ([#126](https://github.com/WeTransfer/Mocker/pull/126)) via [@AvdLee](https://github.com/AvdLee)
