@@ -85,7 +85,7 @@ public struct Mock: Equatable {
     @available(*, deprecated, message: "Use `onRequestHandler` instead.")
     public var onRequest: OnRequest? {
         set {
-            onRequestHandler = OnRequestHandler(callback: newValue)
+            onRequestHandler = OnRequestHandler(legacyCallback: newValue)
         }
         get {
             onRequestHandler?.legacyCallback
