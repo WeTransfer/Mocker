@@ -1,3 +1,7 @@
+### 3.0.1
+- Merge release 3.0.0 into master ([#138](https://github.com/WeTransfer/Mocker/pull/138)) via [@wetransferplatform](https://github.com/wetransferplatform)
+- Add extra capabilities for on request handling ([#139](https://github.com/WeTransfer/Mocker/pull/139)) via [@AvdLee](https://github.com/AvdLee)
+
 ### 3.0.0
 - Revert breaking change and add `OnRequestHandler` ([#135](https://github.com/WeTransfer/Mocker/pull/135)) via [@AvdLee](https://github.com/AvdLee)
 - Support collection types as a top level object ([#125](https://github.com/WeTransfer/Mocker/pull/125)) via [@batuhansk](https://github.com/batuhansk)
