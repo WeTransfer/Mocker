@@ -151,7 +151,7 @@ final class MockerTests: XCTestCase {
     }
     
     /// No Content-Type should be included in the headers
-    func testNoDataType() {
+    func testNoContentType() {
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://www.wetransfer.com/api/foobar")!
         var request = URLRequest(url: originalURL)

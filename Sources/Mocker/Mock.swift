@@ -34,8 +34,14 @@ public struct Mock: Equatable {
 
     public typealias OnRequest = (_ request: URLRequest, _ httpBodyArguments: [String: Any]?) -> Void
 
+    /// The type of the data which designates the Content-Type header.
+    @available(*, deprecated, message: "Calling this property is unsafe after migrating to the `contentType` initializers, and will be removed in an upcoming release. Use `contentType` instead.")
+    public var dataType: DataType {
+        return contentType!
+    }
+    
     /// The type of the data which designates the Content-Type header. If set to `nil`, no Content-Type header is added to the headers.
-    public let dataType: DataType?
+    public let contentType: DataType?
 
     /// If set, the error that URLProtocol will report as a result rather than returning data from the mock
     public let requestError: Error?
@@ -101,27 +107,27 @@ public struct Mock: Equatable {
     /// Can only be set internally as it's used by the `expectationForCompletingMock(_:)` method.
     var onCompletedExpectation: XCTestExpectation?
 
-    private init(url: URL? = nil, ignoreQuery: Bool = false, cacheStoragePolicy: URLCache.StoragePolicy = .notAllowed, dataType: DataType? = nil, statusCode: Int, data: [HTTPMethod: Data], requestError: Error? = nil, additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
+    private init(url: URL? = nil, ignoreQuery: Bool = false, cacheStoragePolicy: URLCache.StoragePolicy = .notAllowed, contentType: DataType? = nil, statusCode: Int, data: [HTTPMethod: Data], requestError: Error? = nil, additionalHeaders: [String: String] = [:], fileExtensions: [String]? = nil) {
         guard data.count > 0 else {
             preconditionFailure("At least one entry is required in the data dictionary")
         }
         
         self.urlToMock = url
-        let generatedURL = URL(string: "https://mocked.wetransfer.com/\(dataType?.name ?? "no-content")/\(statusCode)/\(data.keys.first!.rawValue)")!
+        let generatedURL = URL(string: "https://mocked.wetransfer.com/\(contentType?.name ?? "no-content")/\(statusCode)/\(data.keys.first!.rawValue)")!
         self.generatedURL = generatedURL
         var request = URLRequest(url: url ?? generatedURL)
         request.httpMethod = data.keys.first!.rawValue
         self.request = request
         self.ignoreQuery = ignoreQuery
         self.requestError = requestError
-        self.dataType = dataType
+        self.contentType = contentType
         self.statusCode = statusCode
         self.data = data
         self.cacheStoragePolicy = cacheStoragePolicy
 
         var headers = additionalHeaders
-        if let dataType = dataType {
-            headers["Content-Type"] = dataType.headerValue
+        if let contentType = contentType {
+            headers["Content-Type"] = contentType.headerValue
         }
         self.headers = headers
 
@@ -131,12 +137,38 @@ public struct Mock: Equatable {
     /// Creates a `Mock` for the given data type. The mock will be automatically matched based on a URL created from the given parameters.
     ///
     /// - Parameters:
-    ///   - dataType: The type of the data which designates the Content-Type header. Defaults to `nil`, which means that no Content-Type header is added to the headers.
+    ///   - dataType: The type of the data which designates the Content-Type header.
     ///   - statusCode: The HTTP status code to return with the response.
     ///   - data: The data which will be returned as the response based on the HTTP Method.
     ///   - additionalHeaders: Additional headers to be added to the response.
-    public init(dataType: DataType? = nil, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
-        self.init(url: nil, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: nil)
+    @available(*, deprecated, renamed: "init(contentType:statusCode:data:additionalHeaders:)")
+    public init(dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
+        self.init(
+            url: nil,
+            contentType: dataType,
+            statusCode: statusCode,
+            data: data,
+            additionalHeaders: additionalHeaders,
+            fileExtensions: nil
+        )
+    }
+    
+    /// Creates a `Mock` for the given content type. The mock will be automatically matched based on a URL created from the given parameters.
+    ///
+    /// - Parameters:
+    ///   - contentType: The type of the data which designates the Content-Type header. Defaults to `nil`, which means that no Content-Type header is added to the headers.
+    ///   - statusCode: The HTTP status code to return with the response.
+    ///   - data: The data which will be returned as the response based on the HTTP Method.
+    ///   - additionalHeaders: Additional headers to be added to the response.
+    public init(contentType: DataType?, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
+        self.init(
+            url: nil,
+            contentType: contentType,
+            statusCode: statusCode,
+            data: data,
+            additionalHeaders: additionalHeaders,
+            fileExtensions: nil
+        )
     }
 
     /// Creates a `Mock` for the given URL.
@@ -145,38 +177,45 @@ public struct Mock: Equatable {
     ///   - url: The URL to match for and to return the mocked data for.
     ///   - ignoreQuery: If `true`, checking the URL will ignore the query and match only for the scheme, host and path. Defaults to `false`.
     ///   - cacheStoragePolicy: The caching strategy. Defaults to `notAllowed`.
-    ///   - dataType: The type of the data which designates the Content-Type header. Defaults to `nil`, which means that no Content-Type header is added to the headers.
+    ///   - dataType: The type of the data which designates the Content-Type header.
     ///   - statusCode: The HTTP status code to return with the response.
     ///   - data: The data which will be returned as the response based on the HTTP Method.
     ///   - additionalHeaders: Additional headers to be added to the response.
     ///   - requestError: If provided, the URLSession will report the passed error rather than returning data. Defaults to `nil`.
-    public init(url: URL, ignoreQuery: Bool = false, cacheStoragePolicy: URLCache.StoragePolicy = .notAllowed, dataType: DataType? = nil, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], requestError: Error? = nil) {
-        self.init(url: url, ignoreQuery: ignoreQuery, cacheStoragePolicy: cacheStoragePolicy, dataType: dataType, statusCode: statusCode, data: data, requestError: requestError, additionalHeaders: additionalHeaders, fileExtensions: nil)
-    }
-
-    /// Creates a `Mock` for the given `URLRequest`.
-    ///
-    /// - Parameters:
-    ///   - request: The URLRequest, from which the URL and request method is used to match for and to return the mocked data for.
-    ///   - ignoreQuery: If `true`, checking the URL will ignore the query and match only for the scheme, host and path. Defaults to `false`.
-    ///   - cacheStoragePolicy: The caching strategy. Defaults to `notAllowed`.
-    ///   - dataType: The type of the data which designates the Content-Type header. Defaults to `nil`, which means that no Content-Type header is added to the headers.
-    ///   - statusCode: The HTTP status code to return with the response.
-    ///   - data: The data which will be returned as the response. Defaults to an empty `Data` instance.
-    ///   - additionalHeaders: Additional headers to be added to the response.
-    ///   - requestError: If provided, the URLSession will report the passed error rather than returning data. Defaults to `nil`.
-    public init(request: URLRequest, ignoreQuery: Bool = false, cacheStoragePolicy: URLCache.StoragePolicy = .notAllowed, dataType: DataType? = nil, statusCode: Int, data: Data = Data(), additionalHeaders: [String: String] = [:], requestError: Error? = nil) {
-        guard let requestHTTPMethod = Mock.HTTPMethod(rawValue: request.httpMethod ?? "") else {
-            preconditionFailure("Unexpected http method")
-        }
-
+    @available(*, deprecated, renamed: "init(url:ignoreQuery:cacheStoragePolicy:contentType:statusCode:data:additionalHeaders:requestError:)")
+    public init(url: URL, ignoreQuery: Bool = false, cacheStoragePolicy: URLCache.StoragePolicy = .notAllowed, dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], requestError: Error? = nil) {
         self.init(
-            url: request.url,
+            url: url,
             ignoreQuery: ignoreQuery,
             cacheStoragePolicy: cacheStoragePolicy,
-            dataType: dataType,
+            contentType: dataType,
             statusCode: statusCode,
-            data: [requestHTTPMethod: data],
+            data: data,
+            requestError: requestError,
+            additionalHeaders: additionalHeaders,
+            fileExtensions: nil
+        )
+    }
+    
+    /// Creates a `Mock` for the given URL.
+    ///
+    /// - Parameters:
+    ///   - url: The URL to match for and to return the mocked data for.
+    ///   - ignoreQuery: If `true`, checking the URL will ignore the query and match only for the scheme, host and path. Defaults to `false`.
+    ///   - cacheStoragePolicy: The caching strategy. Defaults to `notAllowed`.
+    ///   - contentType: The type of the data which designates the Content-Type header. Defaults to `nil`, which means that no Content-Type header is added to the headers.
+    ///   - statusCode: The HTTP status code to return with the response.
+    ///   - data: The data which will be returned as the response based on the HTTP Method.
+    ///   - additionalHeaders: Additional headers to be added to the response.
+    ///   - requestError: If provided, the URLSession will report the passed error rather than returning data. Defaults to `nil`.
+    public init(url: URL, ignoreQuery: Bool = false, cacheStoragePolicy: URLCache.StoragePolicy = .notAllowed, contentType: DataType? = nil, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:], requestError: Error? = nil) {
+        self.init(
+            url: url,
+            ignoreQuery: ignoreQuery,
+            cacheStoragePolicy: cacheStoragePolicy,
+            contentType: contentType,
+            statusCode: statusCode,
+            data: data,
             requestError: requestError,
             additionalHeaders: additionalHeaders,
             fileExtensions: nil
@@ -187,12 +226,68 @@ public struct Mock: Equatable {
     ///
     /// - Parameters:
     ///   - fileExtensions: The file extension to match for.
-    ///   - dataType: The type of the data which designates the Content-Type header. Defaults to `nil`, which means that no Content-Type header is added to the headers.
+    ///   - dataType: The type of the data which designates the Content-Type header.
     ///   - statusCode: The HTTP status code to return with the response.
     ///   - data: The data which will be returned as the response based on the HTTP Method.
     ///   - additionalHeaders: Additional headers to be added to the response.
-    public init(fileExtensions: String..., dataType: DataType? = nil, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
-        self.init(url: nil, dataType: dataType, statusCode: statusCode, data: data, additionalHeaders: additionalHeaders, fileExtensions: fileExtensions)
+    @available(*, deprecated, renamed: "init(fileExtensions:contentType:statusCode:data:additionalHeaders:)")
+    public init(fileExtensions: String..., dataType: DataType, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
+        self.init(
+            url: nil,
+            contentType: dataType,
+            statusCode: statusCode,
+            data: data,
+            additionalHeaders: additionalHeaders,
+            fileExtensions: fileExtensions
+        )
+    }
+    
+    /// Creates a `Mock` for the given file extensions. The mock will only be used for urls matching the extension.
+    ///
+    /// - Parameters:
+    ///   - fileExtensions: The file extension to match for.
+    ///   - contentType: The type of the data which designates the Content-Type header. Defaults to `nil`, which means that no Content-Type header is added to the headers.
+    ///   - statusCode: The HTTP status code to return with the response.
+    ///   - data: The data which will be returned as the response based on the HTTP Method.
+    ///   - additionalHeaders: Additional headers to be added to the response.
+    public init(fileExtensions: String..., contentType: DataType? = nil, statusCode: Int, data: [HTTPMethod: Data], additionalHeaders: [String: String] = [:]) {
+        self.init(
+            url: nil,
+            contentType: contentType,
+            statusCode: statusCode,
+            data: data,
+            additionalHeaders: additionalHeaders,
+            fileExtensions: fileExtensions
+        )
+    }
+    
+    /// Creates a `Mock` for the given `URLRequest`.
+    ///
+    /// - Parameters:
+    ///   - request: The URLRequest, from which the URL and request method is used to match for and to return the mocked data for.
+    ///   - ignoreQuery: If `true`, checking the URL will ignore the query and match only for the scheme, host and path. Defaults to `false`.
+    ///   - cacheStoragePolicy: The caching strategy. Defaults to `notAllowed`.
+    ///   - contentType: The type of the data which designates the Content-Type header. Defaults to `nil`, which means that no Content-Type header is added to the headers.
+    ///   - statusCode: The HTTP status code to return with the response.
+    ///   - data: The data which will be returned as the response. Defaults to an empty `Data` instance.
+    ///   - additionalHeaders: Additional headers to be added to the response.
+    ///   - requestError: If provided, the URLSession will report the passed error rather than returning data. Defaults to `nil`.
+    public init(request: URLRequest, ignoreQuery: Bool = false, cacheStoragePolicy: URLCache.StoragePolicy = .notAllowed, contentType: DataType? = nil, statusCode: Int, data: Data = Data(), additionalHeaders: [String: String] = [:], requestError: Error? = nil) {
+        guard let requestHTTPMethod = Mock.HTTPMethod(rawValue: request.httpMethod ?? "") else {
+            preconditionFailure("Unexpected http method")
+        }
+
+        self.init(
+            url: request.url,
+            ignoreQuery: ignoreQuery,
+            cacheStoragePolicy: cacheStoragePolicy,
+            contentType: contentType,
+            statusCode: statusCode,
+            data: [requestHTTPMethod: data],
+            requestError: requestError,
+            additionalHeaders: additionalHeaders,
+            fileExtensions: nil
+        )
     }
 
     /// Registers the mock with the shared `Mocker`.
