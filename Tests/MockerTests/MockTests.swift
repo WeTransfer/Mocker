@@ -23,10 +23,10 @@ final class MockTests: XCTestCase {
 
     /// It should match two file extension mocks correctly.
     func testFileExtensionMocksComparing() {
-        let mock200 = Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 200, data: [.put: Data()])
-        let secondMock200 = Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 200, data: [.put: Data()])
-        let mock400 = Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 400, data: [.put: Data()])
-        let mockJPEG = Mock(fileExtensions: "jpeg", dataType: .imagePNG, statusCode: 200, data: [.put: Data()])
+        let mock200 = Mock(fileExtensions: "png", contentType: .imagePNG, statusCode: 200, data: [.put: Data()])
+        let secondMock200 = Mock(fileExtensions: "png", contentType: .imagePNG, statusCode: 200, data: [.put: Data()])
+        let mock400 = Mock(fileExtensions: "png", contentType: .imagePNG, statusCode: 400, data: [.put: Data()])
+        let mockJPEG = Mock(fileExtensions: "jpeg", contentType: .imagePNG, statusCode: 200, data: [.put: Data()])
 
         XCTAssertEqual(mock200, secondMock200)
         XCTAssertEqual(mock200, mock400)
