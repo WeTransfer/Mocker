@@ -86,7 +86,7 @@ public final class MockedData {
 ``` swift
 let originalURL = URL(string: "https://www.wetransfer.com/example.json")!
     
-let mock = Mock(url: originalURL, dataType: .json, statusCode: 200, data: [
+let mock = Mock(url: originalURL, contentType: .json, statusCode: 200, data: [
     .get : try! Data(contentsOf: MockedData.exampleJSON) // Data containing the JSON response
 ])
 mock.register()
@@ -102,6 +102,20 @@ URLSession.shared.dataTask(with: originalURL) { (data, response, error) in
 }.resume()
 ```
 
+##### Empty Responses
+``` swift
+let originalURL = URL(string: "https://www.wetransfer.com/api/foobar")!
+var request = URLRequest(url: originalURL)
+request.httpMethod = "PUT"
+    
+let mock = Mock(request: request, statusCode: 204)
+mock.register()
+
+URLSession.shared.dataTask(with: originalURL) { (data, response, error) in
+    // ....
+}.resume()
+```
+
 ##### Ignoring the query
 Some URLs like authentication URLs contain timestamps or UUIDs in the query. To mock these you can ignore the Query for a certain URL:
 
@@ -109,7 +123,7 @@ Some URLs like authentication URLs contain timestamps or UUIDs in the query. To 
 /// Would transform to "https://www.example.com/api/authentication" for example.
 let originalURL = URL(string: "https://www.example.com/api/authentication?oauth_timestamp=151817037")!
     
-let mock = Mock(url: originalURL, ignoreQuery: true, dataType: .json, statusCode: 200, data: [
+let mock = Mock(url: originalURL, ignoreQuery: true, contentType: .json, statusCode: 200, data: [
     .get : try! Data(contentsOf: MockedData.exampleJSON) // Data containing the JSON response
 ])
 mock.register()
@@ -129,7 +143,7 @@ URLSession.shared.dataTask(with: originalURL) { (data, response, error) in
 ```swift
 let imageURL = URL(string: "https://www.wetransfer.com/sample-image.png")!
 
-Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 200, data: [
+Mock(fileExtensions: "png", contentType: .imagePNG, statusCode: 200, data: [
     .get: try! Data(contentsOf: MockedData.botAvatarImageFileUrl)
 ]).register()
 
@@ -142,7 +156,7 @@ URLSession.shared.dataTask(with: imageURL) { (data, response, error) in
 ```swift
 let exampleURL = URL(string: "https://www.wetransfer.com/api/endpoint")!
 
-Mock(url: exampleURL, dataType: .json, statusCode: 200, data: [
+Mock(url: exampleURL, contentType: .json, statusCode: 200, data: [
     .head: try! Data(contentsOf: MockedData.headResponse),
     .get: try! Data(contentsOf: MockedData.exampleJSON)
 ]).register()
@@ -158,7 +172,7 @@ In addition to the already build in static `DataType` implementations it is poss
 ```swift
 let xmlURL = URL(string: "https://www.wetransfer.com/sample-xml.xml")!
 
-Mock(fileExtensions: "png", dataType: .init(name: "xml", headerValue: "text/xml"), statusCode: 200, data: [
+Mock(fileExtensions: "png", contentType: .init(name: "xml", headerValue: "text/xml"), statusCode: 200, data: [
     .get: try! Data(contentsOf: MockedData.sampleXML)
 ]).register()
 
@@ -174,7 +188,7 @@ Sometimes you want to test if the cancellation of requests is working. In that c
 ```swift
 let exampleURL = URL(string: "https://www.wetransfer.com/api/endpoint")!
 
-var mock = Mock(url: exampleURL, dataType: .json, statusCode: 200, data: [
+var mock = Mock(url: exampleURL, contentType: .json, statusCode: 200, data: [
     .head: try! Data(contentsOf: MockedData.headResponse),
     .get: try! Data(contentsOf: MockedData.exampleJSON)
 ])
@@ -194,8 +208,8 @@ By creating a mock for the short URL and the redirect URL, you can mock redirect
 
 ```swift
 let urlWhichRedirects: URL = URL(string: "https://we.tl/redirect")!
-Mock(url: urlWhichRedirects, dataType: .html, statusCode: 200, data: [.get: try! Data(contentsOf: MockedData.redirectGET)]).register()
-Mock(url: URL(string: "https://wetransfer.com/redirect")!, dataType: .json, statusCode: 200, data: [.get: try! Data(contentsOf: MockedData.exampleJSON)]).register()
+Mock(url: urlWhichRedirects, contentType: .html, statusCode: 200, data: [.get: try! Data(contentsOf: MockedData.redirectGET)]).register()
+Mock(url: URL(string: "https://wetransfer.com/redirect")!, contentType: .json, statusCode: 200, data: [.get: try! Data(contentsOf: MockedData.exampleJSON)]).register()
 ```
 
 ##### Ignoring URLs
@@ -223,7 +237,7 @@ Mocker.mode = .optout
 You can request a `Mock` to return an error, allowing testing of error handling.
 
 ```swift
-Mock(url: originalURL, dataType: .json, statusCode: 500, data: [.get: Data()],
+Mock(url: originalURL, contentType: .json, statusCode: 500, data: [.get: Data()],
      requestError: TestExampleError.example).register()
 
 URLSession.shared.dataTask(with: originalURL) { (data, urlresponse, err) in
@@ -245,7 +259,7 @@ URLSession.shared.dataTask(with: originalURL) { (data, urlresponse, err) in
 You can register on `Mock` callbacks to make testing easier.
 
 ```swift
-var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
+var mock = Mock(url: request.url!, contentType: .json, statusCode: 200, data: [.post: Data()])
 mock.onRequestHandler = OnRequestHandler(httpBodyType: [[String:String]].self, callback: { request, postBodyArguments in
     XCTAssertEqual(request.url, mock.request.url)
     XCTAssertEqual(expectedParameters, postBodyArguments)
@@ -261,7 +275,7 @@ mock.register()
 Instead of setting the `completion` and `onRequest` you can also make use of expectations:
 
 ```swift
-var mock = Mock(url: url, dataType: .json, statusCode: 200, data: [.get: Data()])
+var mock = Mock(url: url, contentType: .json, statusCode: 200, data: [.get: Data()])
 let requestExpectation = expectationForRequestingMock(&mock)
 let completionExpectation = expectationForCompletingMock(&mock)
 mock.register()

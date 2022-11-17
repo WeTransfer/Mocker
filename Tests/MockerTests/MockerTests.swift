@@ -40,7 +40,7 @@ final class MockerTests: XCTestCase {
         let originalURL = URL(string: "https://avatars3.githubusercontent.com/u/26250426?v=4&s=400")!
 
         let mockedData = MockedData.botAvatarImageFileUrl.data
-        let mock = Mock(url: originalURL, dataType: .imagePNG, statusCode: 200, data: [
+        let mock = Mock(url: originalURL, contentType: .imagePNG, statusCode: 200, data: [
             .get: mockedData
         ])
 
@@ -60,7 +60,7 @@ final class MockerTests: XCTestCase {
         let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png")
 
         let mockedData = MockedData.botAvatarImageFileUrl.data
-        Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 200, data: [
+        Mock(fileExtensions: "png", contentType: .imagePNG, statusCode: 200, data: [
             .get: mockedData
         ]).register()
 
@@ -78,12 +78,12 @@ final class MockerTests: XCTestCase {
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png")!
 
-        Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 400, data: [
+        Mock(fileExtensions: "png", contentType: .imagePNG, statusCode: 400, data: [
             .get: Data()
         ]).register()
 
         let mockedData = MockedData.botAvatarImageFileUrl.data
-        Mock(url: originalURL, ignoreQuery: true, dataType: .imagePNG, statusCode: 200, data: [
+        Mock(url: originalURL, ignoreQuery: true, contentType: .imagePNG, statusCode: 200, data: [
             .get: mockedData
         ]).register()
 
@@ -102,7 +102,7 @@ final class MockerTests: XCTestCase {
         let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png?width=200&height=200")!
 
         let mockedData = MockedData.botAvatarImageFileUrl.data
-        Mock(url: originalURL, ignoreQuery: true, dataType: .imagePNG, statusCode: 200, data: [
+        Mock(url: originalURL, ignoreQuery: true, contentType: .imagePNG, statusCode: 200, data: [
             .get: mockedData
         ]).register()
 
@@ -123,10 +123,9 @@ final class MockerTests: XCTestCase {
         let expectation = self.expectation(description: "Data request should succeed")
         let originalURL = URL(string: "https://www.wetransfer.com/example.json")!
 
-        Mock(url: originalURL, dataType: .json, statusCode: 200, data: [
+        Mock(url: originalURL, contentType: .json, statusCode: 200, data: [
             .get: MockedData.exampleJSON.data
-        ]
-        ).register()
+        ]).register()
 
         URLSession.shared.dataTask(with: originalURL) { (data, _, _) in
 
@@ -150,12 +149,37 @@ final class MockerTests: XCTestCase {
 
         waitForExpectations(timeout: 10.0, handler: nil)
     }
+    
+    /// No Content-Type should be included in the headers
+    func testNoContentType() {
+        let expectation = self.expectation(description: "Data request should succeed")
+        let originalURL = URL(string: "https://www.wetransfer.com/api/foobar")!
+        var request = URLRequest(url: originalURL)
+        request.httpMethod = "PUT"
+
+        Mock(request: request, statusCode: 202).register()
+
+        URLSession.shared.dataTask(with: request) { (data, response, _) in
+            guard let response = response as? HTTPURLResponse else {
+                XCTFail("Unexpected response")
+                return
+            }
+            
+            // data is only nil if there is an error
+            XCTAssertEqual(data, Data())
+            XCTAssertNil(response.allHeaderFields["Content-Type"])
+
+            expectation.fulfill()
+        }.resume()
+
+        waitForExpectations(timeout: 10.0, handler: nil)
+    }
 
     /// It should return the additional headers.
     func testAdditionalHeaders() {
         let expectation = self.expectation(description: "Data request should succeed")
         let headers = ["Testkey": "testvalue"]
-        let mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: headers)
+        let mock = Mock(contentType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: headers)
         mock.register()
 
         URLSession.shared.dataTask(with: mock.request) { (_, response, error) in
@@ -170,10 +194,10 @@ final class MockerTests: XCTestCase {
     /// It should override existing mocks.
     func testMockOverriding() {
         let expectation = self.expectation(description: "Data request should succeed")
-        let mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: ["testkey": "testvalue"])
+        let mock = Mock(contentType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: ["testkey": "testvalue"])
         mock.register()
 
-        let newMock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: ["Newkey": "newvalue"])
+        let newMock = Mock(contentType: .json, statusCode: 200, data: [.get: Data()], additionalHeaders: ["Newkey": "newvalue"])
         newMock.register()
 
         URLSession.shared.dataTask(with: mock.request) { (_, response, error) in
@@ -191,7 +215,7 @@ final class MockerTests: XCTestCase {
         let originalURL = URL(string: "https://www.wetransfer.com/sample-image.png")
 
         let mockedData = MockedData.botAvatarImageFileUrl.data
-        Mock(fileExtensions: "png", dataType: .imagePNG, statusCode: 200, data: [
+        Mock(fileExtensions: "png", contentType: .imagePNG, statusCode: 200, data: [
             .get: mockedData
         ]).register()
 
@@ -211,7 +235,7 @@ final class MockerTests: XCTestCase {
     /// It should be possible to test cancellation of requests with a delayed mock.
     func testDelayedMockCancelation() {
         let expectation = self.expectation(description: "Data request should be cancelled")
-        var mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()])
+        var mock = Mock(contentType: .json, statusCode: 200, data: [.get: Data()])
         mock.delay = DispatchTimeInterval.seconds(5)
         mock.register()
 
@@ -235,8 +259,8 @@ final class MockerTests: XCTestCase {
         #endif
         let expectation = self.expectation(description: "Data request should be cancelled")
         let urlWhichRedirects: URL = URL(string: "https://we.tl/redirect")!
-        Mock(url: urlWhichRedirects, dataType: .html, statusCode: 200, data: [.get: MockedData.redirectGET.data]).register()
-        Mock(url: URL(string: "https://wetransfer.com/redirect")!, dataType: .json, statusCode: 200, data: [.get: MockedData.exampleJSON.data]).register()
+        Mock(url: urlWhichRedirects, contentType: .html, statusCode: 200, data: [.get: MockedData.redirectGET.data]).register()
+        Mock(url: URL(string: "https://wetransfer.com/redirect")!, contentType: .json, statusCode: 200, data: [.get: MockedData.exampleJSON.data]).register()
 
         URLSession.shared.dataTask(with: urlWhichRedirects) { (data, _, _) in
 
@@ -286,7 +310,7 @@ final class MockerTests: XCTestCase {
     func testComposedURLMatch() {
         let composedURL = URL(fileURLWithPath: "resource", relativeTo: URL(string: "https://host.com/api/"))
         let simpleURL = URL(string: "https://host.com/api/resource")
-        let mock = Mock(url: composedURL, dataType: .json, statusCode: 200, data: [.get: MockedData.exampleJSON.data])
+        let mock = Mock(url: composedURL, contentType: .json, statusCode: 200, data: [.get: MockedData.exampleJSON.data])
         let urlRequest = URLRequest(url: simpleURL!)
         XCTAssertEqual(composedURL.absoluteString, simpleURL?.absoluteString)
         XCTAssert(mock == urlRequest)
@@ -296,7 +320,7 @@ final class MockerTests: XCTestCase {
     func testMockCallbacks() {
         let onRequestExpectation = expectation(description: "Data request should start")
         let completionExpectation = expectation(description: "Data request should succeed")
-        var mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()])
+        var mock = Mock(contentType: .json, statusCode: 200, data: [.get: Data()])
         mock.onRequest = { _, _ in
             onRequestExpectation.fulfill()
         }
@@ -319,7 +343,7 @@ final class MockerTests: XCTestCase {
         request.httpMethod = Mock.HTTPMethod.post.rawValue
         request.httpBody = try JSONSerialization.data(withJSONObject: expectedParameters, options: .prettyPrinted)
 
-        var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
+        var mock = Mock(url: request.url!, contentType: .json, statusCode: 200, data: [.post: Data()])
         mock.onRequest = { request, postBodyArguments in
             XCTAssertEqual(request.url, mock.request.url)
             XCTAssertEqual(expectedParameters, postBodyArguments as? [String: String])
@@ -344,7 +368,7 @@ final class MockerTests: XCTestCase {
         request.httpMethod = Mock.HTTPMethod.post.rawValue
         request.httpBody = try JSONEncoder().encode(expectedParameters)
 
-        var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
+        var mock = Mock(url: request.url!, contentType: .json, statusCode: 200, data: [.post: Data()])
         mock.onRequestHandler = .init(httpBodyType: RequestParameters.self, callback: { request, postBodyDecodable in
             XCTAssertEqual(request.url, mock.request.url)
             XCTAssertEqual(expectedParameters, postBodyDecodable)
@@ -365,7 +389,7 @@ final class MockerTests: XCTestCase {
         request.httpMethod = Mock.HTTPMethod.post.rawValue
         request.httpBody = try JSONSerialization.data(withJSONObject: expectedParameters, options: .prettyPrinted)
 
-        var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
+        var mock = Mock(url: request.url!, contentType: .json, statusCode: 200, data: [.post: Data()])
         mock.onRequestHandler = .init(jsonDictionaryCallback: { request, postBodyArguments in
             XCTAssertEqual(request.url, mock.request.url)
             XCTAssertEqual(expectedParameters, postBodyArguments as? [String: String])
@@ -384,7 +408,7 @@ final class MockerTests: XCTestCase {
         var request = URLRequest(url: URL(string: "https://www.fakeurl.com")!)
         request.httpMethod = Mock.HTTPMethod.post.rawValue
 
-        var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
+        var mock = Mock(url: request.url!, contentType: .json, statusCode: 200, data: [.post: Data()])
         mock.onRequestHandler = .init(callback: {
             onRequestExpectation.fulfill()
         })
@@ -404,7 +428,7 @@ final class MockerTests: XCTestCase {
         request.httpMethod = Mock.HTTPMethod.post.rawValue
         request.httpBody = try JSONSerialization.data(withJSONObject: expectedParameters, options: .prettyPrinted)
 
-        var mock = Mock(url: request.url!, dataType: .json, statusCode: 200, data: [.post: Data()])
+        var mock = Mock(url: request.url!, contentType: .json, statusCode: 200, data: [.post: Data()])
         mock.onRequestHandler = OnRequestHandler(jsonArrayCallback: { request, postBodyArguments in
             XCTAssertEqual(request.url, mock.request.url)
             XCTAssertEqual(expectedParameters, postBodyArguments as? [[String: String]])
@@ -421,13 +445,13 @@ final class MockerTests: XCTestCase {
     func testDelayedMock() {
         let nonDelayExpectation = expectation(description: "Data request should succeed")
         let delayedExpectation = expectation(description: "Data request should succeed")
-        var delayedMock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()])
+        var delayedMock = Mock(contentType: .json, statusCode: 200, data: [.get: Data()])
         delayedMock.delay = DispatchTimeInterval.seconds(1)
         delayedMock.completion = {
             delayedExpectation.fulfill()
         }
         delayedMock.register()
-        var nonDelayMock = Mock(dataType: .json, statusCode: 200, data: [.post: Data()])
+        var nonDelayMock = Mock(contentType: .json, statusCode: 200, data: [.post: Data()])
         nonDelayMock.completion = {
             nonDelayExpectation.fulfill()
         }
@@ -443,7 +467,7 @@ final class MockerTests: XCTestCase {
 
     /// It should remove all registered mocks correctly.
     func testRemoveAll() {
-        let mock = Mock(dataType: .json, statusCode: 200, data: [.get: Data()])
+        let mock = Mock(contentType: .json, statusCode: 200, data: [.get: Data()])
         mock.register()
         Mocker.removeAll()
         XCTAssertTrue(Mocker.shared.mocks.isEmpty)
@@ -452,8 +476,8 @@ final class MockerTests: XCTestCase {
     /// It should correctly add two mocks for the same URL if the HTTP method is different.
     func testDifferentHTTPMethodSameURL() {
         let url = URL(string: "https://www.fakeurl.com/\(UUID().uuidString)")!
-        Mock(url: url, dataType: .json, statusCode: 200, data: [.get: Data()]).register()
-        Mock(url: url, dataType: .json, statusCode: 200, data: [.put: Data()]).register()
+        Mock(url: url, contentType: .json, statusCode: 200, data: [.get: Data()]).register()
+        Mock(url: url, contentType: .json, statusCode: 200, data: [.put: Data()]).register()
         var request = URLRequest(url: url)
         request.httpMethod = Mock.HTTPMethod.get.rawValue
         XCTAssertNotNil(Mocker.mock(for: request))
@@ -465,7 +489,7 @@ final class MockerTests: XCTestCase {
     func testOnRequestExpectation() {
         let url = URL(string: "https://www.fakeurl.com")!
 
-        var mock = Mock(url: url, dataType: .json, statusCode: 200, data: [.get: Data()])
+        var mock = Mock(url: url, contentType: .json, statusCode: 200, data: [.get: Data()])
         let expectation = expectationForRequestingMock(&mock)
         mock.register()
 
@@ -478,7 +502,7 @@ final class MockerTests: XCTestCase {
     func testOnCompletionExpectation() {
         let url = URL(string: "https://www.fakeurl.com")!
 
-        var mock = Mock(url: url, dataType: .json, statusCode: 200, data: [.get: Data()])
+        var mock = Mock(url: url, contentType: .json, statusCode: 200, data: [.get: Data()])
         let expectation = expectationForCompletingMock(&mock)
         mock.register()
 
@@ -498,7 +522,7 @@ final class MockerTests: XCTestCase {
             var errorDescription: String { "example" }
         }
 
-        Mock(url: originalURL, dataType: .json, statusCode: 500, data: [.get: Data()], requestError: TestExampleError.example).register()
+        Mock(url: originalURL, contentType: .json, statusCode: 500, data: [.get: Data()], requestError: TestExampleError.example).register()
 
         URLSession.shared.dataTask(with: originalURL) { (data, urlresponse, error) in
 
@@ -531,7 +555,7 @@ final class MockerTests: XCTestCase {
         let originalURL = URL(string: "https://www.wetransfer.com/example.json")!
 
         Mock(url: originalURL, cacheStoragePolicy: .allowed,
-             dataType: .json, statusCode: 200,
+             contentType: .json, statusCode: 200,
              data: [.get: MockedData.exampleJSON.data],
              additionalHeaders: ["Cache-Control": "public, max-age=31557600, immutable"]
         ).register()
@@ -565,7 +589,7 @@ final class MockerTests: XCTestCase {
         let unknownURL = URL(string: "www.netflix.com")!
 
         // Mocking
-        Mock(url: mockedURL, dataType: .json, statusCode: 200, data: [.get: Data()])
+        Mock(url: mockedURL, contentType: .json, statusCode: 200, data: [.get: Data()])
             .register()
 
         // Ignoring
@@ -589,7 +613,7 @@ final class MockerTests: XCTestCase {
         let unknownURL = URL(string: "www.netflix.com")!
 
         // Mocking
-        Mock(url: mockedURL, dataType: .json, statusCode: 200, data: [.get: Data()])
+        Mock(url: mockedURL, contentType: .json, statusCode: 200, data: [.get: Data()])
             .register()
 
         // Ignoring
