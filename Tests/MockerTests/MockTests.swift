@@ -32,4 +32,13 @@ final class MockTests: XCTestCase {
         XCTAssertEqual(mock200, mock400)
         XCTAssertNotEqual(mock200, mockJPEG)
     }
+    
+    func testMethodsComparing() {
+        let url = URL(string: "https://mocked.wetransfer.com")!
+        
+        let methods = [Mock.HTTPMethod.options, .get, .head, .post, .put, .patch, .delete, .trace, .connect]
+        let first = Mock(url: url, statusCode: 200, data: Dictionary(uniqueKeysWithValues: methods.shuffled().map { ($0, Data()) }))
+        let second = Mock(url: url, statusCode: 200, data: Dictionary(uniqueKeysWithValues: methods.shuffled().map { ($0, Data()) }))
+        XCTAssertEqual(first, second)
+    }
 }
