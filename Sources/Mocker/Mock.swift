@@ -320,8 +320,8 @@ public struct Mock: Equatable {
     }
 
     public static func == (lhs: Mock, rhs: Mock) -> Bool {
-        let lhsHTTPMethods: [String] = lhs.data.keys.compactMap { $0.rawValue }
-        let rhsHTTPMethods: [String] = rhs.data.keys.compactMap { $0.rawValue }
+        let lhsHTTPMethods: [String] = lhs.data.keys.compactMap { $0.rawValue }.sorted()
+        let rhsHTTPMethods: [String] = rhs.data.keys.compactMap { $0.rawValue }.sorted()
 
         if let lhsFileExtensions = lhs.fileExtensions, let rhsFileExtensions = rhs.fileExtensions, (!lhsFileExtensions.isEmpty || !rhsFileExtensions.isEmpty) {
             /// The mocks are targeting file extensions specifically, check on those.
