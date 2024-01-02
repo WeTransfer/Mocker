@@ -339,13 +339,14 @@ final class MockerTests: XCTestCase {
         let onRequestExpectation = expectation(description: "Data request should start")
 
         let expectedParameters = ["test": "value"]
-        var request = URLRequest(url: URL(string: "https://www.fakeurl.com")!)
+        let requestURL = URL(string: "https://www.fakeurl.com")!
+        var request = URLRequest(url: requestURL)
         request.httpMethod = Mock.HTTPMethod.post.rawValue
         request.httpBody = try JSONSerialization.data(withJSONObject: expectedParameters, options: .prettyPrinted)
 
-        var mock = Mock(url: request.url!, contentType: .json, statusCode: 200, data: [.post: Data()])
+        var mock = Mock(url: requestURL, contentType: .json, statusCode: 200, data: [.post: Data()])
         mock.onRequest = { request, postBodyArguments in
-            XCTAssertEqual(request.url, mock.request.url)
+            XCTAssertEqual(request.url, requestURL)
             XCTAssertEqual(expectedParameters, postBodyArguments as? [String: String])
             onRequestExpectation.fulfill()
         }
@@ -364,13 +365,14 @@ final class MockerTests: XCTestCase {
         let onRequestExpectation = expectation(description: "Data request should start")
 
         let expectedParameters = RequestParameters(name: UUID().uuidString)
-        var request = URLRequest(url: URL(string: "https://www.fakeurl.com")!)
+        let requestURL = URL(string: "https://www.fakeurl.com")!
+        var request = URLRequest(url: requestURL)
         request.httpMethod = Mock.HTTPMethod.post.rawValue
         request.httpBody = try JSONEncoder().encode(expectedParameters)
 
         var mock = Mock(url: request.url!, contentType: .json, statusCode: 200, data: [.post: Data()])
         mock.onRequestHandler = .init(httpBodyType: RequestParameters.self, callback: { request, postBodyDecodable in
-            XCTAssertEqual(request.url, mock.request.url)
+            XCTAssertEqual(request.url, requestURL)
             XCTAssertEqual(expectedParameters, postBodyDecodable)
             onRequestExpectation.fulfill()
         })
@@ -385,13 +387,14 @@ final class MockerTests: XCTestCase {
         let onRequestExpectation = expectation(description: "Data request should start")
 
         let expectedParameters = ["test": "value"]
-        var request = URLRequest(url: URL(string: "https://www.fakeurl.com")!)
+        let requestURL = URL(string: "https://www.fakeurl.com")!
+        var request = URLRequest(url: requestURL)
         request.httpMethod = Mock.HTTPMethod.post.rawValue
         request.httpBody = try JSONSerialization.data(withJSONObject: expectedParameters, options: .prettyPrinted)
 
         var mock = Mock(url: request.url!, contentType: .json, statusCode: 200, data: [.post: Data()])
         mock.onRequestHandler = .init(jsonDictionaryCallback: { request, postBodyArguments in
-            XCTAssertEqual(request.url, mock.request.url)
+            XCTAssertEqual(request.url, requestURL)
             XCTAssertEqual(expectedParameters, postBodyArguments as? [String: String])
             onRequestExpectation.fulfill()
         })
@@ -424,13 +427,14 @@ final class MockerTests: XCTestCase {
         let onRequestExpectation = expectation(description: "Data request should start")
 
         let expectedParameters = [["test": "value"], ["test": "value"]]
-        var request = URLRequest(url: URL(string: "https://www.fakeurl.com")!)
+        let requestURL = URL(string: "https://www.fakeurl.com")!
+        var request = URLRequest(url: requestURL)
         request.httpMethod = Mock.HTTPMethod.post.rawValue
         request.httpBody = try JSONSerialization.data(withJSONObject: expectedParameters, options: .prettyPrinted)
 
         var mock = Mock(url: request.url!, contentType: .json, statusCode: 200, data: [.post: Data()])
         mock.onRequestHandler = OnRequestHandler(jsonArrayCallback: { request, postBodyArguments in
-            XCTAssertEqual(request.url, mock.request.url)
+            XCTAssertEqual(request.url, requestURL)
             XCTAssertEqual(expectedParameters, postBodyArguments as? [[String: String]])
             onRequestExpectation.fulfill()
         })
