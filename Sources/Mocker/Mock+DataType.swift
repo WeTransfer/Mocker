@@ -10,7 +10,7 @@ import Foundation
 
 extension Mock {
     /// The types of content of a request. Will be used as Content-Type header inside a `Mock`.
-    public struct DataType {
+    public struct DataType: Sendable {
 
         /// Name of the data type.
         public let name: String
