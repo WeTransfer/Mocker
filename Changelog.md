@@ -1,3 +1,10 @@
+### 3.0.2
+- Update CI submodule ([#151](https://github.com/WeTransfer/Mocker/pull/151)) via [@AvdLee](https://github.com/AvdLee)
+- Simplify tests and add Sendable to subtypes ([#150](https://github.com/WeTransfer/Mocker/pull/150)) via [@AvdLee](https://github.com/AvdLee)
+- Sort HTTP methods to remove randomness from keys ([#149](https://github.com/WeTransfer/Mocker/pull/149)) via [@Chewie69006](https://github.com/Chewie69006)
+- Optional dataType ([#140](https://github.com/WeTransfer/Mocker/pull/140)) via [@chkpnt](https://github.com/chkpnt)
+- Merge release 3.0.1 into master ([#141](https://github.com/WeTransfer/Mocker/pull/141)) via [@wetransferplatform](https://github.com/wetransferplatform)
+
 ### 3.0.1
 - Merge release 3.0.0 into master ([#138](https://github.com/WeTransfer/Mocker/pull/138)) via [@wetransferplatform](https://github.com/wetransferplatform)
 - Add extra capabilities for on request handling ([#139](https://github.com/WeTransfer/Mocker/pull/139)) via [@AvdLee](https://github.com/AvdLee)
