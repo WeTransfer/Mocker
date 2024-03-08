@@ -24,10 +24,19 @@ public struct OnRequestHandler {
     ///   - httpBodyType: The decodable type to use for parsing the request body.
     ///   - callback: The callback which will be called just before the request executes.
     public init<HTTPBody: Decodable>(httpBodyType: HTTPBody.Type?, callback: @escaping OnRequest<HTTPBody>) {
+        self.init(httpBodyType: httpBodyType, jsonDecoder: JSONDecoder(), callback: callback)
+    }
+
+    /// Creates a new request handler using the given `HTTPBody` type, which can be any `Decodable` and decoding it using the provided `JSONDecoder`.
+    /// - Parameters:
+    ///   - httpBodyType: The decodable type to use for parsing the request body.
+    ///   - jsonDecoder: The decoder to use for decoding the request body.
+    ///   - callback: The callback which will be called just before the request executes.
+    public init<HTTPBody: Decodable>(httpBodyType: HTTPBody.Type?, jsonDecoder: JSONDecoder, callback: @escaping OnRequest<HTTPBody>) {
         self.internalCallback = { request in
             guard
                 let httpBody = request.httpBodyStreamData() ?? request.httpBody,
-                let decodedObject = try? JSONDecoder().decode(HTTPBody.self, from: httpBody)
+                let decodedObject = try? jsonDecoder.decode(HTTPBody.self, from: httpBody)
             else {
                 callback(request, nil)
                 return

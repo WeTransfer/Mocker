@@ -383,6 +383,32 @@ final class MockerTests: XCTestCase {
         wait(for: [onRequestExpectation], timeout: 2.0)
     }
 
+    func testOnRequestDecodablePostBodyParametersWithCustomJSONDecoder() throws {
+        struct RequestParameters: Codable, Equatable {
+            let name: String
+        }
+
+        let onRequestExpectation = expectation(description: "Data request should start")
+
+        let expectedParameters = RequestParameters(name: UUID().uuidString)
+        let requestURL = URL(string: "https://www.fakeurl.com")!
+        var request = URLRequest(url: requestURL)
+        request.httpMethod = Mock.HTTPMethod.post.rawValue
+        request.httpBody = try JSONEncoder().encode(expectedParameters)
+
+        var mock = Mock(url: request.url!, contentType: .json, statusCode: 200, data: [.post: Data()])
+        mock.onRequestHandler = .init(httpBodyType: RequestParameters.self, jsonDecoder: JSONDecoder(), callback: { request, postBodyDecodable in
+            XCTAssertEqual(request.url, requestURL)
+            XCTAssertEqual(expectedParameters, postBodyDecodable)
+            onRequestExpectation.fulfill()
+        })
+        mock.register()
+
+        URLSession.shared.dataTask(with: request).resume()
+
+        wait(for: [onRequestExpectation], timeout: 2.0)
+    }
+
     func testOnRequestJSONDictionaryPostBodyParameters() throws {
         let onRequestExpectation = expectation(description: "Data request should start")
 
