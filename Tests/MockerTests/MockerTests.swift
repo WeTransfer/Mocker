@@ -302,8 +302,20 @@ final class MockerTests: XCTestCase {
         let ignoredURLQueries = URL(string: "https://www.wetransfer.com/sample-image.png?width=200&height=200")!
 
         XCTAssertTrue(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURLQueries)))
-        Mocker.ignore(ignoredURL, ignoreQuery: true)
+        Mocker.ignore(ignoredURL, matchType: .ignoreQuery)
         XCTAssertFalse(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURLQueries)))
+    }
+
+    /// It should be possible to ignore URL prefixes and not let them be handled.
+    func testIgnoreURLsIgnorePrefixes() {
+
+        let ignoredURL = URL(string: "https://www.wetransfer.com/private")!
+        let ignoredURLSubPath = URL(string: "https://www.wetransfer.com/private/sample-image.png")!
+
+        XCTAssertTrue(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURLSubPath)))
+        Mocker.ignore(ignoredURL, matchType: .prefix)
+        XCTAssertFalse(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURLSubPath)))
+        XCTAssertFalse(MockingURLProtocol.canInit(with: URLRequest(url: ignoredURL)))
     }
 
     /// It should be possible to compose a url relative to a base and still have it match the full url
