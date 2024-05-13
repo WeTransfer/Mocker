@@ -15,18 +15,14 @@ import FoundationNetworking
 public struct Mocker {
     private struct IgnoredRule: Equatable {
         let urlToIgnore: URL
-        let ignoreQuery: Bool
+        let matchType: URLMatchType
 
         /// Checks if the passed URL should be ignored.
         ///
         /// - Parameter url: The URL to check for.
         /// - Returns: `true` if it should be ignored, `false` if the URL doesn't correspond to ignored rules.
         func shouldIgnore(_ url: URL) -> Bool {
-            if ignoreQuery {
-                return urlToIgnore.baseString == url.baseString
-            }
-
-            return urlToIgnore.absoluteString == url.absoluteString
+            url.matches(urlToIgnore, matchType: matchType)
         }
     }
 
@@ -92,11 +88,23 @@ public struct Mocker {
 
     /// Register an URL to ignore for mocking. This will let the URL work as if the Mocker doesn't exist.
     ///
-    /// - Parameter url: The URL to mock.
+    /// - Parameter url: The URL to ignore.
     /// - Parameter ignoreQuery: If `true`, checking the URL will ignore the query and match only for the scheme, host and path. Defaults to `false`.
-    public static func ignore(_ url: URL, ignoreQuery: Bool = false) {
+    @available(*, deprecated, renamed: "ignore(_:matchType:)")
+    public static func ignore(_ url: URL, ignoreQuery: Bool) {
         shared.queue.async(flags: .barrier) {
-            let rule = IgnoredRule(urlToIgnore: url, ignoreQuery: ignoreQuery)
+            let rule = IgnoredRule(urlToIgnore: url, matchType: ignoreQuery ? .ignoreQuery : .full)
+            shared.ignoredRules.append(rule)
+        }
+    }
+
+    /// Register an URL to ignore for mocking. This will let the URL work as if the Mocker doesn't exist.
+    ///
+    /// - Parameter url: The URL to ignore.
+    /// - Parameter matchType: The approach that will be used to determine whether URLs match the provided URL. Defaults to `full`.
+    public static func ignore(_ url: URL, matchType: URLMatchType = .full) {
+        shared.queue.async(flags: .barrier) {
+            let rule = IgnoredRule(urlToIgnore: url, matchType: matchType)
             shared.ignoredRules.append(rule)
         }
     }
