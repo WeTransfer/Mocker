@@ -483,6 +483,38 @@ final class MockerTests: XCTestCase {
         wait(for: [onRequestExpectation], timeout: 2.0)
     }
 
+    func testResponseHandler() {
+        let requestExpectation = self.expectation(description: "Data request should succeed")
+        let responseHandlerExpectation = self.expectation(description: "Data request should start")
+        let originalURL = URL(string: "https://avatars3.githubusercontent.com/u/26250426?v=4&s=400")!
+        var request = URLRequest(url: originalURL)
+
+        let mockedData = MockedData.botAvatarImageFileUrl.data
+        let mock = Mock(request: request, responseHandler: ResponseHandler(callback: {
+            responseHandlerExpectation.fulfill()
+            return (
+                HTTPURLResponse(
+                    url: originalURL,
+                    statusCode: 200,
+                    httpVersion: Mocker.httpVersion.rawValue,
+                    headerFields: nil
+                )!,
+                mockedData
+            )
+        }))
+        mock.register()
+
+        mock.register()
+        URLSession.shared.dataTask(with: originalURL) { (data, _, error) in
+            XCTAssertNil(error)
+            XCTAssertEqual(data, mockedData, "Image should be returned mocked")
+            requestExpectation.fulfill()
+        }.resume()
+
+
+        wait(for: [responseHandlerExpectation, requestExpectation], enforceOrder: true)
+    }
+
     /// It should call the mock after a delay.
     func testDelayedMock() {
         let nonDelayExpectation = expectation(description: "Data request should succeed")

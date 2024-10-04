@@ -36,13 +36,26 @@ open class MockingURLProtocol: URLProtocol {
 
     /// Returns Mocked data based on the mocks register in the `Mocker`. Will end up in an error when no Mock data is found for the request.
     override public func startLoading() {
-        guard
-            let mock = Mocker.mock(for: request),
-            let response = HTTPURLResponse(url: mock.request.url!, statusCode: mock.statusCode, httpVersion: Mocker.httpVersion.rawValue, headerFields: mock.headers),
-            let data = mock.data(for: request)
-        else {
+        guard let mock = Mocker.mock(for: request) else {
             print("\n\n 🚨 No mocked data found for url \(String(describing: request.url?.absoluteString)) method \(String(describing: request.httpMethod)). Did you forget to use `register()`? 🚨 \n\n")
             client?.urlProtocol(self, didFailWithError: Error.missingMockedData(url: String(describing: request.url?.absoluteString)))
+            return
+        }
+
+        let response: HTTPURLResponse
+        let data: Data
+        if let responseHandler = mock.responseHandler {
+            (response, data) = responseHandler.handleRequest(request)
+        } else if let httpResponse = HTTPURLResponse(
+            url: mock.request.url!,
+            statusCode: mock.statusCode,
+            httpVersion: Mocker.httpVersion.rawValue,
+            headerFields: mock.headers
+        ), let mockData = mock.data(for: request) {
+            response = httpResponse
+            data = mockData
+        } else {
+            print("\n\n 🚨 Unable to create HTTPURLResponse for mock for url \(String(describing: request.url?.absoluteString)) method \(String(describing: request.httpMethod)). 🚨 \n\n")
             return
         }
 
