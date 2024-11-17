@@ -352,10 +352,10 @@ let package = Package(
     targets: [
         .target(
             name: "MyProject",
-            dependencies: ["Mocker"]),
+            dependencies: []),
         .testTarget(
             name: "MyProjectTests",
-            dependencies: ["MyProject"]),
+            dependencies: ["MyProject", "Mocker"]),
     ]
 )
 ```
