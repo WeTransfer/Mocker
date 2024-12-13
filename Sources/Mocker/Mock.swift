@@ -101,6 +101,9 @@ public struct Mock: Equatable {
     /// The on request handler which will be executed everytime this `Mock` was started. Can be used within unit tests for validating that a request has been started. The handler must be set before calling `register`.
     public var onRequestHandler: OnRequestHandler?
 
+    /// Optional response handler which could be used to dynamically generate the response
+    public var responseHandler: ResponseHandler?
+
     /// Can only be set internally as it's used by the `expectationForRequestingMock(_:)` method.
     var onRequestExpectation: XCTestExpectation?
 
@@ -290,6 +293,30 @@ public struct Mock: Equatable {
         )
     }
 
+    /// Creates a `Mock` for the given `URLRequest`.
+    ///
+    /// - Parameters:
+    ///   - request: The URLRequest, from which the URL and request method is used to match for and to return the mocked data for.
+    ///   - ignoreQuery: If `true`, checking the URL will ignore the query and match only for the scheme, host and path. Defaults to `false`.
+    ///   - cacheStoragePolicy: The caching strategy. Defaults to `notAllowed`.
+    ///   - responseHandler: The response handler to dynamicly generate the response for this Mock
+    public init(request: URLRequest, ignoreQuery: Bool = false, cacheStoragePolicy: URLCache.StoragePolicy = .notAllowed, responseHandler: ResponseHandler) {
+        guard let requestHTTPMethod = Mock.HTTPMethod(rawValue: request.httpMethod ?? "") else {
+            preconditionFailure("Unexpected http method")
+        }
+
+        self.init(
+            url: request.url,
+            ignoreQuery: ignoreQuery,
+            cacheStoragePolicy: cacheStoragePolicy,
+            statusCode: 999, // unused, see responseHandler
+            data: [requestHTTPMethod: "responseHandler should have been used instead of this".data(using: .utf8)!],
+            fileExtensions: nil
+        )
+
+        self.responseHandler = responseHandler
+    }
+
     /// Registers the mock with the shared `Mocker`.
     public func register() {
         Mocker.register(self)
@@ -312,11 +339,17 @@ public struct Mock: Equatable {
             // If the mock contains a file extension, this should always be used to match for.
             guard let pathExtension = request.url?.pathExtension else { return false }
             return fileExtensions.contains(pathExtension)
-        } else if mock.ignoreQuery {
-            return mock.request.url!.baseString == request.url?.baseString && mock.data.keys.contains(requestHTTPMethod)
         }
 
-        return mock.request.url!.absoluteString == request.url?.absoluteString && mock.data.keys.contains(requestHTTPMethod)
+        if mock.ignoreQuery {
+            if mock.request.url!.baseString != request.url?.baseString {
+                return false
+            }
+        } else if mock.request.url!.absoluteString != request.url?.absoluteString {
+            return false
+        }
+
+        return mock.responseHandler != nil || mock.data.keys.contains(requestHTTPMethod)
     }
 
     public static func == (lhs: Mock, rhs: Mock) -> Bool {
