@@ -57,7 +57,7 @@ public struct Mocker {
     /// The HTTP Version to use in the mocked response.
     public static var httpVersion: HTTPVersion = HTTPVersion.http1_1
 
-    /// The registrated mocks.
+    /// The registered mocks.
     private(set) var mocks: [Mock] = []
 
     /// URLs to ignore for mocking.

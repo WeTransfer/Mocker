@@ -18,7 +18,7 @@ public enum URLMatchType {
 }
 
 extension URL {
-    /// Returns the base URL string build with the scheme, host and path. "https://www.wetransfer.com/v1/test?param=test" would be "https://www.wetransfer.com/v1/test".
+    /// Returns the base URL string built with the scheme, host and path. "https://www.wetransfer.com/v1/test?param=test" would be "https://www.wetransfer.com/v1/test".
     var baseString: String? {
         guard let scheme = scheme, let host = host else { return nil }
         return scheme + "://" + host + path
@@ -27,7 +27,7 @@ extension URL {
     /// Checks if  this URL matches the passed URL using the provided match type.
     ///
     /// - Parameter url: The URL to check for a match.
-    /// - Parameter matchType: The approach that will be used to determine whether this URL match the provided URL. Defaults to `full`.
+    /// - Parameter matchType: The approach that will be used to determine whether this URL matches the provided URL. Defaults to `full`.
     /// - Returns: `true` if the URL matches based on the match type; `false` otherwise.
     func matches(_ otherURL: URL?, matchType: URLMatchType = .full) -> Bool {
         guard let otherURL else { return false }
